@@ -91,9 +91,13 @@ def write_pj64_symbols(f, symbols):
 
 def get_parser():
     parser = argparse.ArgumentParser()
+    parser.add_argument('-t', '--target', default='oot', help='Target directory name')
     parser.add_argument('--pj64sym', help="Output path for PJ64 debugging symbols")
     parser.add_argument('--compile-c', action='store_true', help="Recompile C modules")
     return parser
+
+def get_target_relpath(path):
+    return os.path.join('target', path)
 
 def main():
     args = get_parser().parse_args()
@@ -101,28 +105,31 @@ def main():
     compile_c = args.compile_c
 
     script_dir = os.path.dirname(os.path.realpath(__file__))
-    run_dir = script_dir + '/..'
+    run_dir = os.path.join(script_dir, '..')
     os.chdir(run_dir)
+
+    # Target relative path
+    relpath = get_target_relpath(args.target)
 
     # Compile code
 
     os.environ['PATH'] = script_dir + os.pathsep + os.environ['PATH']
 
     if compile_c:
-        os.chdir(run_dir + '/target/oot/c')
+        os.chdir(os.path.join(run_dir, relpath, 'c'))
         call(['make'])
 
-    os.chdir(run_dir + '/target/oot/src')
+    os.chdir(os.path.join(run_dir, relpath, 'src'))
     call(['armips', '-sym2', '../build/asm_symbols.txt', 'build.asm'])
     os.chdir(run_dir)
 
-    fixup_asm_symbols('target/oot/build/asm_symbols.txt')
+    fixup_asm_symbols(os.path.join(relpath, 'build/asm_symbols.txt'))
 
     # ...
-    c_sym_types = parse_c_symbols('target/oot/build/c_symbols.txt')
+    c_sym_types = parse_c_symbols(os.path.join(relpath, 'build/c_symbols.txt'))
 
     # ...
-    symbols = parse_asm_symbols('target/oot/build/asm_symbols.txt', c_sym_types)
+    symbols = parse_asm_symbols(os.path.join(relpath, 'build/asm_symbols.txt'), c_sym_types)
 
     # Output symbols
 
@@ -130,17 +137,21 @@ def main():
 
     # Dump symbols as JSON
     data_symbols = build_data_symbols(symbols)
-    dump_json_to_file(data_symbols, 'target/oot/data/generated/symbols.json')
+    dump_json_to_file(data_symbols, os.path.join(relpath, 'data/generated/symbols.json'))
 
     if pj64_sym_path:
         pj64_sym_path = os.path.realpath(pj64_sym_path)
         with open(pj64_sym_path, 'w') as f:
             write_pj64_symbols(f, symbols)
 
-    update_crc('target/oot/roms/patched.z64')
+    update_crc(os.path.join(relpath, 'roms/patched.z64'))
 
     # Diff ROMs
-    create_diff('target/oot/roms/base.z64', 'target/oot/roms/patched.z64', 'target/oot/data/generated/rom_patch.txt')
+    create_diff(
+        os.path.join(relpath, 'roms/base.z64'),
+        os.path.join(relpath, 'roms/patched.z64'),
+        os.path.join(relpath, 'data/generated/rom_patch.txt')
+    )
 
 if __name__ == '__main__':
     main()
