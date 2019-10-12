@@ -78,9 +78,9 @@ RANDO_CONTEXT:
 .importobj "../build/bundle.o"
 .align 8
 FONT_TEXTURE:
-.incbin("../resources/font.bin")
+.incbin("../../../resources/font.bin")
 DPAD_TEXTURE:
-.incbin("../resources/dpad.bin")
+.incbin("../../../resources/dpad.bin")
 
 .align 0x10
 PAYLOAD_END:
