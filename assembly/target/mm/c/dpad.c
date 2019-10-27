@@ -1,5 +1,11 @@
 #include "z64.h"
 
+#define IS_TRANSFORMATION_MASK(MASK) \
+    ((MASK) == Z64_ITEM_DEKU_MASK  || \
+    (MASK) == Z64_ITEM_GORON_MASK  || \
+    (MASK) == Z64_ITEM_ZORA_MASK   || \
+    (MASK) == Z64_ITEM_FIERCE_DEITY_MASK)
+
 static void try_use_item(uint8_t slot, uint8_t item) {
     if (z64_file.items[slot] == item) {
         z64_UseItem(&z64_ctxt, &z64_link, item, 2);
@@ -7,6 +13,10 @@ static void try_use_item(uint8_t slot, uint8_t item) {
 }
 
 static void try_use_mask(uint8_t slot, uint8_t item) {
+    // Can't use normal masks unless human link
+    if (!IS_TRANSFORMATION_MASK(item) && z64_file.form != Z64_FORM_CHILD)
+        return;
+
     if (z64_file.masks[slot] == item) {
         z64_UseItem(&z64_ctxt, &z64_link, item, 2);
     }
