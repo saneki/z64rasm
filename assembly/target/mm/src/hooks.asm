@@ -17,3 +17,15 @@
 .orga 0xB5A8F8 ; In memory: 0x80174898
     j       after_game_state_update
     nop
+
+;==================================================================================================
+; Non-menu processing hooks
+;==================================================================================================
+
+; Runs when in the "main game" (and not using the menu)
+; Replaces:
+;   lw      t6, 0x0A74 (s0)
+;   addiu   at, r0, 0xFFEF
+.orga 0xC10060 ; In memory: 0x80763560
+    jal     before_non_menu_update_hook
+    nop
