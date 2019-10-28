@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include "dpad.h"
 #include "z64.h"
 
 #define IS_TRANSFORMATION_MASK(MASK)   \
@@ -24,8 +25,8 @@ uint8_t DPAD_DEFAULT[4] = {
     Z64_ITEM_GORON_MASK,
 };
 
-// Whether or not the D-Pad is enabled at all.
-uint8_t DPAD_ENABLE = 1;
+// State of D-pad usage (disabled, enabled, defaults).
+uint8_t DPAD_STATE = DPAD_STATE_TYPE_DEFAULTS;
 
 static bool get_slot(uint8_t item, uint8_t *slot, uint8_t *array, uint8_t length) {
     for (uint8_t i = 0; i < length; i++) {
@@ -78,19 +79,8 @@ static void try_use_item_or_mask(uint8_t item) {
 }
 
 void dpad_init() {
-    bool assign_defaults = true;
-
-    // If DPAD_CONFIG values are still unset, set to default values
-    for (int i = 0; i < 4; i++) {
-        if (DPAD_CONFIG[i] != Z64_ITEM_NONE) {
-            // If any field in the config is set, do not set defaults
-            // This is so we can leave specific buttons blank if needed
-            assign_defaults = false;
-        }
-    }
-
-    // Set all default values
-    if (assign_defaults) {
+    // If using default values, overwrite DPAD_CONFIG with DPAD_DEFAULT
+    if (DPAD_STATE == DPAD_STATE_TYPE_DEFAULTS) {
         for (int i = 0; i < 4; i++) {
             DPAD_CONFIG[i] = DPAD_DEFAULT[i];
         }
@@ -100,7 +90,7 @@ void dpad_init() {
 void handle_dpad() {
     pad_t pad_pressed = z64_ctxt.input[0].pad_pressed;
 
-    if (DPAD_ENABLE) {
+    if (DPAD_STATE != DPAD_STATE_TYPE_DISABLED) {
         if (pad_pressed.du) {
             try_use_item_or_mask(DPAD_CONFIG[0]);
         } else if (pad_pressed.dr) {
