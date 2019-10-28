@@ -24,6 +24,9 @@ uint8_t DPAD_DEFAULT[4] = {
     Z64_ITEM_GORON_MASK,
 };
 
+// Whether or not the D-Pad is enabled at all.
+uint8_t DPAD_ENABLE = 1;
+
 static bool get_slot(uint8_t item, uint8_t *slot, uint8_t *array, uint8_t length) {
     for (uint8_t i = 0; i < length; i++) {
         if (item == array[i]) {
@@ -97,14 +100,16 @@ void dpad_init() {
 void handle_dpad() {
     pad_t pad_pressed = z64_ctxt.input[0].pad_pressed;
 
-    if (pad_pressed.du) {
-        try_use_item_or_mask(DPAD_CONFIG[0]);
-    } else if (pad_pressed.dr) {
-        try_use_item_or_mask(DPAD_CONFIG[1]);
-    } else if (pad_pressed.dd) {
-        try_use_item_or_mask(DPAD_CONFIG[2]);
-    } else if (pad_pressed.dl) {
-        try_use_item_or_mask(DPAD_CONFIG[3]);
+    if (DPAD_ENABLE) {
+        if (pad_pressed.du) {
+            try_use_item_or_mask(DPAD_CONFIG[0]);
+        } else if (pad_pressed.dr) {
+            try_use_item_or_mask(DPAD_CONFIG[1]);
+        } else if (pad_pressed.dd) {
+            try_use_item_or_mask(DPAD_CONFIG[2]);
+        } else if (pad_pressed.dl) {
+            try_use_item_or_mask(DPAD_CONFIG[3]);
+        }
     }
 }
 
