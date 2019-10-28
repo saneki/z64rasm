@@ -1,10 +1,10 @@
 #include "z64.h"
 
-#define IS_TRANSFORMATION_MASK(MASK) \
-    ((MASK) == Z64_ITEM_DEKU_MASK  || \
-    (MASK) == Z64_ITEM_GORON_MASK  || \
-    (MASK) == Z64_ITEM_ZORA_MASK   || \
-    (MASK) == Z64_ITEM_FIERCE_DEITY_MASK)
+#define IS_TRANSFORMATION_MASK(MASK)   \
+    ((MASK) == Z64_ITEM_DEKU_MASK   || \
+     (MASK) == Z64_ITEM_GORON_MASK  || \
+     (MASK) == Z64_ITEM_ZORA_MASK   || \
+     (MASK) == Z64_ITEM_FIERCE_DEITY_MASK)
 
 static void try_use_item(uint8_t slot, uint8_t item) {
     if (z64_file.items[slot] == item) {
