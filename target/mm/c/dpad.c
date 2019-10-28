@@ -75,9 +75,20 @@ static void try_use_item_or_mask(uint8_t item) {
 }
 
 void dpad_init() {
+    bool assign_defaults = true;
+
     // If DPAD_CONFIG values are still unset, set to default values
     for (int i = 0; i < 4; i++) {
-        if (DPAD_CONFIG[i] == Z64_ITEM_NONE) {
+        if (DPAD_CONFIG[i] != Z64_ITEM_NONE) {
+            // If any field in the config is set, do not set defaults
+            // This is so we can leave specific buttons blank if needed
+            assign_defaults = false;
+        }
+    }
+
+    // Set all default values
+    if (assign_defaults) {
+        for (int i = 0; i < 4; i++) {
             DPAD_CONFIG[i] = DPAD_DEFAULT[i];
         }
     }
