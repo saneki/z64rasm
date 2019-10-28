@@ -12,13 +12,21 @@ from rom_diff import create_diff
 from ntype import BigStream
 from crc import calculate_crc
 
-def build_data_symbols(symbols):
+# Hardcoded fields per target for added data:
+# (File Address, RAM Start, RAM End)
+OOT_OFFSETS=(0x03480000, 0x80400000, 0x80420000)
+MM_OFFSETS=(0x02AA0000, 0x80780000, 0x807A0000)
+
+def build_data_symbols(symbols, offsets):
+    # Unpack offset values from tuple
+    file_addr, ram_start, ram_end = offsets
+
     data_symbols = {}
     for (name, sym) in symbols.items():
         if sym['type'] == 'data':
             addr = int(sym['address'], 16)
-            if 0x80400000 <= addr < 0x80420000:
-                addr = addr - 0x80400000 + 0x03480000
+            if ram_start <= addr < ram_end:
+                addr = addr - ram_start + file_addr
             else:
                 continue
             data_symbols[name] = '{0:08X}'.format(addr)
@@ -35,6 +43,12 @@ def fixup_asm_symbols(path):
     asm_symbols_content = asm_symbols_content.replace(b'\x1A', b'')
     with open(path, 'wb') as f:
         f.write(asm_symbols_content)
+
+def get_offsets_by_target(target):
+    if target == 'mm':
+        return MM_OFFSETS
+    elif target == 'oot':
+        return OOT_OFFSETS
 
 def parse_asm_symbols(path, c_symbols):
     symbols = {}
@@ -136,7 +150,8 @@ def main():
     os.chdir(run_dir)
 
     # Dump symbols as JSON
-    data_symbols = build_data_symbols(symbols)
+    offsets = get_offsets_by_target(args.target)
+    data_symbols = build_data_symbols(symbols, offsets)
     dump_json_to_file(data_symbols, os.path.join(relpath, 'data/generated/symbols.json'))
 
     if pj64_sym_path:
