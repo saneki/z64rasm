@@ -491,7 +491,7 @@ typedef struct {
 
 /* function prototypes */
 typedef void (*z64_ReadFile_proc)(void *mem_addr, uint32_t vrom_addr, uint32_t size);
-typedef void (*z64_UseItem_proc)(z64_ctxt_t *ctxt, z64_link_t *link, uint8_t item, uint8_t unk);
+typedef void (*z64_UseItem_proc)(z64_ctxt_t *ctxt, z64_link_t *link, uint8_t item);
 
 /* functions */
 #define z64_ReadFile       ((z64_ReadFile_proc) z64_ReadFile_addr)

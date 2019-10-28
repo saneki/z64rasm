@@ -8,7 +8,7 @@
 
 static void try_use_item(uint8_t slot, uint8_t item) {
     if (z64_file.items[slot] == item) {
-        z64_UseItem(&z64_ctxt, &z64_link, item, 2);
+        z64_UseItem(&z64_ctxt, &z64_link, item);
     }
 }
 
@@ -18,7 +18,7 @@ static void try_use_mask(uint8_t slot, uint8_t item) {
         return;
 
     if (z64_file.masks[slot] == item) {
-        z64_UseItem(&z64_ctxt, &z64_link, item, 2);
+        z64_UseItem(&z64_ctxt, &z64_link, item);
     }
 }
 
