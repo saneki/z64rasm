@@ -8,7 +8,7 @@
 ;   - this isn't strictly necessary, but adds flexibility for the future
 .orga 0x20580
 .area 0x70, 0
-    .word 0x02EE0000, 0x02EE0000 + PAYLOAD_END - PAYLOAD_START, 0x02EE0000, 0
+    .word 0x02F00000, 0x02F00000 + PAYLOAD_END - PAYLOAD_START, 0x02F00000, 0
 .endarea
 
 ; Load new code from ROM
@@ -31,7 +31,7 @@
     lui     a0, 0x8078
     li      a2, PAYLOAD_END - PAYLOAD_START
     jal     0x80080C90
-    lui     a1, 0x02EE
+    lui     a1, 0x02F0
 
     jal     init
     nop
