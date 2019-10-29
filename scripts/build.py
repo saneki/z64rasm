@@ -15,7 +15,7 @@ from crc import calculate_crc
 # Hardcoded fields per target for added data:
 # (File Address, RAM Start, RAM End)
 OOT_OFFSETS=(0x03480000, 0x80400000, 0x80420000)
-MM_OFFSETS=(0x02EE0000, 0x80780000, 0x807A0000)
+MM_OFFSETS=(0x02F00000, 0x80780000, 0x807A0000)
 
 def build_data_symbols(symbols, offsets):
     # Unpack offset values from tuple
