@@ -1,9 +1,7 @@
 #!/usr/bin/env/python3
 
 import argparse
-import json
 import struct
-import sys
 
 from table import Table
 
