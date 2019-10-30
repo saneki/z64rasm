@@ -1,5 +1,5 @@
 import itertools
-from ntype import BigStream, uint32
+from ntype import uint32
 
 def calculate_crc(self):
 

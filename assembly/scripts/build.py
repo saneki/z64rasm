@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 
-import sys
-import os
-
 import argparse
 import collections
 import json
+import os
 import re
 from subprocess import check_call as call
 
