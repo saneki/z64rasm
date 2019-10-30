@@ -13,13 +13,13 @@ from ntype import BigStream
 from crc import calculate_crc
 
 # Hardcoded fields per target for added data:
-# (File Address, RAM Start, RAM End)
-OOT_OFFSETS=(0x03480000, 0x80400000, 0x80420000)
-MM_OFFSETS=(0x02F00000, 0x80780000, 0x807A0000)
+# (Table Start, File Address, RAM Start, RAM End)
+OOT_OFFSETS=(0x00007400, 0x03480000, 0x80400000, 0x80420000)
+MM_OFFSETS=(0x0001A500, 0x02F00000, 0x80780000, 0x807A0000)
 
 def build_data_symbols(symbols, offsets):
     # Unpack offset values from tuple
-    file_addr, ram_start, ram_end = offsets
+    _, file_addr, ram_start, ram_end = offsets
 
     data_symbols = {}
     for (name, sym) in symbols.items():
@@ -108,6 +108,7 @@ def get_parser():
     parser.add_argument('-t', '--target', default='oot', help='Target directory name')
     parser.add_argument('--pj64sym', help="Output path for PJ64 debugging symbols")
     parser.add_argument('--compile-c', action='store_true', help="Recompile C modules")
+    parser.add_argument('--virtual', action='store_true', help='Use virtual addresses in diff')
     return parser
 
 def get_target_relpath(path):
@@ -162,10 +163,13 @@ def main():
     update_crc(os.path.join(relpath, 'roms/patched.z64'))
 
     # Diff ROMs
+    table_offset, _, _, _ = offsets
     create_diff(
         os.path.join(relpath, 'roms/base.z64'),
         os.path.join(relpath, 'roms/patched.z64'),
-        os.path.join(relpath, 'data/generated/rom_patch.txt')
+        os.path.join(relpath, 'data/generated/rom_patch.txt'),
+        virtual=args.virtual,
+        offset=table_offset,
     )
 
 if __name__ == '__main__':
