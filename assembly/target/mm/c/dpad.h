@@ -3,7 +3,11 @@
 
 // Most of these states get checked by the "UseItem" function itself.
 // We do need to handle some of them though.
+//
+// Normally Z64_ACTION_STATE1_SPECIAL would not need to be checked, except for some rare cases
+// (like exiting from the telescope).
 #define DPAD_ACTION_STATE1 (      \
+    Z64_ACTION_STATE1_SPECIAL |   \
     Z64_ACTION_STATE1_CHARGE_SPIN \
 )
 #define DPAD_ACTION_STATE2 (   \
