@@ -246,6 +246,99 @@ typedef enum {
     Z64_GAME_STATE_NORMAL = 0x32,
 } z64_game_state_t;
 
+typedef enum {
+    // NPC dialogue, get item, area transition, cutscene, etc.
+    Z64_ACTION_STATE1_SPECIAL      = 0x20000000,
+    // Swimming.
+    Z64_ACTION_STATE1_SWIM         = 0x08000000,
+    // Damaged.
+    Z64_ACTION_STATE1_DAMAGED      = 0x04000000,
+    // Zora fins are out, "Put Away" may be prompted.
+    Z64_ACTION_STATE1_ZORA_WEAPON  = 0x01000000,
+    // On Epona.
+    Z64_ACTION_STATE1_EPONA        = 0x00800000,
+    // Shielding.
+    Z64_ACTION_STATE1_SHIELD       = 0x00400000,
+    // Using Zora fins.
+    Z64_ACTION_STATE1_ZORA_FINS    = 0x00200000,
+    // Aiming bow, hookshot, Zora fins, etc.
+    Z64_ACTION_STATE1_AIM          = 0x00100000,
+    // In the air.
+    Z64_ACTION_STATE1_AIR          = 0x00040000,
+    // In Z-target view.
+    Z64_ACTION_STATE1_Z_VIEW       = 0x00020000,
+    // Z-target enabled.
+    Z64_ACTION_STATE1_Z_ON         = 0x00008000,
+    // Hanging from ledge.
+    Z64_ACTION_STATE1_LEDGE_HANG   = 0x00002000,
+    // Charging spin attack.
+    Z64_ACTION_STATE1_CHARGE_SPIN  = 0x00001000,
+    // Hold above head.
+    Z64_ACTION_STATE1_HOLD         = 0x00000800,
+    // Hold new item over head.
+    Z64_ACTION_STATE1_GET_ITEM     = 0x00000400,
+    // Dead.
+    Z64_ACTION_STATE1_DEAD         = 0x00000080,
+    // Zora electric barrier.
+    Z64_ACTION_STATE1_BARRIER      = 0x00000010,
+    // Item is out, may later prompt "Put Away."
+    // Relevant to Bow, Hookshot, not Great Fairy Sword.
+    Z64_ACTION_STATE1_ITEM_OUT     = 0x00000008,
+    // Climbing ledge.
+    Z64_ACTION_STATE1_LEDGE_CLIMB  = 0x00000004,
+} z64_action_state1_t;
+
+typedef enum {
+    // Using ocarina? Maybe more.
+    Z64_ACTION_STATE2_OCARINA      = 0x08000000,
+    // Can get down from Epona.
+    Z64_ACTION_STATE2_CAN_DOWN     = 0x00400000,
+    // When tatl is out.
+    Z64_ACTION_STATE2_TATL_OUT     = 0x00100000,
+    // Jump slashing.
+    Z64_ACTION_STATE2_Z_JUMP       = 0x00080000,
+    // Spin attack.
+    Z64_ACTION_STATE2_SPIN_ATTACK  = 0x00020000,
+    // Stationary while climbing.
+    Z64_ACTION_STATE2_CLIMB_STAY   = 0x00001000,
+    // Diving.
+    Z64_ACTION_STATE2_DIVING       = 0x00000800,
+    // Diving, swimming as Zora.
+    Z64_ACTION_STATE2_DIVING_2     = 0x00000400,
+    // Climbing. Also occurs during: transforming, hanging from ledge,
+    // deku spinning, goron ball
+    Z64_ACTION_STATE2_CLIMBING     = 0x00000040,
+    // Running / moving.
+    Z64_ACTION_STATE2_MOVING       = 0x00000020,
+    // Is set for some movement frames.
+    Z64_ACTION_STATE2_MOVING_2     = 0x00000008,
+} z64_action_state2_t;
+
+typedef enum {
+    // Rolling (non-Goron).
+    Z64_ACTION_STATE3_ROLLING     = 0x08000000,
+    // Attacking with sword, B button weapon.
+    Z64_ACTION_STATE3_ATTACK      = 0x02000000,
+    // Hover with flower petals? Maybe more.
+    Z64_ACTION_STATE3_DEKU_AIR_2  = 0x01000000,
+    // Goron spike roll.
+    Z64_ACTION_STATE3_GORON_SPIKE = 0x00080000,
+    // Transforming (latter-half).
+    Z64_ACTION_STATE3_TRANS_PART  = 0x00020000,
+    // Hover with flower petals.
+    Z64_ACTION_STATE3_DEKU_AIR    = 0x00002000,
+    // Jumping out of Deku flower.
+    Z64_ACTION_STATE3_DEKU_RISE   = 0x00000200,
+    // Deku flower dive.
+    Z64_ACTION_STATE3_DEKU_DIVE   = 0x00000100,
+    // Pull back bow string.
+    Z64_ACTION_STATE3_PULL_BOW    = 0x00000040,
+    // Post-attack.
+    Z64_ACTION_STATE3_ATTACK_2    = 0x00000008,
+    // Beginning of jump attack.
+    Z64_ACTION_STATE3_JUMP_ATTACK = 0x00000002,
+} z64_action_state3_t;
+
 typedef union
 {
   struct
@@ -491,6 +584,10 @@ typedef struct {
     /// ...
     uint8_t unk_00_[0x146];     // 0x0000
     uint8_t pre_use;            // 0x0146
+    uint8_t unk_147_[0x925];    // 0x0147
+    uint32_t action_state1;     // 0x0A6C
+    uint32_t action_state2;     // 0x0A70
+    uint32_t action_state3;     // 0x0A74
 } z64_link_t;
 
 /* dram addresses */

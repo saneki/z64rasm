@@ -79,6 +79,18 @@ static void try_use_item_or_mask(uint8_t item) {
     }
 }
 
+static bool check_action_state() {
+    // Make sure certain action state flags are cleared before processing input
+    if ((z64_link.action_state1 & DPAD_ACTION_STATE1) != 0)
+        return false;
+    else if ((z64_link.action_state2 & DPAD_ACTION_STATE2) != 0)
+        return false;
+    else if ((z64_link.action_state3 & DPAD_ACTION_STATE3) != 0)
+        return false;
+    else
+        return true;
+}
+
 void dpad_init() {
     // If using default values, overwrite DPAD_CONFIG with DPAD_DEFAULT
     if (DPAD_STATE == DPAD_STATE_TYPE_DEFAULTS) {
@@ -93,6 +105,10 @@ void handle_dpad() {
 
     // Check general game state to know if we can use C buttons at all
     if (z64_file.game_state != Z64_GAME_STATE_NORMAL)
+        return;
+
+    // Check action state flags
+    if (!check_action_state())
         return;
 
     if (DPAD_STATE != DPAD_STATE_TYPE_DISABLED) {
