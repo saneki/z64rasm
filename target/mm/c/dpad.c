@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include "dpad.h"
+#include "item.h"
 #include "z64.h"
 
 #define IS_TRANSFORMATION_MASK(MASK)   \
@@ -48,7 +49,7 @@ static bool get_mask_slot(uint8_t item, uint8_t *slot) {
 }
 
 static void try_use_item(uint8_t slot, uint8_t item) {
-    if (z64_file.items[slot] == item) {
+    if (z64_file.items[slot] == item && check_c_item_usable(item)) {
         z64_UseItem(&z64_ctxt, &z64_link, item);
     }
 }
@@ -58,7 +59,7 @@ static void try_use_mask(uint8_t slot, uint8_t item) {
     if (!IS_TRANSFORMATION_MASK(item) && z64_file.form != Z64_FORM_CHILD)
         return;
 
-    if (z64_file.masks[slot] == item) {
+    if (z64_file.masks[slot] == item && check_c_item_usable(item)) {
         z64_UseItem(&z64_ctxt, &z64_link, item);
     }
 }
@@ -89,6 +90,10 @@ void dpad_init() {
 
 void handle_dpad() {
     pad_t pad_pressed = z64_ctxt.input[0].pad_pressed;
+
+    // Check general game state to know if we can use C buttons at all
+    if (z64_file.game_state != Z64_GAME_STATE_NORMAL)
+        return;
 
     if (DPAD_STATE != DPAD_STATE_TYPE_DISABLED) {
         if (pad_pressed.du) {

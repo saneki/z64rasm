@@ -235,6 +235,17 @@ typedef enum
     Z64_SLOT_FIERCE_DIETY_MASK,
 } z64_mask_slot_t;
 
+typedef enum {
+    Z64_GAME_STATE_BLACK_SCREEN,
+    Z64_GAME_STATE_TRANSITION,
+    Z64_GAME_STATE_TRANSITION_2,
+    Z64_GAME_STATE_DIALOGUE = 5,
+    Z64_GAME_STATE_PAUSE = 7,
+    Z64_GAME_STATE_MINIGAME = 0xC,
+    Z64_GAME_STATE_ITEM_PROMPT = 0x10,
+    Z64_GAME_STATE_NORMAL = 0x32,
+} z64_game_state_t;
+
 typedef union
 {
   struct
@@ -387,9 +398,7 @@ typedef struct
     };
     uint8_t unk_48_[4];     // 0x0048
     uint8_t b_button;       // 0x004C
-    uint8_t c_button_left;  // 0x004D
-    uint8_t c_button_down;  // 0x004E
-    uint8_t c_button_right; // 0x004F
+    uint8_t c_buttons[3];   // 0x004D
     uint8_t unk_50_[0xD];   // 0x0050
     uint8_t alt_c_buttons[3]; // 0x005D
     uint8_t unk_60_[0xD];   // 0x0060
@@ -468,13 +477,20 @@ typedef struct
     uint8_t unk_F60[0x86];      // 0x0F60
     uint8_t bomber_count;       // 0x0FE6, set to 5 once the bomber code is obtained
     uint8_t bomber_code[5];     // 0x0FE7, cosmetic??
-    uint8_t unk_FEC_[0x2F42];   // 0x0FEC
-    uint16_t magic_meter_size;  // 0x3F2E
+    uint8_t unk_FEC_[0x2F2C];   // 0x0FEC
+    uint8_t b_button_usable;     // 0x3F18
+    uint8_t c_buttons_usable[3]; // 0x3F19
+    uint8_t unk_3F1C_[4];        // 0x3F1C
+    uint16_t pre_game_state;     // 0x3F20
+    uint16_t game_state;         // 0x3F22
+    uint8_t unk_3F24_[0xA];      // 0x3F24
+    uint16_t magic_meter_size;   // 0x3F2E
 } z64_file_t;
 
 typedef struct {
     /// ...
-    uint8_t temp;
+    uint8_t unk_00_[0x146];     // 0x0000
+    uint8_t pre_use;            // 0x0146
 } z64_link_t;
 
 /* dram addresses */
@@ -482,6 +498,7 @@ typedef struct {
 #define z64_file_addr      0x801EF670
 #define z64_ctxt_addr      0x803E6B20
 #define z64_link_addr      0x803FFDB0
+#define z64_UpdateButtonUsability_addr 0x80110038
 #define z64_UseItem_addr   0x8074EE20
 
 /* data */
@@ -491,10 +508,12 @@ typedef struct {
 
 /* function prototypes */
 typedef void (*z64_ReadFile_proc)(void *mem_addr, uint32_t vrom_addr, uint32_t size);
+typedef void (*z64_UpdateButtonUsability_proc)(z64_ctxt_t *ctxt);
 typedef void (*z64_UseItem_proc)(z64_ctxt_t *ctxt, z64_link_t *link, uint8_t item);
 
 /* functions */
 #define z64_ReadFile       ((z64_ReadFile_proc) z64_ReadFile_addr)
+#define z64_UpdateButtonUsability ((z64_UpdateButtonUsability_proc) z64_UpdateButtonUsability_addr)
 #define z64_UseItem        ((z64_UseItem_proc) z64_UseItem_addr)
 
 #endif
