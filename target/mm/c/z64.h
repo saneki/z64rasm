@@ -293,10 +293,10 @@ typedef enum {
 typedef enum {
     // Idle animation.
     Z64_ACTION_STATE2_IDLE         = 0x10000000,
-    // Kamaro mask dance.
-    Z64_ACTION_STATE2_KAMARO       = 0x02000000,
     // Using ocarina? Maybe more.
     Z64_ACTION_STATE2_OCARINA      = 0x08000000,
+    // Kamaro mask dance.
+    Z64_ACTION_STATE2_KAMARO       = 0x02000000,
     // Can get down from Epona.
     Z64_ACTION_STATE2_CAN_DOWN     = 0x00400000,
     // When tatl is out.
