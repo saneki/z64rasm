@@ -263,7 +263,9 @@ typedef enum {
     Z64_ACTION_STATE1_ZORA_FINS    = 0x00200000,
     // Aiming bow, hookshot, Zora fins, etc.
     Z64_ACTION_STATE1_AIM          = 0x00100000,
-    // In the air.
+    // In the air (without jumping beforehand).
+    Z64_ACTION_STATE1_FALLING      = 0x00080000,
+    // In the air (with jumping beforehand).
     Z64_ACTION_STATE1_AIR          = 0x00040000,
     // In Z-target view.
     Z64_ACTION_STATE1_Z_VIEW       = 0x00020000,
@@ -289,6 +291,10 @@ typedef enum {
 } z64_action_state1_t;
 
 typedef enum {
+    // Idle animation.
+    Z64_ACTION_STATE2_IDLE         = 0x10000000,
+    // Kamaro mask dance.
+    Z64_ACTION_STATE2_KAMARO       = 0x02000000,
     // Using ocarina? Maybe more.
     Z64_ACTION_STATE2_OCARINA      = 0x08000000,
     // Can get down from Epona.
@@ -315,6 +321,8 @@ typedef enum {
 } z64_action_state2_t;
 
 typedef enum {
+    // Bremen mask march.
+    Z64_ACTION_STATE3_BREMEN      = 0x20000000,
     // Rolling (non-Goron).
     Z64_ACTION_STATE3_ROLLING     = 0x08000000,
     // Attacking with sword, B button weapon.
