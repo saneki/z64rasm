@@ -232,7 +232,7 @@ typedef enum
     Z64_SLOT_GARO_MASK,
     Z64_SLOT_CAPTAIN_HAT,
     Z64_SLOT_GIANT_MASK,
-    Z64_SLOT_FIERCE_DIETY_MASK,
+    Z64_SLOT_FIERCE_DEITY_MASK,
 } z64_mask_slot_t;
 
 typedef enum {
@@ -247,8 +247,10 @@ typedef enum {
 } z64_game_state_t;
 
 typedef enum {
-    // NPC dialogue, get item, area transition, cutscene, etc.
+    // NPC dialogue, get item, area transition, cutscene, form transition, using ocarina, etc.
     Z64_ACTION_STATE1_SPECIAL      = 0x20000000,
+    // Form transition, using ocarina.
+    Z64_ACTION_STATE1_SPECIAL_2    = 0x10000000,
     // Swimming.
     Z64_ACTION_STATE1_SWIM         = 0x08000000,
     // Damaged.
@@ -269,6 +271,8 @@ typedef enum {
     Z64_ACTION_STATE1_AIR          = 0x00040000,
     // In Z-target view.
     Z64_ACTION_STATE1_Z_VIEW       = 0x00020000,
+    // Z-target check-able or speak-able.
+    Z64_ACTION_STATE1_Z_CHECK      = 0x00010000,
     // Z-target enabled.
     Z64_ACTION_STATE1_Z_ON         = 0x00008000,
     // Hanging from ledge.
@@ -279,6 +283,8 @@ typedef enum {
     Z64_ACTION_STATE1_HOLD         = 0x00000800,
     // Hold new item over head.
     Z64_ACTION_STATE1_GET_ITEM     = 0x00000400,
+    // Transition to day/night.
+    Z64_ACTION_STATE1_DAY_TRANS    = 0x00000200,
     // Dead.
     Z64_ACTION_STATE1_DEAD         = 0x00000080,
     // Zora electric barrier.
@@ -301,7 +307,7 @@ typedef enum {
     Z64_ACTION_STATE2_CAN_DOWN     = 0x00400000,
     // When tatl is out.
     Z64_ACTION_STATE2_TATL_OUT     = 0x00100000,
-    // Jump slashing.
+    // Z-target jumping (sidehop, backflip).
     Z64_ACTION_STATE2_Z_JUMP       = 0x00080000,
     // Spin attack.
     Z64_ACTION_STATE2_SPIN_ATTACK  = 0x00020000,
@@ -318,6 +324,8 @@ typedef enum {
     Z64_ACTION_STATE2_MOVING       = 0x00000020,
     // Is set for some movement frames.
     Z64_ACTION_STATE2_MOVING_2     = 0x00000008,
+    // "Check" or "Speak" prompt may appear.
+    Z64_ACTION_STATE2_CHECK        = 0x00000002,
 } z64_action_state2_t;
 
 typedef enum {
