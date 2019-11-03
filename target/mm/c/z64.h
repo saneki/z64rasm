@@ -615,10 +615,11 @@ typedef struct
     uint8_t c_buttons_usable[3]; // 0x3F19
     uint8_t a_button_usable;     // 0x3F1C
     uint8_t unk_3F1D_[3];        // 0x3F1D
-    uint16_t pre_game_state;     // 0x3F20
+    uint16_t pre_game_state;     // 0x3F20, game state in relation to alpha transition?
     uint16_t game_state;         // 0x3F22
     uint16_t alpha_transition;   // 0x3F24
-    uint8_t unk_3F26_[0x8];      // 0x3F26
+    uint16_t sub_game_state;     // 0x3F26, might be "previous" game state but not sure
+    uint8_t unk_3F28_[0x6];      // 0x3F28
     uint16_t magic_meter_size;   // 0x3F2E
 } z64_file_t;
 
