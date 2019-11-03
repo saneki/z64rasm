@@ -57,6 +57,9 @@ static uint16_t positions[4][2] = {
     { 257, 64 },
 };
 
+// Whether or not D-Pad items are usable, according to z64_UpdateButtonUsability.
+static bool usable[4];
+
 static bool get_slot(uint8_t item, uint8_t *slot, uint8_t *array, uint8_t length) {
     for (uint8_t i = 0; i < length; i++) {
         if (item == array[i]) {
@@ -76,8 +79,22 @@ static bool get_mask_slot(uint8_t item, uint8_t *slot) {
     return get_slot(item, slot, (uint8_t *)&z64_file.masks, sizeof(z64_file.masks));
 }
 
+static bool has_item_or_mask(uint8_t item) {
+    uint8_t slot;
+    return (get_item_slot(item, &slot) || get_mask_slot(item, &slot));
+}
+
+static bool have_any(uint8_t *dpad) {
+    for (int i = 0; i < 4; i++) {
+        if (has_item_or_mask(dpad[i]))
+            return true;
+    }
+
+    return false;
+}
+
 static void try_use_item(uint8_t slot, uint8_t item) {
-    if (z64_file.items[slot] == item && check_c_item_usable(item)) {
+    if (z64_file.items[slot] == item) {
         z64_UseItem(&z64_ctxt, &z64_link, item);
     }
 }
@@ -87,7 +104,7 @@ static void try_use_mask(uint8_t slot, uint8_t item) {
     if (!IS_TRANSFORMATION_MASK(item) && z64_file.form != Z64_FORM_CHILD)
         return;
 
-    if (z64_file.masks[slot] == item && check_c_item_usable(item)) {
+    if (z64_file.masks[slot] == item) {
         z64_UseItem(&z64_ctxt, &z64_link, item);
     }
 }
@@ -105,6 +122,12 @@ static void try_use_item_or_mask(uint8_t item) {
     } else {
         try_use_item(slot, item);
     }
+}
+
+static void get_dpad_item_usability(bool *dest)
+{
+    check_item_usability(dest, 0xFF, DPAD_CONFIG[1], DPAD_CONFIG[2], DPAD_CONFIG[3]);
+    dest[0] = check_c_item_usable(DPAD_CONFIG[0]);
 }
 
 static bool check_action_state() {
@@ -147,6 +170,9 @@ void dpad_init() {
 void handle_dpad() {
     pad_t pad_pressed = z64_ctxt.input[0].pad_pressed;
 
+    // Update usability flags for later use in draw_dpad
+    get_dpad_item_usability(usable);
+
     // Check general game state to know if we can use C buttons at all
     if (z64_file.game_state != Z64_GAME_STATE_NORMAL)
         return;
@@ -156,36 +182,55 @@ void handle_dpad() {
         return;
 
     if (DPAD_STATE != DPAD_STATE_TYPE_DISABLED) {
-        if (pad_pressed.du) {
+        if (pad_pressed.du && usable[0]) {
             try_use_item_or_mask(DPAD_CONFIG[0]);
-        } else if (pad_pressed.dr) {
+        } else if (pad_pressed.dr && usable[1]) {
             try_use_item_or_mask(DPAD_CONFIG[1]);
-        } else if (pad_pressed.dd) {
+        } else if (pad_pressed.dd && usable[2]) {
             try_use_item_or_mask(DPAD_CONFIG[2]);
-        } else if (pad_pressed.dl) {
+        } else if (pad_pressed.dl && usable[3]) {
             try_use_item_or_mask(DPAD_CONFIG[3]);
         }
     }
 }
 
 void draw_dpad() {
-    if (z64_file.game_state != Z64_GAME_STATE_NORMAL)
+    // If disabled, don't draw
+    if (DPAD_STATE == DPAD_STATE_TYPE_DISABLED)
         return;
+
+    // If we don't have any D-Pad items, draw nothing
+    if (!have_any(DPAD_CONFIG))
+        return;
+
+    // Use minimap alpha for fading textures out
+    uint8_t minimap_alpha = z64_game.sub_169E8.minimap_alpha & 0xFF;
 
     z64_disp_buf_t *db = &(z64_ctxt.gfx->overlay);
     gSPDisplayList(db->p, &setup_db);
     gDPPipeSync(db->p++);
-    gDPSetPrimColor(db->p++, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF);
+    gDPSetPrimColor(db->p++, 0, 0, 0xFF, 0xFF, 0xFF, minimap_alpha);
     gDPSetCombineMode(db->p++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
     sprite_load(db, &dpad_sprite, 0, 1);
     sprite_draw(db, &dpad_sprite, 0, 271, 64, 16, 16);
 
     for (int i = 0; i < 4; i++) {
         uint16_t x = positions[i][0], y = positions[i][1];
+        uint8_t value = DPAD_CONFIG[i];
+
+        // Show nothing if not in inventory
+        if (!has_item_or_mask(value))
+            continue;
+
+        // Draw faded
+        uint8_t alpha = minimap_alpha;
+        if (!usable[i] && alpha > 0x4A)
+            alpha = 0x4A;
+        gDPSetPrimColor(db->p++, 0, 0, 0xFF, 0xFF, 0xFF, alpha);
 
         // If D-Pad item has changed, load new texture on the fly.
-        if (texture_items[i] != DPAD_CONFIG[i]) {
-            load_texture(i, DPAD_CONFIG[i]);
+        if (texture_items[i] != value) {
+            load_texture(i, value);
         }
 
         sprite_load(db, &dpad_item_sprites, i, 1);

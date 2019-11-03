@@ -4,7 +4,10 @@
 void check_item_usability(bool *dest, uint8_t b, uint8_t c1, uint8_t c2, uint8_t c3) {
     uint8_t previous[4];
 
-    // Backup
+    // Backup button alpha transition
+    uint8_t alpha_transition = z64_file.alpha_transition;
+
+    // Backup button items
     previous[0] = z64_file.b_button;
     for (int i = 0; i < 3; i++)
         previous[i+1] = z64_file.c_buttons[i];
@@ -21,12 +24,16 @@ void check_item_usability(bool *dest, uint8_t b, uint8_t c1, uint8_t c2, uint8_t
     for (int i = 0; i < 3; i++)
         dest[i+1] = (z64_file.c_buttons_usable[i] == 0);
 
-    // Restore
+    // Restore button items
     z64_file.b_button = previous[0];
     for (int i = 0; i < 3; i++)
         z64_file.c_buttons[i] = previous[i+1];
 
-    // Todo: Restore usable state if needed?
+    // Restore states
+    z64_UpdateButtonUsability(&z64_ctxt);
+
+    // Restore alpha transition
+    z64_file.alpha_transition = alpha_transition;
 }
 
 bool check_c_item_usable(uint8_t c) {
