@@ -203,13 +203,16 @@ void draw_dpad() {
     if (!have_any(DPAD_CONFIG))
         return;
 
-    // Use minimap alpha for fading textures out
-    uint8_t minimap_alpha = z64_game.sub_169E8.minimap_alpha & 0xFF;
+    // Use minimap alpha by default for fading textures out
+    uint8_t prim_alpha = z64_game.sub_169E8.minimap_alpha & 0xFF;
+    // If in minigame, the C buttons fade out and so should the D-Pad
+    if (z64_file.game_state == Z64_GAME_STATE_MINIGAME)
+        prim_alpha = z64_game.sub_169E8.c_left_button_alpha & 0xFF;
 
     z64_disp_buf_t *db = &(z64_ctxt.gfx->overlay);
     gSPDisplayList(db->p, &setup_db);
     gDPPipeSync(db->p++);
-    gDPSetPrimColor(db->p++, 0, 0, 0xFF, 0xFF, 0xFF, minimap_alpha);
+    gDPSetPrimColor(db->p++, 0, 0, 0xFF, 0xFF, 0xFF, prim_alpha);
     gDPSetCombineMode(db->p++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
     sprite_load(db, &dpad_sprite, 0, 1);
     sprite_draw(db, &dpad_sprite, 0, 271, 64, 16, 16);
@@ -223,7 +226,7 @@ void draw_dpad() {
             continue;
 
         // Draw faded
-        uint8_t alpha = minimap_alpha;
+        uint8_t alpha = prim_alpha;
         if (!usable[i] && alpha > 0x4A)
             alpha = 0x4A;
         gDPSetPrimColor(db->p++, 0, 0, 0xFF, 0xFF, 0xFF, alpha);
