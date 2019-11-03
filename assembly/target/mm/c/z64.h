@@ -606,7 +606,12 @@ typedef struct {
     uint32_t action_state3;     // 0x0A74
 } z64_link_t;
 
+/* virtual file addresses */
+#define z64_item_texture_file          0xA36C10
+
 /* dram addresses */
+#define z64_GetPhysicalAddrOfFile_addr 0x80080950
+#define z64_LoadItemTexture_addr       0x80178DAC
 #define z64_ReadFile_addr  0x80080C90
 #define z64_file_addr      0x801EF670
 #define z64_ctxt_addr      0x803E6B20
@@ -620,11 +625,15 @@ typedef struct {
 #define z64_link           (*(z64_link_t*) z64_link_addr)
 
 /* function prototypes */
+typedef uint32_t (*z64_GetPhysicalAddrOfFile_proc)(uint32_t vrom_addr);
+typedef void (*z64_LoadItemTexture_proc)(uint32_t phys_file, uint8_t item, uint8_t *dest, uint32_t length);
 typedef void (*z64_ReadFile_proc)(void *mem_addr, uint32_t vrom_addr, uint32_t size);
 typedef void (*z64_UpdateButtonUsability_proc)(z64_ctxt_t *ctxt);
 typedef void (*z64_UseItem_proc)(z64_ctxt_t *ctxt, z64_link_t *link, uint8_t item);
 
 /* functions */
+#define z64_GetPhysicalAddrOfFile ((z64_GetPhysicalAddrOfFile_proc) z64_GetPhysicalAddrOfFile_addr)
+#define z64_LoadItemTexture       ((z64_LoadItemTexture_proc)       z64_LoadItemTexture_addr)
 #define z64_ReadFile       ((z64_ReadFile_proc) z64_ReadFile_addr)
 #define z64_UpdateButtonUsability ((z64_UpdateButtonUsability_proc) z64_UpdateButtonUsability_addr)
 #define z64_UseItem        ((z64_UseItem_proc) z64_UseItem_addr)
