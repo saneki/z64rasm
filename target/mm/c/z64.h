@@ -454,6 +454,26 @@ typedef struct
                                           /* 0x00A4 */
 } z64_ctxt_t;
 
+typedef struct z64
+{
+    uint8_t  unk_0_[0x266];        // 0x0000
+    uint16_t a_button_alpha;       // 0x0266
+    uint16_t b_button_alpha;       // 0x0268
+    uint16_t c_left_button_alpha;  // 0x026A
+    uint16_t c_down_button_alpha;  // 0x026C
+    uint16_t c_right_button_alpha; // 0x026E
+    uint16_t hearts_alpha;         // 0x0270
+    uint16_t rupees_alpha;         // 0x0272
+    uint16_t minimap_alpha;        // 0x0274
+} z64_game_sub_169E8;
+
+typedef struct
+{
+    z64_ctxt_t         common;            // 0x00000
+    uint8_t            unk_2E4_[0x16944]; // 0x000A4
+    z64_game_sub_169E8 sub_169E8;         // 0x169E8
+} z64_game_t;
+
 // Note: Currently comparing two separate sources:
 //
 // - https://wiki.cloudmodding.com/mm/Notes/Deathbasket - N64 version, see "current file stuff"
@@ -589,10 +609,12 @@ typedef struct
     uint8_t unk_FEC_[0x2F2C];   // 0x0FEC
     uint8_t b_button_usable;     // 0x3F18
     uint8_t c_buttons_usable[3]; // 0x3F19
-    uint8_t unk_3F1C_[4];        // 0x3F1C
+    uint8_t a_button_usable;     // 0x3F1C
+    uint8_t unk_3F1D_[3];        // 0x3F1D
     uint16_t pre_game_state;     // 0x3F20
     uint16_t game_state;         // 0x3F22
-    uint8_t unk_3F24_[0xA];      // 0x3F24
+    uint16_t alpha_transition;   // 0x3F24
+    uint8_t unk_3F26_[0x8];      // 0x3F26
     uint16_t magic_meter_size;   // 0x3F2E
 } z64_file_t;
 
@@ -615,6 +637,7 @@ typedef struct {
 #define z64_ReadFile_addr  0x80080C90
 #define z64_file_addr      0x801EF670
 #define z64_ctxt_addr      0x803E6B20
+#define z64_game_addr      z64_ctxt_addr
 #define z64_link_addr      0x803FFDB0
 #define z64_UpdateButtonUsability_addr 0x80110038
 #define z64_UseItem_addr   0x8074EE20
@@ -622,6 +645,7 @@ typedef struct {
 /* data */
 #define z64_ctxt           (*(z64_ctxt_t*) z64_ctxt_addr)
 #define z64_file           (*(z64_file_t*) z64_file_addr)
+#define z64_game           (*(z64_game_t*) z64_game_addr)
 #define z64_link           (*(z64_link_t*) z64_link_addr)
 
 /* function prototypes */
