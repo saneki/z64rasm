@@ -1,7 +1,11 @@
 #include <stdbool.h>
 #include "dpad.h"
+#include "gfx.h"
 #include "item.h"
+#include "util.h"
 #include "z64.h"
+
+#define ITEM_TEXTURE_LEN 0x1000
 
 #define IS_TRANSFORMATION_MASK(MASK)   \
     ((MASK) == Z64_ITEM_DEKU_MASK   || \
@@ -28,6 +32,30 @@ uint8_t DPAD_DEFAULT[4] = {
 
 // State of D-pad usage (disabled, enabled, defaults).
 uint8_t DPAD_STATE = DPAD_STATE_TYPE_DEFAULTS;
+
+// Textures buffer pointer.
+static uint8_t *textures;
+
+static sprite_t dpad_item_sprites = {
+    NULL, 32, 32, 4,
+    G_IM_FMT_RGBA, G_IM_SIZ_32b, 4
+};
+
+// Indicates which item textures are currently loaded into our buffer.
+static uint8_t texture_items[4] = {
+    Z64_ITEM_NONE,
+    Z64_ITEM_NONE,
+    Z64_ITEM_NONE,
+    Z64_ITEM_NONE,
+};
+
+// Positions of textures.
+static uint16_t positions[4][2] = {
+    { 272, 49 },
+    { 286, 64 },
+    { 272, 77 },
+    { 257, 64 },
+};
 
 static bool get_slot(uint8_t item, uint8_t *slot, uint8_t *array, uint8_t length) {
     for (uint8_t i = 0; i < length; i++) {
@@ -91,6 +119,14 @@ static bool check_action_state() {
         return true;
 }
 
+static void load_texture(int idx, uint8_t item)
+{
+    uint32_t phys = z64_GetPhysicalAddrOfFile(z64_item_texture_file);
+    uint8_t *dest = textures + (idx * ITEM_TEXTURE_LEN);
+    z64_LoadItemTexture(phys, item, dest, ITEM_TEXTURE_LEN);
+    texture_items[idx] = item;
+}
+
 void dpad_init() {
     // If using default values, overwrite DPAD_CONFIG with DPAD_DEFAULT
     if (DPAD_STATE == DPAD_STATE_TYPE_DEFAULTS) {
@@ -98,6 +134,14 @@ void dpad_init() {
             DPAD_CONFIG[i] = DPAD_DEFAULT[i];
         }
     }
+
+    // Allocate space for textures
+    textures = heap_alloc(ITEM_TEXTURE_LEN * 4);
+    dpad_item_sprites.buf = textures;
+
+    // Load textures
+    for (int i = 0; i < 4; i++)
+        load_texture(i, DPAD_CONFIG[i]);
 }
 
 void handle_dpad() {
@@ -125,4 +169,28 @@ void handle_dpad() {
 }
 
 void draw_dpad() {
+    if (z64_file.game_state != Z64_GAME_STATE_NORMAL)
+        return;
+
+    z64_disp_buf_t *db = &(z64_ctxt.gfx->overlay);
+    gSPDisplayList(db->p, &setup_db);
+    gDPPipeSync(db->p++);
+    gDPSetPrimColor(db->p++, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF);
+    gDPSetCombineMode(db->p++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+    sprite_load(db, &dpad_sprite, 0, 1);
+    sprite_draw(db, &dpad_sprite, 0, 271, 64, 16, 16);
+
+    for (int i = 0; i < 4; i++) {
+        uint16_t x = positions[i][0], y = positions[i][1];
+
+        // If D-Pad item has changed, load new texture on the fly.
+        if (texture_items[i] != DPAD_CONFIG[i]) {
+            load_texture(i, DPAD_CONFIG[i]);
+        }
+
+        sprite_load(db, &dpad_item_sprites, i, 1);
+        sprite_draw(db, &dpad_item_sprites, 0, x, y, 16, 16);
+    }
+
+    gDPPipeSync(db->p++);
 }

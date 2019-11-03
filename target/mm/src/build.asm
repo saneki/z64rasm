@@ -18,6 +18,7 @@
 .include "boot.asm"
 .include "hacks.asm"
 .include "hooks.asm"
+.include "hooks_dpad.asm"
 
 ;==================================================================================================
 ; New code region
@@ -31,6 +32,7 @@ PAYLOAD_START:
 
 .include "init.asm"
 .include "every_frame.asm"
+.include "dpad.asm"
 .importobj "../build/bundle.o"
 .align 8
 DPAD_TEXTURE:
