@@ -287,6 +287,8 @@ typedef enum {
     Z64_ACTION_STATE1_DAY_TRANS    = 0x00000200,
     // Dead.
     Z64_ACTION_STATE1_DEAD         = 0x00000080,
+    // When walking in a cutscene? Unsure.
+    Z64_ACTION_STATE1_MOVE_SCENE   = 0x00000020,
     // Zora electric barrier.
     Z64_ACTION_STATE1_BARRIER      = 0x00000010,
     // Item is out, may later prompt "Put Away."
@@ -305,6 +307,8 @@ typedef enum {
     Z64_ACTION_STATE2_KAMARO       = 0x02000000,
     // Can get down from Epona.
     Z64_ACTION_STATE2_CAN_DOWN     = 0x00400000,
+    // Tatl C up button prompt.
+    Z64_ACTION_STATE2_TATL_BUTTON  = 0x00200000,
     // When tatl is out.
     Z64_ACTION_STATE2_TATL_OUT     = 0x00100000,
     // Z-target jumping (sidehop, backflip).
