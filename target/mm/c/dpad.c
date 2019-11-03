@@ -210,7 +210,7 @@ void draw_dpad() {
         prim_alpha = z64_game.sub_169E8.c_left_button_alpha & 0xFF;
 
     z64_disp_buf_t *db = &(z64_ctxt.gfx->overlay);
-    gSPDisplayList(db->p, &setup_db);
+    gSPDisplayList(db->p++, &setup_db);
     gDPPipeSync(db->p++);
     gDPSetPrimColor(db->p++, 0, 0, 0xFF, 0xFF, 0xFF, prim_alpha);
     gDPSetCombineMode(db->p++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
