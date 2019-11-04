@@ -243,6 +243,7 @@ typedef enum {
     Z64_GAME_STATE_PAUSE = 7,
     Z64_GAME_STATE_MINIGAME = 0xC,
     Z64_GAME_STATE_ITEM_PROMPT = 0x10,
+    Z64_GAME_STATE_PICTOBOX = 0x15,
     Z64_GAME_STATE_NORMAL = 0x32,
 } z64_game_state_t;
 
@@ -345,6 +346,8 @@ typedef enum {
     Z64_ACTION_STATE3_GORON_SPIKE = 0x00080000,
     // Transforming (latter-half).
     Z64_ACTION_STATE3_TRANS_PART  = 0x00020000,
+    // Zora swimming/diving.
+    Z64_ACTION_STATE3_ZORA_SWIM   = 0x00008000,
     // Hover with flower petals.
     Z64_ACTION_STATE3_DEKU_AIR    = 0x00002000,
     // Jumping out of Deku flower.
