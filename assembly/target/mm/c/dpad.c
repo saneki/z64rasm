@@ -174,7 +174,10 @@ void handle_dpad() {
     get_dpad_item_usability(usable);
 
     // Check general game state to know if we can use C buttons at all
-    if (z64_file.game_state != Z64_GAME_STATE_NORMAL)
+    // Note: After collecting a stray fairy (and possibly in other cases) the state flags are set
+    // to 0 despite the game running normally.
+    if (z64_file.game_state != Z64_GAME_STATE_NORMAL &&
+        z64_file.game_state != Z64_GAME_STATE_BLACK_SCREEN)
         return;
 
     // Check action state flags
