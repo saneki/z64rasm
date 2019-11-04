@@ -1,6 +1,5 @@
 init:
     ; Displaced code (stack storage)
-    sw      s0, 0x0018 (sp)
     sw      s4, 0x0028 (sp)
     sw      s3, 0x0024 (sp)
     sw      s2, 0x0020 (sp)
@@ -17,5 +16,8 @@ init:
     addiu   s0, s0, 0xD910
 
     lw      ra, 0x10 (sp)
-    jr      ra
     addiu   sp, sp, 0x18
+
+    jr      ra
+    ; Displaced code
+    lui     a0, 0x0004
