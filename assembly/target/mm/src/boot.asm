@@ -22,6 +22,7 @@
 ;   sw      s2, 0x0020 (sp)
 ;   sw      s1, 0x001C (sp)
 ;   sw      a0, 0x0340 (sp)
+;   lui     a0, 0x0004
 .orga 0xB5A904 ; In memory: 0x801748A4
 .area 0x24, 0
     sw      ra, 0x002C (sp)
@@ -29,10 +30,11 @@
 
     ; Load first code file from ROM
     lui     a0, 0x8078
+    ori     a0, a0, 0x4600
     li      a2, PAYLOAD_END - PAYLOAD_START
     jal     0x80080C90
     lui     a1, 0x02F0
 
     jal     init
-    nop
+    sw      s0, 0x0018 (sp)
 .endarea
