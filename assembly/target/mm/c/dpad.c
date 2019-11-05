@@ -49,12 +49,15 @@ static uint8_t texture_items[4] = {
     Z64_ITEM_NONE,
 };
 
-// Positions of textures.
-static uint16_t positions[4][2] = {
-    { 272, 49 },
-    { 286, 64 },
-    { 272, 77 },
-    { 257, 64 },
+// Position of D-Pad texture.
+static uint16_t position[2] = { 271, 64 };
+
+// Positions of D-Pad item textures, relative to main texture.
+static int16_t positions[4][2] = {
+    { 1, -15 },
+    { 15, 0 },
+    { 1, 13 },
+    { -14, 0 },
 };
 
 // Whether or not D-Pad items are usable, according to z64_UpdateButtonUsability.
@@ -213,16 +216,17 @@ void draw_dpad() {
         z64_file.game_state == Z64_GAME_STATE_SWORDSMAN_GAME)
         prim_alpha = z64_game.sub_169E8.c_left_button_alpha & 0xFF;
 
+    uint16_t x = position[0], y = position[1];
     z64_disp_buf_t *db = &(z64_ctxt.gfx->overlay);
     gSPDisplayList(db->p++, &setup_db);
     gDPPipeSync(db->p++);
     gDPSetPrimColor(db->p++, 0, 0, 0xFF, 0xFF, 0xFF, prim_alpha);
     gDPSetCombineMode(db->p++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
     sprite_load(db, &dpad_sprite, 0, 1);
-    sprite_draw(db, &dpad_sprite, 0, 271, 64, 16, 16);
+    sprite_draw(db, &dpad_sprite, 0, x, y, 16, 16);
 
     for (int i = 0; i < 4; i++) {
-        uint16_t x = positions[i][0], y = positions[i][1];
+        uint16_t ix = positions[i][0], iy = positions[i][1];
         uint8_t value = DPAD_CONFIG[i];
 
         // Show nothing if not in inventory
@@ -241,7 +245,7 @@ void draw_dpad() {
         }
 
         sprite_load(db, &dpad_item_sprites, i, 1);
-        sprite_draw(db, &dpad_item_sprites, 0, x, y, 16, 16);
+        sprite_draw(db, &dpad_item_sprites, 0, x + ix, y + iy, 16, 16);
     }
 
     gDPPipeSync(db->p++);
