@@ -26,7 +26,7 @@ Gfx setup_db[] =
 
 sprite_t dpad_sprite = {
     NULL, 32, 32, 1,
-    G_IM_FMT_IA, G_IM_SIZ_16b, 2
+    G_IM_FMT_RGBA, G_IM_SIZ_32b, 4
 };
 
 int sprite_bytes_per_tile(sprite_t *sprite) {
