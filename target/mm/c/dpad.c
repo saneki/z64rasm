@@ -216,7 +216,10 @@ void draw_dpad() {
         z64_file.game_state == Z64_GAME_STATE_SWORDSMAN_GAME)
         prim_alpha = z64_game.sub_169E8.c_left_button_alpha & 0xFF;
 
-    uint16_t x = position[0], y = position[1];
+    // Main sprite position
+    uint16_t x = position[0];
+    uint16_t y = position[1];
+
     z64_disp_buf_t *db = &(z64_ctxt.gfx->overlay);
     gSPDisplayList(db->p++, &setup_db);
     gDPPipeSync(db->p++);
@@ -226,8 +229,11 @@ void draw_dpad() {
     sprite_draw(db, &dpad_sprite, 0, x, y, 16, 16);
 
     for (int i = 0; i < 4; i++) {
-        uint16_t ix = positions[i][0], iy = positions[i][1];
         uint8_t value = DPAD_CONFIG[i];
+
+        // Calculate x/y from relative positions
+        uint16_t ix = x + positions[i][0];
+        uint16_t iy = y + positions[i][1];
 
         // Show nothing if not in inventory
         if (!has_item_or_mask(value))
@@ -245,7 +251,7 @@ void draw_dpad() {
         }
 
         sprite_load(db, &dpad_item_sprites, i, 1);
-        sprite_draw(db, &dpad_item_sprites, 0, x + ix, y + iy, 16, 16);
+        sprite_draw(db, &dpad_item_sprites, 0, ix, iy, 16, 16);
     }
 
     gDPPipeSync(db->p++);
