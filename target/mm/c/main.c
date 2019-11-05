@@ -8,11 +8,11 @@ void c_init() {
     dpad_init();
 }
 
-void before_game_state_update() {
-}
+//void before_game_state_update() {
+//}
 
-void after_game_state_update() {
-}
+//void after_game_state_update() {
+//}
 
 void before_non_menu_update() {
     handle_dpad();
