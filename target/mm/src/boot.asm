@@ -22,7 +22,6 @@
 ;   sw      s2, 0x0020 (sp)
 ;   sw      s1, 0x001C (sp)
 ;   sw      a0, 0x0340 (sp)
-;   lui     a0, 0x0004
 .orga 0xB5A904 ; In memory: 0x801748A4
 .area 0x24, 0
     sw      ra, 0x002C (sp)
