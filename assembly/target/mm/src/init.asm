@@ -16,8 +16,6 @@ init:
     addiu   s0, s0, 0xD910
 
     lw      ra, 0x10 (sp)
-    addiu   sp, sp, 0x18
 
     jr      ra
-    ; Displaced code
-    lui     a0, 0x0004
+    addiu   sp, sp, 0x18
