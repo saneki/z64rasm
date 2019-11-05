@@ -50,7 +50,7 @@ static uint8_t texture_items[4] = {
 };
 
 // Position of D-Pad texture.
-static uint16_t position[2] = { 30, 84 };
+static uint16_t position[2] = { 30, 60 };
 
 // Positions of D-Pad item textures, relative to main texture.
 static int16_t positions[4][2] = {
@@ -153,6 +153,29 @@ static void load_texture(int idx, uint8_t item)
     texture_items[idx] = item;
 }
 
+static uint16_t update_y_position(uint16_t x, uint16_t y, uint16_t padding) {
+    uint16_t heart_count = z64_file.hearts / 0x10;
+
+    // Check if we have second row of hearts
+    bool hearts = heart_count > 10;
+    // Check if we have magic
+    bool magic = (z64_file.has_magic != 0) && (z64_file.magic > 0);
+
+    // If on left-half of screen
+    if (x < 160) {
+        // Calculate a minimum y position based on heart rows and magic
+        // This is to avoid the D-Pad textures interfering with the hearts/magic UI
+        uint16_t minimum = 50 + padding;
+        if (hearts)
+            minimum += 10;
+        if (magic)
+            minimum += 16;
+        y = (y > minimum ? y : minimum);
+    }
+
+    return y;
+}
+
 void dpad_init() {
     // If using default values, overwrite DPAD_CONFIG with DPAD_DEFAULT
     if (DPAD_STATE == DPAD_STATE_TYPE_DEFAULTS) {
@@ -219,6 +242,7 @@ void draw_dpad() {
     // Main sprite position
     uint16_t x = position[0];
     uint16_t y = position[1];
+    y = update_y_position(x, y, 10);
 
     z64_disp_buf_t *db = &(z64_ctxt.gfx->overlay);
     gSPDisplayList(db->p++, &setup_db);
