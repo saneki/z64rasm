@@ -16,9 +16,9 @@ def pack32(values):
 
 def get_parser():
     """ Get the argument parser. """
-    parser = argparse.ArgumentParser()
-    parser.add_argument('input', help='rgba5551 texture input file')
-    parser.add_argument('output', help='rgba8888 texture output file')
+    parser = argparse.ArgumentParser(description='16-bit IA to 32-bit RGBA texture converter.')
+    parser.add_argument('input', help='IA (16-bit) texture input file')
+    parser.add_argument('output', help='RGBA (32-bit) texture output file')
     return parser
 
 def main():
