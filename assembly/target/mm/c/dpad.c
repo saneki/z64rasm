@@ -50,7 +50,7 @@ static uint8_t texture_items[4] = {
 };
 
 // Position of D-Pad texture.
-static uint16_t position[2] = { 271, 64 };
+static uint16_t position[2] = { 30, 84 };
 
 // Positions of D-Pad item textures, relative to main texture.
 static int16_t positions[4][2] = {
