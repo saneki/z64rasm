@@ -225,6 +225,16 @@ void handle_dpad() {
     }
 }
 
+static bool is_any_item_usable(uint8_t *dpad, bool *usable)
+{
+    for (int i = 0; i < 4; i++) {
+        if (has_item_or_mask(dpad[i]) && usable[i])
+            return true;
+    }
+
+    return false;
+}
+
 void draw_dpad() {
     // If disabled, don't draw
     if (DPAD_STATE == DPAD_STATE_TYPE_DISABLED)
@@ -240,6 +250,11 @@ void draw_dpad() {
     if (z64_file.game_state == Z64_GAME_STATE_MINIGAME ||
         z64_file.game_state == Z64_GAME_STATE_SWORDSMAN_GAME)
         prim_alpha = z64_game.sub_169E8.c_left_button_alpha & 0xFF;
+
+    // Check if any items shown on the D-Pad are usable
+    // If none are, draw main D-Pad sprite faded
+    if (!is_any_item_usable(DPAD_CONFIG, usable) && prim_alpha > 0x4A)
+        prim_alpha = 0x4A;
 
     // Main sprite position
     uint16_t x = position[0];
