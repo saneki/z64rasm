@@ -159,7 +159,7 @@ static uint16_t update_y_position(uint16_t x, uint16_t y, uint16_t padding) {
     // Check if we have second row of hearts
     bool hearts = heart_count > 10;
     // Check if we have magic
-    bool magic = (z64_file.has_magic != 0) && (z64_file.magic > 0);
+    bool magic = z64_file.has_magic != 0;
 
     // If on left-half of screen
     if (x < 160) {
