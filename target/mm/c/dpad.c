@@ -248,6 +248,7 @@ void draw_dpad() {
     uint8_t prim_alpha = z64_game.sub_169E8.minimap_alpha & 0xFF;
     // If in minigame, the C buttons fade out and so should the D-Pad
     if (z64_file.game_state == Z64_GAME_STATE_MINIGAME ||
+        z64_file.game_state == Z64_GAME_STATE_BOAT_ARCHERY ||
         z64_file.game_state == Z64_GAME_STATE_SWORDSMAN_GAME)
         prim_alpha = z64_game.sub_169E8.c_left_button_alpha & 0xFF;
 
