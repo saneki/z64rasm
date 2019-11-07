@@ -33,6 +33,7 @@ def build_data_symbols(symbols, offsets):
 def dump_json_to_file(data, path):
     with open(path, 'w') as f:
         json.dump(data, f, indent=4, sort_keys=True)
+        f.write('\n')
 
 def fixup_asm_symbols(path):
     with open(path, 'rb') as f:
