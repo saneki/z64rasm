@@ -129,8 +129,8 @@ static void try_use_item_or_mask(uint8_t item) {
 
 static void get_dpad_item_usability(bool *dest)
 {
-    check_item_usability(dest, 0xFF, DPAD_CONFIG[1], DPAD_CONFIG[2], DPAD_CONFIG[3]);
-    dest[0] = check_c_item_usable(DPAD_CONFIG[0]);
+    for (int i = 0; i < 4; i++)
+        dest[i] = check_c_item_usable(DPAD_CONFIG[i]);
 }
 
 static bool check_action_state() {
