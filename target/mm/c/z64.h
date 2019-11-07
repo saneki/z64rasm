@@ -517,7 +517,8 @@ typedef struct
     uint8_t magic;          // 0x0039, current magic amount
     uint16_t rupees;        // 0x003A
     uint32_t playtime;      // 0x003C, play-time frame counter
-    uint8_t unk_40_[2];     // 0x0040
+    uint8_t reset_magic;    // 0x0040
+    uint8_t unk_41_;        // 0x0041
     uint8_t double_defense; // 0x0042
     uint8_t unk_43_[3];     // 0x0043
     union {
