@@ -196,6 +196,10 @@ void dpad_init() {
 void handle_dpad() {
     pad_t pad_pressed = z64_ctxt.input[0].pad_pressed;
 
+    // If disabled, do nothing
+    if (DPAD_STATE == DPAD_STATE_TYPE_DISABLED)
+        return;
+
     // Update usability flags for later use in draw_dpad
     get_dpad_item_usability(usable);
 
@@ -210,16 +214,14 @@ void handle_dpad() {
     if (!check_action_state())
         return;
 
-    if (DPAD_STATE != DPAD_STATE_TYPE_DISABLED) {
-        if (pad_pressed.du && usable[0]) {
-            try_use_item_or_mask(DPAD_CONFIG[0]);
-        } else if (pad_pressed.dr && usable[1]) {
-            try_use_item_or_mask(DPAD_CONFIG[1]);
-        } else if (pad_pressed.dd && usable[2]) {
-            try_use_item_or_mask(DPAD_CONFIG[2]);
-        } else if (pad_pressed.dl && usable[3]) {
-            try_use_item_or_mask(DPAD_CONFIG[3]);
-        }
+    if (pad_pressed.du && usable[0]) {
+        try_use_item_or_mask(DPAD_CONFIG[0]);
+    } else if (pad_pressed.dr && usable[1]) {
+        try_use_item_or_mask(DPAD_CONFIG[1]);
+    } else if (pad_pressed.dd && usable[2]) {
+        try_use_item_or_mask(DPAD_CONFIG[2]);
+    } else if (pad_pressed.dl && usable[3]) {
+        try_use_item_or_mask(DPAD_CONFIG[3]);
     }
 }
 
