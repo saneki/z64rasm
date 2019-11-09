@@ -28,6 +28,7 @@ typedef enum {
     DPAD_STATE_TYPE_DEFAULTS, // 2, enabled with DPAD_DEFAULT values
 } DPAD_STATE_TYPE;
 
+void do_dpad_per_game_frame();
 void dpad_init();
 void handle_dpad();
 void draw_dpad();

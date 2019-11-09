@@ -225,15 +225,22 @@ void dpad_init() {
         load_texture(i, DPAD_CONFIG[i]);
 }
 
-void handle_dpad() {
-    pad_t pad_pressed = z64_ctxt.input[0].pad_pressed;
-
+void do_dpad_per_game_frame()
+{
     // If disabled, do nothing
     if (DPAD_STATE == DPAD_STATE_TYPE_DISABLED)
         return;
 
     // Update usability flags for later use in draw_dpad
     get_dpad_item_usability(usable);
+}
+
+void handle_dpad() {
+    pad_t pad_pressed = z64_ctxt.input[0].pad_pressed;
+
+    // If disabled, do nothing
+    if (DPAD_STATE == DPAD_STATE_TYPE_DISABLED)
+        return;
 
     // Check general game state to know if we can use C buttons at all
     // Note: After collecting a stray fairy (and possibly in other cases) the state flags are set
