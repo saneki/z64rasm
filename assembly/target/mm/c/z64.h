@@ -349,8 +349,8 @@ typedef enum {
     Z64_ACTION_STATE3_ATTACK      = 0x02000000,
     // Hover with flower petals? Maybe more.
     Z64_ACTION_STATE3_DEKU_AIR_2  = 0x01000000,
-    // Special messagebox? Collecting stray fairy.
-    Z64_ACTION_STATE3_MESSAGEBOX  = 0x00200000,
+    // Deku hopping on water.
+    Z64_ACTION_STATE3_DEKU_HOP    = 0x00200000,
     // Goron spike roll.
     Z64_ACTION_STATE3_GORON_SPIKE = 0x00080000,
     // Transforming (latter-half).
