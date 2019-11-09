@@ -63,6 +63,9 @@ static int16_t positions[4][2] = {
 // Whether or not D-Pad items are usable, according to z64_UpdateButtonUsability.
 static bool usable[4];
 
+// Whether the previous frame was a "minigame" frame.
+bool g_was_minigame = false;
+
 static bool get_slot(uint8_t item, uint8_t *slot, uint8_t *array, uint8_t length) {
     for (uint8_t i = 0; i < length; i++) {
         if (item == array[i]) {
@@ -185,6 +188,26 @@ static uint16_t update_y_position(uint16_t x, uint16_t y, uint16_t padding) {
     return y;
 }
 
+bool is_minigame_frame()
+{
+    bool result = false;
+
+    if (g_was_minigame)
+        result = true;
+
+    // Note on state 6:
+    // If on Epona, and holding "B" for bow, then press "A" while holding "B", the game state
+    // will go from: 0xC, 0x6, 0x32, 0xC. Thus we need to mark 0x6 as a "minigame frame" as well.
+    //
+    // Note on state 1 (transition):
+    // In the Deku playground, can go from 0xC to 0x1 when cutscene-transitioning to the business scrub.
+    // Thus, if the minigame state goes directly to the transition state, consider that a minigame frame.
+    g_was_minigame = (z64_file.game_state == Z64_GAME_STATE_MINIGAME ||
+                      (g_was_minigame && z64_file.game_state == Z64_GAME_STATE_TRANSITION) ||
+                      z64_file.game_state == 6);
+    return result;
+}
+
 void dpad_init() {
     // If using default values, overwrite DPAD_CONFIG with DPAD_DEFAULT
     if (DPAD_STATE == DPAD_STATE_TYPE_DEFAULTS) {
@@ -256,6 +279,10 @@ void draw_dpad() {
 
     // If we don't have any D-Pad items, draw nothing
     if (!have_any(DPAD_CONFIG))
+        return;
+
+    // Check for minigame frame
+    if (is_minigame_frame())
         return;
 
     // Use minimap alpha by default for fading textures out
