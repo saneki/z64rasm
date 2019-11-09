@@ -17,5 +17,5 @@ void c_init() {
 
 void before_non_menu_update() {
     do_hacks_per_game_frame();
-    handle_dpad();
+    do_dpad_per_game_frame();
 }
