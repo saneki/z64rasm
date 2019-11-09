@@ -189,6 +189,7 @@ bool is_minigame_frame()
     // Note on state 6:
     // If on Epona, and holding "B" for bow, then press "A" while holding "B", the game state
     // will go from: 0xC, 0x6, 0x32, 0xC. Thus we need to mark 0x6 as a "minigame frame" as well.
+    // Riding Epona to a new area: 0xC, 0x32, 0x6, 0x1, 0x1...
     //
     // Note on state 1 (transition):
     // In the Deku playground, can go from 0xC to 0x1 when cutscene-transitioning to the business scrub.
@@ -196,7 +197,7 @@ bool is_minigame_frame()
     g_was_minigame = (z64_file.game_state == Z64_GAME_STATE_MINIGAME ||
                       (g_was_minigame && z64_file.game_state == Z64_GAME_STATE_TRANSITION) ||
                       z64_file.game_state == 6);
-    return result;
+    return result || g_was_minigame;
 }
 
 void dpad_init() {
