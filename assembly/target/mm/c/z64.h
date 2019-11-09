@@ -470,7 +470,7 @@ typedef struct
                                           /* 0x00A4 */
 } z64_ctxt_t;
 
-typedef struct z64
+typedef struct
 {
     uint8_t  unk_0_[0x266];        // 0x0000
     uint16_t a_button_alpha;       // 0x0266
@@ -485,9 +485,19 @@ typedef struct z64
 
 typedef struct
 {
+    uint8_t unk_0_[0x875];         // 0x0000
+    uint8_t flag_875;              // 0x0875
+    uint8_t unk_876_[0x2D4];       // 0x0876
+    uint8_t flag_B4A;              // 0x0B4A
+} z64_game_sub_18000;
+
+typedef struct
+{
     z64_ctxt_t         common;            // 0x00000
     uint8_t            unk_2E4_[0x16944]; // 0x000A4
     z64_game_sub_169E8 sub_169E8;         // 0x169E8
+    uint8_t            unk_16C5E_[0x13A2]; // 0x16C5E
+    z64_game_sub_18000 sub_18000;         // 0x18000
 } z64_game_t;
 
 // Note: Currently comparing two separate sources:
@@ -650,6 +660,7 @@ typedef struct {
 #define z64_item_texture_file          0xA36C10
 
 /* dram addresses */
+#define z64_CheckTimeOfDayTransition_addr 0x8074AF20
 #define z64_GetPhysicalAddrOfFile_addr 0x80080950
 #define z64_LoadItemTexture_addr       0x80178DAC
 #define z64_ReadFile_addr  0x80080C90
@@ -667,13 +678,16 @@ typedef struct {
 #define z64_link           (*(z64_link_t*) z64_link_addr)
 
 /* function prototypes */
+typedef uint32_t (*z64_CheckTimeOfDayTransition_proc)(z64_game_t *game);
 typedef uint32_t (*z64_GetPhysicalAddrOfFile_proc)(uint32_t vrom_addr);
 typedef void (*z64_LoadItemTexture_proc)(uint32_t phys_file, uint8_t item, uint8_t *dest, uint32_t length);
 typedef void (*z64_ReadFile_proc)(void *mem_addr, uint32_t vrom_addr, uint32_t size);
 typedef void (*z64_UpdateButtonUsability_proc)(z64_ctxt_t *ctxt);
 typedef void (*z64_UseItem_proc)(z64_ctxt_t *ctxt, z64_link_t *link, uint8_t item);
 
+
 /* functions */
+#define z64_CheckTimeOfDayTransition ((z64_CheckTimeOfDayTransition_proc) z64_CheckTimeOfDayTransition_addr)
 #define z64_GetPhysicalAddrOfFile ((z64_GetPhysicalAddrOfFile_proc) z64_GetPhysicalAddrOfFile_addr)
 #define z64_LoadItemTexture       ((z64_LoadItemTexture_proc)       z64_LoadItemTexture_addr)
 #define z64_ReadFile       ((z64_ReadFile_proc) z64_ReadFile_addr)
