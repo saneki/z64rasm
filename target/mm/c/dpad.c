@@ -275,8 +275,9 @@ void draw_dpad() {
     if (!have_any(DPAD_CONFIG))
         return;
 
-    // Check for minigame frame
-    if (is_minigame_frame())
+    // Check for minigame frame, and do nothing unless transitioning into minigame
+    // In which case the C-buttons alpha will be used instead for fade-in
+    if (is_minigame_frame() && z64_file.pre_game_state != Z64_GAME_STATE_MINIGAME)
         return;
 
     // Use minimap alpha by default for fading textures out
@@ -284,7 +285,8 @@ void draw_dpad() {
     // If in minigame, the C buttons fade out and so should the D-Pad
     if (z64_file.game_state == Z64_GAME_STATE_MINIGAME ||
         z64_file.game_state == Z64_GAME_STATE_BOAT_ARCHERY ||
-        z64_file.game_state == Z64_GAME_STATE_SWORDSMAN_GAME)
+        z64_file.game_state == Z64_GAME_STATE_SWORDSMAN_GAME ||
+        is_minigame_frame())
         prim_alpha = z64_game.sub_169E8.c_left_button_alpha & 0xFF;
 
     // Check if any items shown on the D-Pad are usable
