@@ -238,6 +238,7 @@ typedef enum
 typedef enum {
     Z64_GAME_STATE_BLACK_SCREEN,
     Z64_GAME_STATE_TRANSITION,
+    // Postman's timing game
     Z64_GAME_STATE_TRANSITION_2,
     Z64_GAME_STATE_DIALOGUE = 5,
     Z64_GAME_STATE_PAUSE = 7,
@@ -289,11 +290,12 @@ typedef enum {
     Z64_ACTION_STATE1_HOLD         = 0x00000800,
     // Hold new item over head.
     Z64_ACTION_STATE1_GET_ITEM     = 0x00000400,
-    // Transition to day/night.
+    // Transition to day/night, Pictobox prompt.
     Z64_ACTION_STATE1_DAY_TRANS    = 0x00000200,
     // Dead.
     Z64_ACTION_STATE1_DEAD         = 0x00000080,
     // When walking in a cutscene? Unsure.
+    // Used during Postman's minigame.
     Z64_ACTION_STATE1_MOVE_SCENE   = 0x00000020,
     // Zora electric barrier.
     Z64_ACTION_STATE1_BARRIER      = 0x00000010,
@@ -328,7 +330,7 @@ typedef enum {
     // Diving, swimming as Zora.
     Z64_ACTION_STATE2_DIVING_2     = 0x00000400,
     // Climbing. Also occurs during: transforming, hanging from ledge,
-    // deku spinning, goron ball
+    // deku spinning, goron ball, sliding
     Z64_ACTION_STATE2_CLIMBING     = 0x00000040,
     // Running / moving.
     Z64_ACTION_STATE2_MOVING       = 0x00000020,
