@@ -148,15 +148,6 @@ static bool check_action_state() {
         return true;
 }
 
-static bool check_day_night_transition_flags() {
-    // This checks the flags that denies input processing when transitioning between day/night
-    // It is likely used for other things as well, but not sure
-    if (z64_CheckTimeOfDayTransition(&z64_game) != 0)
-        return false;
-
-    return true;
-}
-
 static void load_texture(int idx, uint8_t item)
 {
     uint32_t phys = z64_GetPhysicalAddrOfFile(z64_item_texture_file);
@@ -251,11 +242,6 @@ void handle_dpad() {
 
     // Check action state flags
     if (!check_action_state())
-        return;
-
-    // Checks flags in the z64_game struct
-    // This is a fix for using items before transition from day to night is complete
-    if (!check_day_night_transition_flags())
         return;
 
     if (pad_pressed.du && usable[0]) {
