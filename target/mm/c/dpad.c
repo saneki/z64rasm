@@ -294,6 +294,10 @@ void draw_dpad() {
     if (!is_any_item_usable(DPAD_CONFIG, usable) && prim_alpha > 0x4A)
         prim_alpha = 0x4A;
 
+    // Show faded while flying as a Deku
+    if (((z64_link.action_state3 & Z64_ACTION_STATE3_DEKU_AIR) != 0) && prim_alpha > 0x4A)
+        prim_alpha = 0x4A;
+
     // Main sprite position
     uint16_t x = position[0];
     uint16_t y = position[1];
