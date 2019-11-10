@@ -38,5 +38,5 @@ static void fix_deku_hover_button_fade() {
 }
 
 void do_hacks_per_game_frame() {
-    fix_deku_hover_button_fade();
+    // fix_deku_hover_button_fade();
 }
