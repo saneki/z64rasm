@@ -31,6 +31,7 @@
 PAYLOAD_START:
 
 .include "init.asm"
+.include "deku_magic.asm"
 .include "every_frame.asm"
 .include "dpad.asm"
 .importobj "../build/bundle.o"
