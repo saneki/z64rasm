@@ -555,7 +555,12 @@ typedef struct
     uint8_t unk_48_[4];     // 0x0048
     uint8_t b_button;       // 0x004C
     uint8_t c_buttons[3];   // 0x004D
-    uint8_t unk_50_[0xD];   // 0x0050
+    uint8_t goron_b_button; // 0x0050
+    uint8_t unk_51_[3];     // 0x0051
+    uint8_t zora_b_button;  // 0x0054
+    uint8_t unk_55_[3];     // 0x0055
+    uint8_t deku_b_button;  // 0x0058
+    uint8_t unk_59_[4];     // 0x0059
     uint8_t alt_c_buttons[3]; // 0x005D
     uint8_t unk_60_[0xD];   // 0x0060
     union {
