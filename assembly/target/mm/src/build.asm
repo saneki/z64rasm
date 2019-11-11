@@ -24,10 +24,10 @@
 ; New code region
 ;==================================================================================================
 
-.headersize (0x807A4000 - 0x02F00000)
+.headersize (0x807A9E00 - 0x02F00000)
 
-.org 0x807A4000
-.area 0x14000 //payload max memory
+.org 0x807A9E00
+.area 0xE200 //payload max memory
 PAYLOAD_START:
 
 .include "init.asm"
