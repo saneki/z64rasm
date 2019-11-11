@@ -3,4 +3,4 @@
 .definelabel GLOBAL_CONTEXT,    0x803E6B20
 
 ; Extended memory map:
-.definelabel C_HEAP,            0x807A0000
+.definelabel C_HEAP,            0x807B8000
