@@ -29,3 +29,12 @@
 .orga 0xC10060 ; In memory: 0x80763560
     jal     before_non_menu_update_hook
     nop
+
+;==================================================================================================
+; Override floor physics type hook
+;==================================================================================================
+
+; Replaces:
+;   jal     0x800C99D4
+.orga 0xC0DAA0 ; In memory: 0x80760FA0
+    jal     override_get_floor_physics_type

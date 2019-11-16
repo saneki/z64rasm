@@ -371,6 +371,75 @@ typedef enum {
     Z64_ACTION_STATE3_JUMP_ATTACK = 0x00000002,
 } z64_action_state3_t;
 
+typedef enum {
+    // Item "pickup", such as a rupee, arrows, magic, deku stick, etc.
+    Z64_ACTOR_ID_PICKUP = 0xE,
+    // Fairy.
+    Z64_ACTOR_ID_FAIRY = 0x10,
+} z64_actor_id_t;
+
+typedef enum {
+    // Step-on switches.
+    Z64_ACTOR_TYPE_SWITCH,
+    // Typically larger, more complex set pieces.
+    Z64_ACTOR_TYPE_PROP,
+    // Main player (Link).
+    Z64_ACTOR_TYPE_PLAYER,
+    // Bombs, Bombchus.
+    Z64_ACTOR_TYPE_BOMB,
+    // NPCs.
+    Z64_ACTOR_TYPE_NPC,
+    // Enemies, used for triggering room clear state.
+    Z64_ACTOR_TYPE_ENEMY,
+    Z64_ACTOR_TYPE_PROP2,
+    Z64_ACTOR_TYPE_ITEM,
+    Z64_ACTOR_TYPE_MISC,
+    Z64_ACTOR_TYPE_BOSS,
+    Z64_ACTOR_TYPE_DOOR,
+    Z64_ACTOR_TYPE_CHEST,
+} z64_actor_type_t;
+
+typedef enum {
+    Z64_FLOOR_TYPE_DIRT = 0,
+    Z64_FLOOR_TYPE_SAND = 1,
+    Z64_FLOOR_TYPE_STONE = 2,
+    Z64_FLOOR_TYPE_WET1 = 4,
+    Z64_FLOOR_TYPE_WET2 = 5,
+    Z64_FLOOR_TYPE_PLANTS = 6,
+    Z64_FLOOR_TYPE_GRASS = 8,
+    Z64_FLOOR_TYPE_WOOD = 0xA,
+    Z64_FLOOR_TYPE_SNOW = 0xE,
+    Z64_FLOOR_TYPE_ICE = 0xF,
+} z64_floor_type_t;
+
+typedef enum {
+    Z64_FLOOR_PHYSICS_NORMAL = 0,
+    Z64_FLOOR_PHYSICS_ICE = 5,
+    Z64_FLOOR_PHYSICS_SNOW = 0xE,
+} z64_floor_physics_t;
+
+typedef struct
+{
+  int16_t x;
+  int16_t y;
+  int16_t z;
+} z64_xyz_t;
+
+typedef struct
+{
+  float x;
+  float y;
+  float z;
+} z64_xyzf_t;
+
+typedef uint16_t z64_angle_t;
+typedef struct
+{
+  z64_angle_t x;
+  z64_angle_t y;
+  z64_angle_t z;
+} z64_rot_t;
+
 typedef union
 {
   struct
@@ -493,11 +562,15 @@ typedef struct
 
 typedef struct
 {
-    z64_ctxt_t         common;            // 0x00000
-    uint8_t            unk_2E4_[0x16944]; // 0x000A4
-    z64_game_sub_169E8 sub_169E8;         // 0x169E8
+    z64_ctxt_t         common;             // 0x00000
+    uint16_t           scene_number;       // 0x000A4
+    uint8_t            scene_code_index;   // 0x000A6
+    uint8_t            unk_A7_[0x1BF9];    // 0x000A7
+    uint8_t            unk_1CA0_;          // 0x01CA0
+    uint8_t            unk_1CA1_[0x14D47]; // 0x01CA1
+    z64_game_sub_169E8 sub_169E8;          // 0x169E8
     uint8_t            unk_16C5E_[0x13A2]; // 0x16C5E
-    z64_game_sub_18000 sub_18000;         // 0x18000
+    z64_game_sub_18000 sub_18000;          // 0x18000
 } z64_game_t;
 
 // Note: Currently comparing two separate sources:
@@ -631,14 +704,29 @@ typedef struct
     uint8_t doubled_hearts;     // 0x00D3
     uint8_t unk_D4_[0xE0A];     // 0x00D4
     uint16_t bank_rupees;       // 0x0EDE
-    uint8_t unk_EE0_[0x2F];     // 0x0EE0
+    uint8_t unk_EE0_[0x10];     // 0x0EE0
+    uint32_t lottery_guess;     // 0x0EF0
+    uint8_t unk_EF4_[0x12];     // 0x0EF4
+    union {
+        uint8_t flag_F06;       // 0x0F06
+        struct {
+            uint8_t                : 4;
+            uint8_t infinite_magic : 1;
+            uint8_t                : 3;
+        };
+    };
+    uint8_t unk_F07_[0x8];      // 0x0F07
     uint8_t great_spin;         // 0x0F0F
     uint8_t unk_F10[0x4C];      // 0x0F10
     uint32_t locations_visited; // 0x0F5C
-    uint8_t unk_F60[0x86];      // 0x0F60
-    uint8_t bomber_count;       // 0x0FE6, set to 5 once the bomber code is obtained
-    uint8_t bomber_code[5];     // 0x0FE7, cosmetic??
-    uint8_t unk_FEC_[0x2F2C];   // 0x0FEC
+    uint8_t unk_F60[0x7C];      // 0x0F60
+    uint8_t lotteries[9];       // 0x0FDC
+    uint8_t unk_FE5_[6];        // 0x0FE5
+    uint8_t bomber_code[5];     // 0x0FEB
+    uint8_t unk_FF0_[0x26];      // 0x0FF0
+    uint16_t jinx_timer;         // 0x1016
+    int16_t rupee_timer;         // 0x1018
+    uint8_t unk_101A_[0x2EFE];   // 0x101A
     uint8_t b_button_usable;     // 0x3F18
     uint8_t c_buttons_usable[3]; // 0x3F19
     uint8_t a_button_usable;     // 0x3F1C
@@ -651,24 +739,128 @@ typedef struct
     uint16_t magic_meter_size;   // 0x3F2E
 } z64_file_t;
 
+typedef struct
+{
+    struct
+    {
+        uint8_t damage : 4;
+        uint8_t effect : 4;
+    } attack[0x20];
+} z64_actor_damage_table_t;
+
+typedef struct z64_actor_s z64_actor_t;
+
+/* actor callback prototypes */
+typedef void (*z64_ActorMain_proc)(z64_actor_t *actor, z64_game_t *game);
+typedef void (*z64_ActorDraw_proc)(z64_actor_t *actor, z64_game_t *game);
+
+// Source: https://wiki.cloudmodding.com/mm/Actors
+struct z64_actor_s
+{
+    uint16_t                 id;                     // 0x0000, Actor Id.
+    uint8_t                  type;                   // 0x0002, Actor Type. See Below
+    uint8_t                  room;                   // 0x0003, Room number the actor is part of. FF denotes that the actor won't despawn on a room change
+    int32_t                  flags;                  // 0x0004, flags used for drawing stuff?
+                                                     // & 0x0040 0000 = Affects actor lighting
+                                                     // & 0x0000 1000 = ?
+                                                     // & 0x0000 0040 = ?
+    z64_xyzf_t                pos1;                  // 0x0008, Related to collision detection routine
+    z64_rot_t                 init_rot;              // 0x0014, Initial Rotation when spawned
+    uint16_t                  unk_1A_;               // 0x001A
+    uint16_t                  variable;              // 0x001C, Configurable variable set by an actor's spawn data
+    int8_t                    obj_table_index;       // 0x001E, index to table at Global Context + ????
+    uint8_t                   unk_1F_;               // 0x001F
+    uint16_t                  sound_effect;          // 0x0020, Plays sound effect relative to actor's location (if within range of camera?)
+    uint16_t                  unk_22_;               // 0x0022
+    z64_xyzf_t                position;              // 0x0024, Current coordinates
+    z64_rot_t                 speed_rot;             // 0x0030, 0x32 sets what direction the 0x68 speedXZ variable is moving the actor
+    uint16_t                  unk_36_;               // 0x0036, same as 0x1A
+    int8_t                    unk_38_;               // 0x0038
+    uint8_t                   unk_39_;               // 0x0039
+    uint16_t                  unk_3A_;               // 0x003A
+    z64_xyzf_t                pos3;                  // 0x003C, Related to camera
+    z64_rot_t                 rot1;                  // 0x0048, 0x30 rotation copied into here
+    uint16_t                  unk_4E_;               // 0x004E
+    int32_t                   unk_50_;               // 0x0050
+    float                     unk_54_;               // 0x0054, I know this is a float from breakpointing it
+    z64_xyzf_t                scale;                 // 0x0058, sets x,y,z scaling factor. Typically, a factor of 0.01 is used for each axis
+    z64_xyzf_t                velocity;              // 0x0064
+    float                     speedXZ;               // 0x0070, Always positive, stores how fast the actor is traveling along the XZ plane
+    float                     gravity;               // 0x0074, acceleration due to gravity; value is added to Y velocity every frame
+    float                     min_velocity_y;        // 0x0078, sets the lower bounds cap on velocity along the Y axis struct, collision related
+    int*                      wall_poly;             // 0x007C, Wall polygon an actor is touching
+    int*                      floor_poly;            // 0x0080, Floor polygon an actor is over/touching
+    uint8_t                   wall_poly_src;         // 0x0084, Complex Poly Surface Source. 0x32 = Scene
+    uint8_t                   floor_poly_src;        // 0x0085, Complex Poly Surface Source. 0x32 = Scene
+    uint16_t                  wallrot;               // 0x0086
+    float                     unk_88_;               // 0x0088, floor poly height?
+    float                     water_surface_dist;    // 0x008C
+    uint16_t                  bgcheck_flags;         // 0x0090, unknown
+    int16_t                   unk_roty;              // 0x0092, rotation y (give item, possibly next facing dir?/face toward link?)
+    float                     _unk_94;               // 0x0094
+    float                     xz_distance_from_link; // 0x0098
+    float                     y_distance_from_link;  // 0x009C, relative distance
+
+    // 8-10-2012 : Addition made by Jason777
+    // For actors which contain a damage chart (example: Stalfos)...
+    z64_actor_damage_table_t* damage_table;          // 0x00A0, Pointer to the actor's Damage Chart in RAM.
+    z64_xyzf_t                displacement;          // 0x00A4, amount to correct velocity (0x5C) by when colliding into a body
+    int16_t                   unk_B0_;               // 0x00B0
+    int16_t                   unk_B2_;               // 0x00B2
+    uint16_t                  unk_B4_;               // 0x00B4
+    uint8_t                   mass;                  // 0x00B6, Used to compute displacement, 50 is common value, 0xFF for infinite mass/unmoveable
+    uint8_t                   health;                // 0x00B7
+    uint8_t                   damage;                // 0x00B8
+    uint8_t                   damage_effect;         // 0x00B9, Stores what effect should occur when hit by a weapon
+    uint8_t                   impact_effect;         // 0x00BA
+    uint8_t                   unk_BB_;               // 0x00BB
+
+    z64_rot_t                 rot_2;                 // 0x00BC, Setting this immediately changes actor's rotation
+    uint8_t                   unk_C2_[0x53];         // 0x00C2
+    uint8_t                   run_actor;             // 0x0115, Determines if actor instance should be processed. 01 for yes, 00 for no.
+    uint8_t                   unk_116_[0x12];        // 0x0116
+    z64_actor_t*              actor_prev;            // 0x0128, Previous z_ram_actor of this type
+    z64_actor_t*              actor_next;            // 0x012C, Next z_ram_actor of this type
+    void*                     Init;                  // 0x0130, Actor Constructor?
+    void*                     Dest;                  // 0x0134, Actor Deconstructor?
+    z64_ActorMain_proc        Main;                  // 0x0138
+    z64_ActorDraw_proc        Draw;                  // 0x013C
+    void*                     CodeEntry;             // 0x0140, Address to source overlay file's reference in code (file)
+    // ?
+    // From here on, the structure and size varies for each actor
+};
+
 typedef struct {
-    /// ...
-    uint8_t unk_00_[0x146];     // 0x0000
+    z64_actor_t common;         // 0x0000
+    uint8_t unk_144_[0x116];    // 0x0144
+    uint16_t anim_timer;        // 0x025A, counts from 0 to 0x5F as "fairy heal" animation progresses
+} z64_fairy_actor_t;
+
+typedef struct {
+    z64_actor_t common;         // 0x0000
+    uint8_t unk_144_[2];        // 0x0144
     uint8_t pre_use;            // 0x0146
     uint8_t unk_147_[0x925];    // 0x0147
     uint32_t action_state1;     // 0x0A6C
     uint32_t action_state2;     // 0x0A70
     uint32_t action_state3;     // 0x0A74
+    uint8_t unk_A78_[0xFA];     // 0x0A78
+    uint16_t floor_type;        // 0x0B72, determines sound effect used while walking
 } z64_link_t;
 
 /* virtual file addresses */
 #define z64_item_texture_file          0xA36C10
 
 /* dram addresses */
+#define z64_CanInteract_addr           0x801233E4
+#define z64_CanInteract2_addr          0x80123358
 #define z64_CheckTimeOfDayTransition_addr 0x8074AF20
+#define z64_GetFloorPhysicsType_addr   0x800C99D4
 #define z64_GetPhysicalAddrOfFile_addr 0x80080950
 #define z64_LoadItemTexture_addr       0x80178DAC
+#define z64_PlaySfx_addr               0x8019F0C8
 #define z64_ReadFile_addr  0x80080C90
+#define z64_SpawnActor_addr            0x800BAC60
 #define z64_file_addr      0x801EF670
 #define z64_ctxt_addr      0x803E6B20
 #define z64_game_addr      z64_ctxt_addr
@@ -683,19 +875,28 @@ typedef struct {
 #define z64_link           (*(z64_link_t*) z64_link_addr)
 
 /* function prototypes */
+typedef int (*z64_CanInteract_proc)(z64_game_t *game);
+typedef int (*z64_CanInteract2_proc)(z64_game_t *game, z64_link_t *link);
 typedef uint32_t (*z64_CheckTimeOfDayTransition_proc)(z64_game_t *game);
+typedef uint32_t (*z64_GetFloorPhysicsType_proc)(void *arg0, void *arg1, uint8_t arg2);
 typedef uint32_t (*z64_GetPhysicalAddrOfFile_proc)(uint32_t vrom_addr);
 typedef void (*z64_LoadItemTexture_proc)(uint32_t phys_file, uint8_t item, uint8_t *dest, uint32_t length);
+typedef void (*z64_PlaySfx_proc)(uint32_t id);
 typedef void (*z64_ReadFile_proc)(void *mem_addr, uint32_t vrom_addr, uint32_t size);
+typedef z64_actor_t* (*z64_SpawnActor_proc)(void *unk0, z64_game_t *game, uint16_t id, float x, float y, float z, uint16_t rotx, uint16_t roty, uint16_t rotz, uint32_t inst);
 typedef void (*z64_UpdateButtonUsability_proc)(z64_ctxt_t *ctxt);
 typedef void (*z64_UseItem_proc)(z64_ctxt_t *ctxt, z64_link_t *link, uint8_t item);
 
-
 /* functions */
+#define z64_CanInteract               ((z64_CanInteract_proc) z64_CanInteract_addr)
+#define z64_CanInteract2              ((z64_CanInteract2_proc) z64_CanInteract2_addr)
 #define z64_CheckTimeOfDayTransition ((z64_CheckTimeOfDayTransition_proc) z64_CheckTimeOfDayTransition_addr)
+#define z64_GetFloorPhysicsType ((z64_GetFloorPhysicsType_proc) z64_GetFloorPhysicsType_addr)
 #define z64_GetPhysicalAddrOfFile ((z64_GetPhysicalAddrOfFile_proc) z64_GetPhysicalAddrOfFile_addr)
 #define z64_LoadItemTexture       ((z64_LoadItemTexture_proc)       z64_LoadItemTexture_addr)
+#define z64_PlaySfx        ((z64_PlaySfx_proc) z64_PlaySfx_addr)
 #define z64_ReadFile       ((z64_ReadFile_proc) z64_ReadFile_addr)
+#define z64_SpawnActor     ((z64_SpawnActor_proc) z64_SpawnActor_addr)
 #define z64_UpdateButtonUsability ((z64_UpdateButtonUsability_proc) z64_UpdateButtonUsability_addr)
 #define z64_UseItem        ((z64_UseItem_proc) z64_UseItem_addr)
 
