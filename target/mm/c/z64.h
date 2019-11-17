@@ -238,16 +238,20 @@ typedef enum
 typedef enum {
     Z64_GAME_STATE_BLACK_SCREEN,
     Z64_GAME_STATE_TRANSITION,
-    // Postman's timing game
+    // Postman's timing game.
     Z64_GAME_STATE_TRANSITION_2,
     Z64_GAME_STATE_DIALOGUE = 5,
+    // Used when on Epona sometimes, for example holding B (bow) while pressing A ("Return").
+    Z64_GAME_STATE_6 = 6,
     Z64_GAME_STATE_PAUSE = 7,
     Z64_GAME_STATE_ARCHERY_GAME = 8,
     Z64_GAME_STATE_MINIGAME = 0xC,
     Z64_GAME_STATE_SHOP = 0xF,
     Z64_GAME_STATE_ITEM_PROMPT = 0x10,
-    // Boat cruise archery game
+    // Boat cruise archery game.
     Z64_GAME_STATE_BOAT_ARCHERY = 0x11,
+    // Honey & Darling minigame.
+    Z64_GAME_STATE_HONEY_DARLING = 0x14,
     Z64_GAME_STATE_PICTOBOX = 0x15,
     Z64_GAME_STATE_SWORDSMAN_GAME = 0x16,
     Z64_GAME_STATE_NORMAL = 0x32,
@@ -420,25 +424,25 @@ typedef enum {
 
 typedef struct
 {
-  int16_t x;
-  int16_t y;
-  int16_t z;
-} z64_xyz_t;
+  int16_t x;                               // 0x0000
+  int16_t y;                               // 0x0002
+  int16_t z;                               // 0x0004
+} z64_xyz_t;                               // 0x0006
 
 typedef struct
 {
-  float x;
-  float y;
-  float z;
-} z64_xyzf_t;
+  float x;                                 // 0x0000
+  float y;                                 // 0x0004
+  float z;                                 // 0x0008
+} z64_xyzf_t;                              // 0x000C
 
 typedef uint16_t z64_angle_t;
 typedef struct
 {
-  z64_angle_t x;
-  z64_angle_t y;
-  z64_angle_t z;
-} z64_rot_t;
+  z64_angle_t x;                           // 0x0000
+  z64_angle_t y;                           // 0x0002
+  z64_angle_t z;                           // 0x0004
+} z64_rot_t;                               // 0x0006
 
 typedef union
 {
@@ -460,104 +464,104 @@ typedef union
     uint16_t  cl : 1;
     uint16_t  cr : 1;
   };
-  uint16_t    pad;                        // 0x0000
-} pad_t;                                  // 0x0002
+  uint16_t    pad;                         // 0x0000
+} pad_t;                                   // 0x0002
 
 typedef struct
 {
-  pad_t         pad;                      // 0x0000
-  int8_t        x;                        // 0x0002
-  int8_t        y;                        // 0x0003
-} z64_controller_t;                       // 0x0004
+  pad_t         pad;                       // 0x0000
+  int8_t        x;                         // 0x0002
+  int8_t        y;                         // 0x0003
+} z64_controller_t;                        // 0x0004
 
 typedef struct
 {
-  z64_controller_t  raw;                  // 0x0000
-  uint16_t          unk_00_;              // 0x0004
-  z64_controller_t  raw_prev;             // 0x0006
-  uint16_t          unk_01_;              // 0x000A
-  pad_t             pad_pressed;          // 0x000C
-  int8_t            x_diff;               // 0x000E
-  int8_t            y_diff;               // 0x000F
-  char              unk_02_[0x0002];      // 0x0010
-  pad_t             pad_released;         // 0x0012
-  int8_t            adjusted_x;           // 0x0014
-  int8_t            adjusted_y;           // 0x0015
-  char              unk_03_[0x0002];      // 0x0016
-} z64_input_t;                            // 0x0018
+  z64_controller_t  raw;                   // 0x0000
+  uint16_t          unk_00_;               // 0x0004
+  z64_controller_t  raw_prev;              // 0x0006
+  uint16_t          unk_01_;               // 0x000A
+  pad_t             pad_pressed;           // 0x000C
+  int8_t            x_diff;                // 0x000E
+  int8_t            y_diff;                // 0x000F
+  char              unk_02_[0x0002];       // 0x0010
+  pad_t             pad_released;          // 0x0012
+  int8_t            adjusted_x;            // 0x0014
+  int8_t            adjusted_y;            // 0x0015
+  char              unk_03_[0x0002];       // 0x0016
+} z64_input_t;                             // 0x0018
 
 typedef struct
 {
-    uint32_t        size;                 /* 0x0000 */
-    Gfx            *buf;                  /* 0x0004 */
-    Gfx            *p;                    /* 0x0008 */
-    Gfx            *d;                    /* 0x000C */
+    uint32_t        size;                  // 0x0000
+    Gfx            *buf;                   // 0x0004
+    Gfx            *p;                     // 0x0008
+    Gfx            *d;                     // 0x000C
 } z64_disp_buf_t;
 
 // Partially copying struct from OoT, but tweaked (most fields not verified)
 typedef struct
 {
-    Gfx            *poly_opa_w;           /* 0x0000 */
-    Gfx            *poly_xlu_w;           /* 0x0004 */
-    char            unk_00_[0x0008];      /* 0x0008 */
-    Gfx            *overlay_w;            /* 0x0010 */
-    char            unk_01_[0x00A4];      /* 0x0014 */
-    Gfx            *work_c;               /* 0x00B8 */
-    uint32_t        work_c_size;          /* 0x00BC */
-    char            unk_02_[0x00F0];      /* 0x00C0 */
-    Gfx            *work_w;               /* 0x01B0 */
-    z64_disp_buf_t  work;                 /* 0x01B4 */
-    char            unk_03_[0x00D4];      /* 0x01C4 */ // 0x10 bytes less than OoT?
-    z64_disp_buf_t  overlay;              /* 0x0298 */
-    z64_disp_buf_t  poly_opa;             /* 0x02A8 */
-    z64_disp_buf_t  poly_xlu;             /* 0x02B8 */
-    uint32_t        frame_count_1;        /* 0x02C8 */
-    void           *frame_buffer;         /* 0x02CC */
-    char            unk_04_[0x0008];      /* 0x02D0 */
-    uint32_t        frame_count_2;        /* 0x02D8 */
-    // void           *func_ptr;          /* 0x02DC */
-    // z64_ctxt_t     *ctxt;              /* 0x02E0 */
+    Gfx            *poly_opa_w;            // 0x0000
+    Gfx            *poly_xlu_w;            // 0x0004
+    char            unk_08_[0x0008];       // 0x0008
+    Gfx            *overlay_w;             // 0x0010
+    char            unk_14_[0x00A4];       // 0x0014
+    Gfx            *work_c;                // 0x00B8
+    uint32_t        work_c_size;           // 0x00BC
+    char            unk_C0_[0x00F0];       // 0x00C0
+    Gfx            *work_w;                // 0x01B0
+    z64_disp_buf_t  work;                  // 0x01B4
+    char            unk_1C4_[0x00D4];      // 0x01C4, 0x10 bytes less than OoT?
+    z64_disp_buf_t  overlay;               // 0x0298
+    z64_disp_buf_t  poly_opa;              // 0x02A8
+    z64_disp_buf_t  poly_xlu;              // 0x02B8
+    uint32_t        frame_count_1;         // 0x02C8
+    void           *frame_buffer;          // 0x02CC
+    char            unk_2D0_[0x0008];      // 0x02D0
+    uint32_t        frame_count_2;         // 0x02D8
+    // void           *func_ptr;           // 0x02DC
+    // z64_ctxt_t     *ctxt;               // 0x02E0
 } z64_gfx_t;
 
 typedef struct
 {
-    z64_gfx_t      *gfx;                  /* 0x0000 */
-    void           *state_main;           /* 0x0004 */
-    void           *state_dtor;           /* 0x0008 */
-    void           *next_ctor;            /* 0x000C */
-    uint32_t        next_size;            /* 0x0010 */
-    z64_input_t     input[4];             /* 0x0014 */
-    uint32_t        state_heap_size;      /* 0x0074 */
-    void           *state_heap;           /* 0x0078 */
-    void           *heap_start;           /* 0x007C */
-    void           *heap_end;             /* 0x0080 */
-    void           *state_heap_node;      /* 0x0084 */
-    char            unk_00_[0x0010];      /* 0x0088 */
-    int32_t         state_continue;       /* 0x0098 */
-    int32_t         state_frames;         /* 0x009C */
-    uint32_t        unk_01_;              /* 0x00A0 */
-                                          /* 0x00A4 */
+    z64_gfx_t      *gfx;                   // 0x0000
+    void           *state_main;            // 0x0004
+    void           *state_dtor;            // 0x0008
+    void           *next_ctor;             // 0x000C
+    uint32_t        next_size;             // 0x0010
+    z64_input_t     input[4];              // 0x0014
+    uint32_t        state_heap_size;       // 0x0074
+    void           *state_heap;            // 0x0078
+    void           *heap_start;            // 0x007C
+    void           *heap_end;              // 0x0080
+    void           *state_heap_node;       // 0x0084
+    char            unk_00_[0x0010];       // 0x0088
+    int32_t         state_continue;        // 0x0098
+    int32_t         state_frames;          // 0x009C
+    uint32_t        unk_01_;               // 0x00A0
+                                           // 0x00A4
 } z64_ctxt_t;
 
 typedef struct
 {
-    uint8_t  unk_0_[0x266];        // 0x0000
-    uint16_t a_button_alpha;       // 0x0266
-    uint16_t b_button_alpha;       // 0x0268
-    uint16_t c_left_button_alpha;  // 0x026A
-    uint16_t c_down_button_alpha;  // 0x026C
-    uint16_t c_right_button_alpha; // 0x026E
-    uint16_t hearts_alpha;         // 0x0270
-    uint16_t rupees_alpha;         // 0x0272
-    uint16_t minimap_alpha;        // 0x0274
+    uint8_t  unk_0_[0x266];                // 0x0000
+    uint16_t a_button_alpha;               // 0x0266
+    uint16_t b_button_alpha;               // 0x0268
+    uint16_t c_left_button_alpha;          // 0x026A
+    uint16_t c_down_button_alpha;          // 0x026C
+    uint16_t c_right_button_alpha;         // 0x026E
+    uint16_t hearts_alpha;                 // 0x0270
+    uint16_t rupees_alpha;                 // 0x0272
+    uint16_t minimap_alpha;                // 0x0274
 } z64_game_sub_169E8;
 
 typedef struct
 {
-    uint8_t unk_0_[0x875];         // 0x0000
-    uint8_t flag_875;              // 0x0875
-    uint8_t unk_876_[0x2D4];       // 0x0876
-    uint8_t flag_B4A;              // 0x0B4A
+    uint8_t unk_0_[0x875];                 // 0x0000
+    uint8_t flag_875;                      // 0x0875
+    uint8_t unk_876_[0x2D4];               // 0x0876
+    uint8_t flag_B4A;                      // 0x0B4A
 } z64_game_sub_18000;
 
 typedef struct
@@ -582,34 +586,34 @@ typedef struct
 // Both sets of notes seem to fill in some blanks for each other.
 typedef struct
 {
-    uint32_t entrance;      // 0x0000
-    uint8_t unk_04_;        // 0x0004, tatl hint type?
-    uint8_t unk_05_;        // 0x0005
-    uint8_t unk_06_[4];     // 0x0006
-    uint16_t cutscene_flag; // 0x000A, 0xFFFD if in cutscene?
-    uint16_t time_tick;     // 0x000C
-    uint8_t unk_0E_[6];     // 0x000E
-    uint32_t time_speed;    // 0x0014
-    uint16_t time;          // 0x0018
-    uint8_t unk_1A_[6];     // 0x001A
-    uint8_t form;           // 0x0020
-    uint8_t unk_21_;        // 0x0021
-    uint8_t tatl_flag;      // 0x0022
-    uint8_t save_type;      // 0x0023
-    uint8_t zelda3[8];      // 0x0024, "ZELDA3\0\0"
-    uint8_t filename[8];    // 0x002C
-    uint16_t hearts;        // 0x0034
-    uint16_t health;        // 0x0036
-    uint8_t has_magic;      // 0x0038, some sort of "has magic" flag
-    uint8_t magic;          // 0x0039, current magic amount
-    uint16_t rupees;        // 0x003A
-    uint32_t playtime;      // 0x003C, play-time frame counter
-    uint8_t reset_magic;    // 0x0040
-    uint8_t unk_41_;        // 0x0041
-    uint8_t double_defense; // 0x0042
-    uint8_t unk_43_[3];     // 0x0043
+    uint32_t entrance;           // 0x0000
+    uint8_t unk_04_;             // 0x0004, tatl hint type?
+    uint8_t unk_05_;             // 0x0005
+    uint8_t unk_06_[4];          // 0x0006
+    uint16_t cutscene_flag;      // 0x000A, 0xFFFD if in cutscene?
+    uint16_t time_tick;          // 0x000C
+    uint8_t unk_0E_[6];          // 0x000E
+    uint32_t time_speed;         // 0x0014
+    uint16_t time;               // 0x0018
+    uint8_t unk_1A_[6];          // 0x001A
+    uint8_t form;                // 0x0020
+    uint8_t unk_21_;             // 0x0021
+    uint8_t tatl_flag;           // 0x0022
+    uint8_t save_type;           // 0x0023
+    uint8_t zelda3[8];           // 0x0024, "ZELDA3\0\0"
+    uint8_t filename[8];         // 0x002C
+    uint16_t hearts;             // 0x0034
+    uint16_t health;             // 0x0036
+    uint8_t has_magic;           // 0x0038, some sort of "has magic" flag
+    uint8_t magic;               // 0x0039, current magic amount
+    uint16_t rupees;             // 0x003A
+    uint32_t playtime;           // 0x003C, play-time frame counter
+    uint8_t reset_magic;         // 0x0040
+    uint8_t unk_41_;             // 0x0041
+    uint8_t double_defense;      // 0x0042
+    uint8_t unk_43_[3];          // 0x0043
     union {
-        uint16_t owl_statues; // 0x0046
+        uint16_t owl_statues;    // 0x0046
         struct {
             uint16_t great_bay        : 1;
             uint16_t zora_cape        : 1;
@@ -625,32 +629,32 @@ typedef struct
             uint16_t west_clock_town  : 1;
         };
     };
-    uint8_t unk_48_[4];     // 0x0048
-    uint8_t b_button;       // 0x004C
-    uint8_t c_buttons[3];   // 0x004D
-    uint8_t goron_b_button; // 0x0050
-    uint8_t unk_51_[3];     // 0x0051
-    uint8_t zora_b_button;  // 0x0054
-    uint8_t unk_55_[3];     // 0x0055
-    uint8_t deku_b_button;  // 0x0058
-    uint8_t unk_59_[4];     // 0x0059
-    uint8_t alt_c_buttons[3]; // 0x005D
-    uint8_t unk_60_[0xD];   // 0x0060
+    uint8_t unk_48_[4];          // 0x0048
+    uint8_t b_button;            // 0x004C
+    uint8_t c_buttons[3];        // 0x004D
+    uint8_t goron_b_button;      // 0x0050
+    uint8_t unk_51_[3];          // 0x0051
+    uint8_t zora_b_button;       // 0x0054
+    uint8_t unk_55_[3];          // 0x0055
+    uint8_t deku_b_button;       // 0x0058
+    uint8_t unk_59_[4];          // 0x0059
+    uint8_t alt_c_buttons[3];    // 0x005D
+    uint8_t unk_60_[0xD];        // 0x0060
     union {
-        uint8_t sword_shield_equip; // 0x006D
+        uint8_t flag_6D;         // 0x006D
         struct {
-            uint8_t sword_equip  : 4;
-            uint8_t shield_equip : 4;
+            uint8_t sword  : 4;
+            uint8_t shield : 4;
         };
     };
-    uint8_t unk_6E_[2];      // 0x006E
-    uint8_t items[0x18];     // 0x0070
-    uint8_t masks[0x18];     // 0x0088
-    uint8_t item_count[0x18];// 0x00A0
-    uint8_t unk_B8_[2];      // 0x00B8
-    uint8_t wallet;          // 0x00BA
+    uint8_t unk_6E_[2];          // 0x006E
+    uint8_t items[0x18];         // 0x0070
+    uint8_t masks[0x18];         // 0x0088
+    uint8_t item_count[0x18];    // 0x00A0
+    uint8_t unk_B8_[2];          // 0x00B8
+    uint8_t wallet;              // 0x00BA
     union {
-        uint8_t quiver_bomb_bag; // 0x00BB
+        uint8_t flag_BB;         // 0x00BB
         struct {
             uint8_t quiver   : 3;
             uint8_t bomb_bag : 2;
@@ -658,14 +662,14 @@ typedef struct
         };
     };
     union {
-        uint8_t heart_pieces_lullaby; // 0x00BC
+        uint8_t flag_BC;         // 0x00BC
         struct {
             uint8_t lullaby_intro : 4;
             uint8_t heart_pieces  : 4;
         };
     };
     union {
-        uint8_t song_of_storms_notebook; // 0x00BD
+        uint8_t flag_BD;         // 0x00BD
         struct {
             uint8_t song_of_storms   : 1;
             uint8_t                  : 1;
@@ -674,7 +678,7 @@ typedef struct
         };
     };
     union {
-        uint8_t songs; // 0x00BE
+        uint8_t flag_BE;         // 0x00BE
         struct {
             uint8_t new_wave_bossa_nova : 1;
             uint8_t elegy_of_emptiness  : 1;
@@ -687,7 +691,7 @@ typedef struct
         };
     };
     union {
-        uint8_t remains; // 0x00BF
+        uint8_t flag_BF;         // 0x00BF
         struct {
             uint8_t odolwa_remains      : 1;
             uint8_t goht_remains        : 1;
@@ -698,31 +702,31 @@ typedef struct
             uint8_t goron_lullaby       : 1;
         };
     };
-    uint8_t unk_C0_[0xA];       // 0x00C0
-    uint8_t small_keys[4];      // 0x00CA
-    uint8_t unk_CE_[5];         // 0x00CE
-    uint8_t doubled_hearts;     // 0x00D3
-    uint8_t unk_D4_[0xE0A];     // 0x00D4
-    uint16_t bank_rupees;       // 0x0EDE
-    uint8_t unk_EE0_[0x10];     // 0x0EE0
-    uint32_t lottery_guess;     // 0x0EF0
-    uint8_t unk_EF4_[0x12];     // 0x0EF4
+    uint8_t unk_C0_[0xA];        // 0x00C0
+    uint8_t small_keys[4];       // 0x00CA
+    uint8_t unk_CE_[5];          // 0x00CE
+    uint8_t doubled_hearts;      // 0x00D3
+    uint8_t unk_D4_[0xE0A];      // 0x00D4
+    uint16_t bank_rupees;        // 0x0EDE
+    uint8_t unk_EE0_[0x10];      // 0x0EE0
+    uint32_t lottery_guess;      // 0x0EF0
+    uint8_t unk_EF4_[0x12];      // 0x0EF4
     union {
-        uint8_t flag_F06;       // 0x0F06
+        uint8_t flag_F06;        // 0x0F06
         struct {
             uint8_t                : 4;
             uint8_t infinite_magic : 1;
             uint8_t                : 3;
         };
     };
-    uint8_t unk_F07_[0x8];      // 0x0F07
-    uint8_t great_spin;         // 0x0F0F
-    uint8_t unk_F10[0x4C];      // 0x0F10
-    uint32_t locations_visited; // 0x0F5C
-    uint8_t unk_F60[0x7C];      // 0x0F60
-    uint8_t lotteries[9];       // 0x0FDC
-    uint8_t unk_FE5_[6];        // 0x0FE5
-    uint8_t bomber_code[5];     // 0x0FEB
+    uint8_t unk_F07_[0x8];       // 0x0F07
+    uint8_t great_spin;          // 0x0F0F
+    uint8_t unk_F10[0x4C];       // 0x0F10
+    uint32_t locations_visited;  // 0x0F5C
+    uint8_t unk_F60[0x7C];       // 0x0F60
+    uint8_t lotteries[9];        // 0x0FDC
+    uint8_t unk_FE5_[6];         // 0x0FE5
+    uint8_t bomber_code[5];      // 0x0FEB
     uint8_t unk_FF0_[0x26];      // 0x0FF0
     uint16_t jinx_timer;         // 0x1016
     int16_t rupee_timer;         // 0x1018
@@ -848,33 +852,35 @@ typedef struct {
     uint16_t floor_type;        // 0x0B72, determines sound effect used while walking
 } z64_link_t;
 
-/* virtual file addresses */
-#define z64_item_texture_file          0xA36C10
+// virtual file addresses
+#define z64_item_texture_file             0xA36C10
 
-/* dram addresses */
-#define z64_CanInteract_addr           0x801233E4
-#define z64_CanInteract2_addr          0x80123358
+// dram addresses
+#define z64_file_addr                     0x801EF670
+#define z64_ctxt_addr                     0x803E6B20
+#define z64_game_addr                     z64_ctxt_addr
+#define z64_link_addr                     0x803FFDB0
+
+// data
+#define z64_ctxt                          (*(z64_ctxt_t*) z64_ctxt_addr)
+#define z64_file                          (*(z64_file_t*) z64_file_addr)
+#define z64_game                          (*(z64_game_t*) z64_game_addr)
+#define z64_link                          (*(z64_link_t*) z64_link_addr)
+
+// dram function addresses
+#define z64_CanInteract_addr              0x801233E4
+#define z64_CanInteract2_addr             0x80123358
 #define z64_CheckTimeOfDayTransition_addr 0x8074AF20
-#define z64_GetFloorPhysicsType_addr   0x800C99D4
-#define z64_GetPhysicalAddrOfFile_addr 0x80080950
-#define z64_LoadItemTexture_addr       0x80178DAC
-#define z64_PlaySfx_addr               0x8019F0C8
-#define z64_ReadFile_addr  0x80080C90
-#define z64_SpawnActor_addr            0x800BAC60
-#define z64_file_addr      0x801EF670
-#define z64_ctxt_addr      0x803E6B20
-#define z64_game_addr      z64_ctxt_addr
-#define z64_link_addr      0x803FFDB0
-#define z64_UpdateButtonUsability_addr 0x80110038
-#define z64_UseItem_addr   0x8074EE20
+#define z64_GetFloorPhysicsType_addr      0x800C99D4
+#define z64_GetPhysicalAddrOfFile_addr    0x80080950
+#define z64_LoadItemTexture_addr          0x80178DAC
+#define z64_PlaySfx_addr                  0x8019F0C8
+#define z64_ReadFile_addr                 0x80080C90
+#define z64_SpawnActor_addr               0x800BAC60
+#define z64_UpdateButtonUsability_addr    0x80110038
+#define z64_UseItem_addr                  0x8074EE20
 
-/* data */
-#define z64_ctxt           (*(z64_ctxt_t*) z64_ctxt_addr)
-#define z64_file           (*(z64_file_t*) z64_file_addr)
-#define z64_game           (*(z64_game_t*) z64_game_addr)
-#define z64_link           (*(z64_link_t*) z64_link_addr)
-
-/* function prototypes */
+// function prototypes
 typedef int (*z64_CanInteract_proc)(z64_game_t *game);
 typedef int (*z64_CanInteract2_proc)(z64_game_t *game, z64_link_t *link);
 typedef uint32_t (*z64_CheckTimeOfDayTransition_proc)(z64_game_t *game);
@@ -887,17 +893,17 @@ typedef z64_actor_t* (*z64_SpawnActor_proc)(void *unk0, z64_game_t *game, uint16
 typedef void (*z64_UpdateButtonUsability_proc)(z64_ctxt_t *ctxt);
 typedef void (*z64_UseItem_proc)(z64_ctxt_t *ctxt, z64_link_t *link, uint8_t item);
 
-/* functions */
-#define z64_CanInteract               ((z64_CanInteract_proc) z64_CanInteract_addr)
-#define z64_CanInteract2              ((z64_CanInteract2_proc) z64_CanInteract2_addr)
-#define z64_CheckTimeOfDayTransition ((z64_CheckTimeOfDayTransition_proc) z64_CheckTimeOfDayTransition_addr)
-#define z64_GetFloorPhysicsType ((z64_GetFloorPhysicsType_proc) z64_GetFloorPhysicsType_addr)
-#define z64_GetPhysicalAddrOfFile ((z64_GetPhysicalAddrOfFile_proc) z64_GetPhysicalAddrOfFile_addr)
-#define z64_LoadItemTexture       ((z64_LoadItemTexture_proc)       z64_LoadItemTexture_addr)
-#define z64_PlaySfx        ((z64_PlaySfx_proc) z64_PlaySfx_addr)
-#define z64_ReadFile       ((z64_ReadFile_proc) z64_ReadFile_addr)
-#define z64_SpawnActor     ((z64_SpawnActor_proc) z64_SpawnActor_addr)
-#define z64_UpdateButtonUsability ((z64_UpdateButtonUsability_proc) z64_UpdateButtonUsability_addr)
-#define z64_UseItem        ((z64_UseItem_proc) z64_UseItem_addr)
+// functions
+#define z64_CanInteract                   ((z64_CanInteract_proc) z64_CanInteract_addr)
+#define z64_CanInteract2                  ((z64_CanInteract2_proc) z64_CanInteract2_addr)
+#define z64_CheckTimeOfDayTransition      ((z64_CheckTimeOfDayTransition_proc) z64_CheckTimeOfDayTransition_addr)
+#define z64_GetFloorPhysicsType           ((z64_GetFloorPhysicsType_proc) z64_GetFloorPhysicsType_addr)
+#define z64_GetPhysicalAddrOfFile         ((z64_GetPhysicalAddrOfFile_proc) z64_GetPhysicalAddrOfFile_addr)
+#define z64_LoadItemTexture               ((z64_LoadItemTexture_proc) z64_LoadItemTexture_addr)
+#define z64_PlaySfx                       ((z64_PlaySfx_proc) z64_PlaySfx_addr)
+#define z64_ReadFile                      ((z64_ReadFile_proc) z64_ReadFile_addr)
+#define z64_SpawnActor                    ((z64_SpawnActor_proc) z64_SpawnActor_addr)
+#define z64_UpdateButtonUsability         ((z64_UpdateButtonUsability_proc) z64_UpdateButtonUsability_addr)
+#define z64_UseItem                       ((z64_UseItem_proc) z64_UseItem_addr)
 
-#endif
+#endif // Z64_H
