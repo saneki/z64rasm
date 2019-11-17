@@ -144,10 +144,6 @@ static bool check_action_state() {
     // Make sure certain action state flags are cleared before processing input
     if ((z64_link.action_state1 & DPAD_ACTION_STATE1) != 0)
         return false;
-    else if ((z64_link.action_state2 & DPAD_ACTION_STATE2) != 0)
-        return false;
-    else if ((z64_link.action_state3 & DPAD_ACTION_STATE3) != 0)
-        return false;
     else
         return true;
 }
