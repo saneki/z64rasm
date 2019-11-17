@@ -78,10 +78,14 @@ static bool get_slot(uint8_t item, uint8_t *slot, uint8_t *array, uint8_t length
 }
 
 static bool get_item_slot(uint8_t item, uint8_t *slot) {
+    if (item == Z64_ITEM_NONE)
+        return false;
     return get_slot(item, slot, (uint8_t *)&z64_file.items, sizeof(z64_file.items));
 }
 
 static bool get_mask_slot(uint8_t item, uint8_t *slot) {
+    if (item == Z64_ITEM_NONE)
+        return false;
     return get_slot(item, slot, (uint8_t *)&z64_file.masks, sizeof(z64_file.masks));
 }
 
