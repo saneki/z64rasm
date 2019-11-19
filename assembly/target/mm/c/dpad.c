@@ -103,34 +103,40 @@ static bool have_any(uint8_t *dpad) {
     return false;
 }
 
-static void try_use_item(uint8_t slot, uint8_t item) {
+static bool try_use_item(uint8_t slot, uint8_t item) {
     if (z64_file.items[slot] == item) {
         z64_UseItem(&z64_ctxt, &z64_link, item);
+        return true;
     }
+
+    return false;
 }
 
-static void try_use_mask(uint8_t slot, uint8_t item) {
+static bool try_use_mask(uint8_t slot, uint8_t item) {
     // Can't use normal masks unless human link
     if (!IS_TRANSFORMATION_MASK(item) && z64_file.form != Z64_FORM_CHILD)
-        return;
+        return false;
 
     if (z64_file.masks[slot] == item) {
         z64_UseItem(&z64_ctxt, &z64_link, item);
+        return true;
     }
+
+    return false;
 }
 
-static void try_use_item_or_mask(uint8_t item) {
+static bool try_use_item_or_mask(uint8_t item) {
     uint8_t slot;
 
     // Try to find slot in item or mask inventories
     if (!get_item_slot(item, &slot) && !get_mask_slot(item, &slot))
-        return;
+        return false;
 
     // If item value is in mask range, use mask. Otherwise default to use item.
     if (Z64_ITEM_DEKU_MASK <= item && item <= Z64_ITEM_GIANT_MASK) {
-        try_use_mask(slot, item);
+        return try_use_mask(slot, item);
     } else {
-        try_use_item(slot, item);
+        return try_use_item(slot, item);
     }
 }
 
@@ -227,33 +233,35 @@ void do_dpad_per_game_frame()
     get_dpad_item_usability(usable);
 }
 
-void handle_dpad() {
+bool handle_dpad() {
     pad_t pad_pressed = z64_ctxt.input[0].pad_pressed;
 
     // If disabled, do nothing
     if (DPAD_STATE == DPAD_STATE_TYPE_DISABLED)
-        return;
+        return false;
 
     // Check general game state to know if we can use C buttons at all
     // Note: After collecting a stray fairy (and possibly in other cases) the state flags are set
     // to 0 despite the game running normally.
     if (z64_file.game_state != Z64_GAME_STATE_NORMAL &&
         z64_file.game_state != Z64_GAME_STATE_BLACK_SCREEN)
-        return;
+        return false;
 
     // Check action state flags
     if (!check_action_state())
-        return;
+        return false;
 
     if (pad_pressed.du && usable[0]) {
-        try_use_item_or_mask(DPAD_CONFIG[0]);
+        return try_use_item_or_mask(DPAD_CONFIG[0]);
     } else if (pad_pressed.dr && usable[1]) {
-        try_use_item_or_mask(DPAD_CONFIG[1]);
+        return try_use_item_or_mask(DPAD_CONFIG[1]);
     } else if (pad_pressed.dd && usable[2]) {
-        try_use_item_or_mask(DPAD_CONFIG[2]);
+        return try_use_item_or_mask(DPAD_CONFIG[2]);
     } else if (pad_pressed.dl && usable[3]) {
-        try_use_item_or_mask(DPAD_CONFIG[3]);
+        return try_use_item_or_mask(DPAD_CONFIG[3]);
     }
+
+    return false;
 }
 
 static bool is_any_item_usable(uint8_t *dpad, bool *usable)
