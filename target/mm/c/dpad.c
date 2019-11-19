@@ -64,7 +64,7 @@ static int16_t positions[4][2] = {
 static bool usable[4];
 
 // Whether the previous frame was a "minigame" frame.
-bool g_was_minigame = false;
+static bool g_was_minigame = false;
 
 static bool get_slot(uint8_t item, uint8_t *slot, uint8_t *array, uint8_t length) {
     for (uint8_t i = 0; i < length; i++) {
