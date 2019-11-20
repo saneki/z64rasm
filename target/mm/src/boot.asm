@@ -12,7 +12,7 @@
 ;   - this isn't strictly necessary, but adds flexibility for the future
 .orga 0x20580
 .area 0x70, 0
-    .word 0x02F00000, 0x02F00000 + PAYLOAD_END - PAYLOAD_START, 0x02F00000, 0
+    .word 0x03800000, 0x03800000 + PAYLOAD_END - PAYLOAD_START, 0x03800000, 0
 .endarea
 
 ; Load new code from ROM
@@ -36,7 +36,7 @@
     ori     a0, a0, 0x9E00
     li      a2, PAYLOAD_END - PAYLOAD_START
     jal     0x80080C90
-    lui     a1, 0x02F0
+    lui     a1, 0x0380
 
     jal     init
     sw      s0, 0x0018 (sp)
