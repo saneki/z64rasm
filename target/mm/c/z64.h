@@ -21,6 +21,12 @@
 #define Z64_MAGIC_NORMAL         0x30
 #define Z64_MAGIC_FULL           0x60
 
+#define IS_TRANSFORMATION_MASK(MASK)   \
+    ((MASK) == Z64_ITEM_DEKU_MASK   || \
+     (MASK) == Z64_ITEM_GORON_MASK  || \
+     (MASK) == Z64_ITEM_ZORA_MASK   || \
+     (MASK) == Z64_ITEM_FIERCE_DEITY_MASK)
+
 /// Correlates to form field in z64_file_t.
 typedef enum
 {
@@ -663,8 +669,13 @@ typedef struct
         };
     };
     uint8_t unk_6E_[2];          // 0x006E
-    uint8_t items[0x18];         // 0x0070
-    uint8_t masks[0x18];         // 0x0088
+    union {
+        uint8_t inventory[0x30]; // 0x0070
+        struct {
+            uint8_t items[0x18]; // 0x0070
+            uint8_t masks[0x18]; // 0x0088
+        };
+    };
     uint8_t item_count[0x18];    // 0x00A0
     uint8_t unk_B8_[2];          // 0x00B8
     uint8_t wallet;              // 0x00BA

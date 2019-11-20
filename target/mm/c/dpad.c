@@ -7,12 +7,6 @@
 
 #define ITEM_TEXTURE_LEN 0x1000
 
-#define IS_TRANSFORMATION_MASK(MASK)   \
-    ((MASK) == Z64_ITEM_DEKU_MASK   || \
-     (MASK) == Z64_ITEM_GORON_MASK  || \
-     (MASK) == Z64_ITEM_ZORA_MASK   || \
-     (MASK) == Z64_ITEM_FIERCE_DEITY_MASK)
-
 // D-Pad config values that can be set by a randomizer.
 // Order: Up, Right, Down, Left
 uint8_t DPAD_CONFIG[4] = {
@@ -77,34 +71,28 @@ static bool get_slot(uint8_t item, uint8_t *slot, uint8_t *array, uint8_t length
     return false;
 }
 
-static bool get_item_slot(uint8_t item, uint8_t *slot) {
+static bool get_inventory_slot(uint8_t item, uint8_t *slot) {
     if (item == Z64_ITEM_NONE)
         return false;
-    return get_slot(item, slot, (uint8_t *)&z64_file.items, sizeof(z64_file.items));
+    return get_slot(item, slot, (uint8_t *)&z64_file.inventory, sizeof(z64_file.inventory));
 }
 
-static bool get_mask_slot(uint8_t item, uint8_t *slot) {
-    if (item == Z64_ITEM_NONE)
-        return false;
-    return get_slot(item, slot, (uint8_t *)&z64_file.masks, sizeof(z64_file.masks));
-}
-
-static bool has_item_or_mask(uint8_t item) {
+static bool has_inventory_item(uint8_t item) {
     uint8_t slot;
-    return (get_item_slot(item, &slot) || get_mask_slot(item, &slot));
+    return get_inventory_slot(item, &slot);
 }
 
 static bool have_any(uint8_t *dpad) {
     for (int i = 0; i < 4; i++) {
-        if (has_item_or_mask(dpad[i]))
+        if (has_inventory_item(dpad[i]))
             return true;
     }
 
     return false;
 }
 
-static bool try_use_item(uint8_t slot, uint8_t item) {
-    if (z64_file.items[slot] == item) {
+static bool try_use_inventory_item(uint8_t item, uint8_t slot) {
+    if (z64_file.inventory[slot] == item) {
         z64_UseItem(&z64_ctxt, &z64_link, item);
         return true;
     }
@@ -112,32 +100,14 @@ static bool try_use_item(uint8_t slot, uint8_t item) {
     return false;
 }
 
-static bool try_use_mask(uint8_t slot, uint8_t item) {
-    // Can't use normal masks unless human link
-    if (!IS_TRANSFORMATION_MASK(item) && z64_file.form != Z64_FORM_CHILD)
-        return false;
-
-    if (z64_file.masks[slot] == item) {
-        z64_UseItem(&z64_ctxt, &z64_link, item);
-        return true;
-    }
-
-    return false;
-}
-
-static bool try_use_item_or_mask(uint8_t item) {
+static bool try_use_item(uint8_t item) {
     uint8_t slot;
 
     // Try to find slot in item or mask inventories
-    if (!get_item_slot(item, &slot) && !get_mask_slot(item, &slot))
+    if (!get_inventory_slot(item, &slot))
         return false;
 
-    // If item value is in mask range, use mask. Otherwise default to use item.
-    if (Z64_ITEM_DEKU_MASK <= item && item <= Z64_ITEM_GIANT_MASK) {
-        return try_use_mask(slot, item);
-    } else {
-        return try_use_item(slot, item);
-    }
+    return try_use_inventory_item(item, slot);
 }
 
 static void get_dpad_item_usability(bool *dest)
@@ -252,13 +222,13 @@ bool handle_dpad() {
         return false;
 
     if (pad_pressed.du && usable[0]) {
-        return try_use_item_or_mask(DPAD_CONFIG[0]);
+        return try_use_item(DPAD_CONFIG[0]);
     } else if (pad_pressed.dr && usable[1]) {
-        return try_use_item_or_mask(DPAD_CONFIG[1]);
+        return try_use_item(DPAD_CONFIG[1]);
     } else if (pad_pressed.dd && usable[2]) {
-        return try_use_item_or_mask(DPAD_CONFIG[2]);
+        return try_use_item(DPAD_CONFIG[2]);
     } else if (pad_pressed.dl && usable[3]) {
-        return try_use_item_or_mask(DPAD_CONFIG[3]);
+        return try_use_item(DPAD_CONFIG[3]);
     }
 
     return false;
@@ -267,7 +237,7 @@ bool handle_dpad() {
 static bool is_any_item_usable(uint8_t *dpad, bool *usable)
 {
     for (int i = 0; i < 4; i++) {
-        if (has_item_or_mask(dpad[i]) && usable[i])
+        if (has_inventory_item(dpad[i]) && usable[i])
             return true;
     }
 
@@ -327,7 +297,7 @@ void draw_dpad() {
         uint16_t iy = y + positions[i][1];
 
         // Show nothing if not in inventory
-        if (!has_item_or_mask(value))
+        if (!has_inventory_item(value))
             continue;
 
         // Draw faded
