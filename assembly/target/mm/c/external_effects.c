@@ -2,6 +2,7 @@
 #include "external_effects.h"
 #include "fairy.h"
 #include "floor_physics.h"
+#include "icetrap.h"
 #include "z64.h"
 
 // Fairy spawn cooldown (in frames).
@@ -21,6 +22,7 @@ external_effects_t g_external_effects = {
     .version = 0,
     .chateau = 0,
     .fairy = 0,
+    .freeze = 0,
     .ice_physics = 0,
     .jinx = 0,
     .no_z = 0,
@@ -103,6 +105,14 @@ static void handle_fairy_effect() {
     // Decrement cooldown per frame
     if (g_fairy_cooldown > 0) {
         g_fairy_cooldown -= 1;
+    }
+}
+
+static void handle_freeze_effect() {
+    // Handle "Freeze" effect.
+    if (g_external_effects.freeze) {
+        push_pending_icetrap();
+        g_external_effects.freeze = 0;
     }
 }
 
@@ -190,6 +200,7 @@ static void handle_wallet_fill_effect() {
 void handle_external_effects() {
     handle_chateau_effect();
     handle_fairy_effect();
+    handle_freeze_effect();
     handle_ice_physics_effect();
     handle_jinx_effect();
     handle_no_z_effect();
