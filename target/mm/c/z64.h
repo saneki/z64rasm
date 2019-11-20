@@ -327,6 +327,8 @@ typedef enum {
     Z64_ACTION_STATE2_Z_JUMP       = 0x00080000,
     // Spin attack.
     Z64_ACTION_STATE2_SPIN_ATTACK  = 0x00020000,
+    // Frozen, ends once ice cracks.
+    Z64_ACTION_STATE2_FROZEN       = 0x00004000,
     // Stationary while climbing.
     Z64_ACTION_STATE2_CLIMB_STAY   = 0x00001000,
     // Diving.
@@ -421,6 +423,19 @@ typedef enum {
     Z64_FLOOR_PHYSICS_ICE = 5,
     Z64_FLOOR_PHYSICS_SNOW = 0xE,
 } z64_floor_physics_t;
+
+typedef enum {
+    // Damaged normally.
+    Z64_DAMAGE_EFFECT_NORMAL = 0,
+    // Flies backwards screaming.
+    Z64_DAMAGE_EFFECT_FLY_BACK = 1,
+    // Flies backwards.
+    Z64_DAMAGE_EFFECT_FLY_BACK_2 = 2,
+    // Freezes.
+    Z64_DAMAGE_EFFECT_FREEZE = 3,
+    // Electrocutes.
+    Z64_DAMAGE_EFFECT_ELECTRIC = 4,
+} z64_damage_effect_t;
 
 typedef struct
 {
@@ -844,11 +859,22 @@ typedef struct {
     z64_actor_t common;         // 0x0000
     uint8_t unk_144_[2];        // 0x0144
     uint8_t pre_use;            // 0x0146
-    uint8_t unk_147_[0x925];    // 0x0147
+    uint8_t unk_147_[3];        // 0x0147
+    uint8_t item_out;           // 0x014A, which item Link currently has out?
+                                // 0x14 = Ocarina, 0x15 = Bottle, 0x9 = Bow, 0xD = Hookshot
+    uint8_t form;               // 0x014B
+    uint8_t unk_14C_[7];        // 0x014C
+    uint8_t mask;               // 0x0153
+    uint8_t mask_c;             // 0x0154, C button index (starting at 1) of current/recently worn mask
+    uint8_t previous_mask;      // 0x0155
+    uint8_t unk_156_[0x916];    // 0x0156
     uint32_t action_state1;     // 0x0A6C
     uint32_t action_state2;     // 0x0A70
     uint32_t action_state3;     // 0x0A74
-    uint8_t unk_A78_[0xFA];     // 0x0A78
+    uint8_t unk_A78_[0x6F];     // 0x0A78
+    uint8_t anim_timer;         // 0x0AE7, some animation timer? Relevant to: transformation masks, freezing, etc
+    uint16_t frozen_timer;      // 0x0AE8
+    uint8_t unk_AEA_[0x88];     // 0x0AEA
     uint16_t floor_type;        // 0x0B72, determines sound effect used while walking
 } z64_link_t;
 
@@ -873,6 +899,8 @@ typedef struct {
 #define z64_CheckTimeOfDayTransition_addr 0x8074AF20
 #define z64_GetFloorPhysicsType_addr      0x800C99D4
 #define z64_GetPhysicalAddrOfFile_addr    0x80080950
+#define z64_LinkDamage_addr               0x80750FA8
+#define z64_LinkInvincibility_addr        0x80750E28
 #define z64_LoadItemTexture_addr          0x80178DAC
 #define z64_PlaySfx_addr                  0x8019F0C8
 #define z64_ReadFile_addr                 0x80080C90
@@ -886,6 +914,8 @@ typedef int (*z64_CanInteract2_proc)(z64_game_t *game, z64_link_t *link);
 typedef uint32_t (*z64_CheckTimeOfDayTransition_proc)(z64_game_t *game);
 typedef uint32_t (*z64_GetFloorPhysicsType_proc)(void *arg0, void *arg1, uint8_t arg2);
 typedef uint32_t (*z64_GetPhysicalAddrOfFile_proc)(uint32_t vrom_addr);
+typedef void (*z64_LinkDamage_proc)(z64_game_t *game, z64_link_t *link, uint32_t type, uint32_t arg3);
+typedef void (*z64_LinkInvincibility_proc)(z64_link_t *link, uint8_t frames);
 typedef void (*z64_LoadItemTexture_proc)(uint32_t phys_file, uint8_t item, uint8_t *dest, uint32_t length);
 typedef void (*z64_PlaySfx_proc)(uint32_t id);
 typedef void (*z64_ReadFile_proc)(void *mem_addr, uint32_t vrom_addr, uint32_t size);
@@ -899,6 +929,8 @@ typedef void (*z64_UseItem_proc)(z64_ctxt_t *ctxt, z64_link_t *link, uint8_t ite
 #define z64_CheckTimeOfDayTransition      ((z64_CheckTimeOfDayTransition_proc) z64_CheckTimeOfDayTransition_addr)
 #define z64_GetFloorPhysicsType           ((z64_GetFloorPhysicsType_proc) z64_GetFloorPhysicsType_addr)
 #define z64_GetPhysicalAddrOfFile         ((z64_GetPhysicalAddrOfFile_proc) z64_GetPhysicalAddrOfFile_addr)
+#define z64_LinkDamage                    ((z64_LinkDamage_proc) z64_LinkDamage_addr)
+#define z64_LinkInvincibility             ((z64_LinkInvincibility_proc) z64_LinkInvincibility_addr)
 #define z64_LoadItemTexture               ((z64_LoadItemTexture_proc) z64_LoadItemTexture_addr)
 #define z64_PlaySfx                       ((z64_PlaySfx_proc) z64_PlaySfx_addr)
 #define z64_ReadFile                      ((z64_ReadFile_proc) z64_ReadFile_addr)
