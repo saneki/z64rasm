@@ -3,3 +3,7 @@
 /c/*.o
 armips*
 !.gitkeep
+
+# Ignore ROM files
+*.z64
+*.n64
