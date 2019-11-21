@@ -573,7 +573,7 @@ typedef struct
     uint16_t c_down_button_alpha;          // 0x026C
     uint16_t c_right_button_alpha;         // 0x026E
     uint16_t hearts_alpha;                 // 0x0270
-    uint16_t rupees_alpha;                 // 0x0272
+    uint16_t rupees_alpha;                 // 0x0272, also magic meter alpha
     uint16_t minimap_alpha;                // 0x0274
 } z64_game_sub_169E8;
 

@@ -51,3 +51,29 @@
 ;   jal     0x800C99D4
 .orga 0xC0DAA0 ; In memory: 0x80760FA0
     jal     override_get_floor_physics_type
+
+;==================================================================================================
+; Magic meter color hooks
+;==================================================================================================
+
+; Custom color for infinite magic (original: #0000C8)
+; Replaces:
+;   lh      t8, 0x0272 (t1)
+;   andi    t9, t8, 0x00FF
+;   ori     t6, t9, 0xC800
+.orga 0xAFCEA4 ; In memory: 0x80116E44
+    jal     get_magic_meter_color_hook
+    ori     a0, r0, 1
+    ; Restore RA from previous stack value
+    lw      ra, -0x0004 (sp)
+
+; Custom color for normal magic (original: #00C800)
+; Replaces:
+;   lh      t8, 0x0272 (t1)
+;   andi    t9, t8, 0x00FF
+;   or      t6, t9, at
+.orga 0xAFCED4 ; In memory: 0x80116E74
+    jal     get_magic_meter_color_hook
+    ori     a0, r0, 0
+    ; Restore RA from previous stack value
+    lw      ra, -0x0004 (sp)
