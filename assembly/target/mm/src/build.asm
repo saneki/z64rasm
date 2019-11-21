@@ -32,6 +32,7 @@ PAYLOAD_START:
 
 .include "init.asm"
 .include "every_frame.asm"
+.include "colors.asm"
 .include "dpad.asm"
 .importobj "../build/bundle.o"
 .align 8
