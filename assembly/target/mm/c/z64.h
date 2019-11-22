@@ -566,7 +566,26 @@ typedef struct
 
 typedef struct
 {
-    uint8_t  unk_0_[0x266];                // 0x0000
+    uint8_t  unk_0_[0x22A];                // 0x0000
+    uint16_t unk_22A_;                     // 0x022A
+    uint16_t unk_22C_;                     // 0x022C
+    uint16_t unk_22E_;                     // 0x022E
+    uint16_t unk_230_;                     // 0x0230
+    uint16_t unk_232_;                     // 0x0232
+    uint16_t unk_234_;                     // 0x0234
+    uint16_t heart_red1;                   // 0x0236
+    uint16_t heart_red2;                   // 0x0238
+    uint16_t heart_grn1;                   // 0x023A
+    uint16_t heart_grn2;                   // 0x023C
+    uint16_t heart_blu1;                   // 0x023E
+    uint16_t heart_blu2;                   // 0x0240
+    uint16_t unk_242_;                     // 0x0242
+    uint16_t unk_244_;                     // 0x0244
+    uint16_t unk_246_;                     // 0x0246
+    uint16_t unk_248_;                     // 0x0248
+    uint16_t unk_24A_;                     // 0x024A
+    uint16_t unk_24C_;                     // 0x024C
+    uint8_t  unk_24E_[0x18];               // 0x024E
     uint16_t a_button_alpha;               // 0x0266
     uint16_t b_button_alpha;               // 0x0268
     uint16_t c_left_button_alpha;          // 0x026A

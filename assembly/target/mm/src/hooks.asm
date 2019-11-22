@@ -77,3 +77,31 @@
     ori     a0, r0, 0
     ; Restore RA from previous stack value
     lw      ra, -0x0004 (sp)
+
+;==================================================================================================
+; Map color hooks
+;==================================================================================================
+
+; Custom color for map (original: #00FFFFA0)
+; Replaces:
+;   andi    t6, t9, 0x00FF
+;   or      t5, t8, t6
+.orga 0xAE9354 ; In memory: 0x801032F4
+    jal     get_map_color_hook
+    nop
+
+; Custom color for player cursor (original: #C8FF00)
+; Replaces:
+;   andi    t9, t5, 0x00FF
+;   or      t7, t9, at
+.orga 0xAE9EEC ; In memory: 0x80103E8C
+    jal     get_map_player_cursor_color_hook
+    nop
+
+; Custom color for entrance cursor (original: #C80000)
+; Replaces:
+;   andi    t4, t3, 0x00FF
+;   or      t5, t4, at
+.orga 0xAEC430 ; In memory: 0x801063D0
+    jal     get_map_entrance_cursor_color_hook
+    nop
