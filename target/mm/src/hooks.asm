@@ -105,3 +105,57 @@
 .orga 0xAEC430 ; In memory: 0x801063D0
     jal     get_map_entrance_cursor_color_hook
     nop
+
+;==================================================================================================
+; Clock color hooks
+;==================================================================================================
+
+; Custom color for clock.
+; Replaces:
+;   lui     at, 0x00AA
+;   ori     at, at, 0x6400
+;   addiu   t9, v0, 0x0008
+;   sw      t9, 0x02A0 (s0)
+;   or      t8, ra, at
+.orga 0xB00170 ; In memory: 0x8011A110
+    addiu   t9, v0, 0x0008
+    sw      ra, -0x0004 (sp)
+    jal     get_clock_diamond_color_hook
+    sw      t9, 0x02A0 (s0)
+    lw      ra, -0x0004 (sp)
+
+; Custom color for inverted clock (red).
+; Replaces:
+;   addu    t0, t0, t2
+;   lh      a0, 0xFBCC (a0)
+;   lh      t0, 0xFBEC (t0)
+;   lui     t5, 0x801C
+.orga 0xAFFB98 ; In memory: 0x80119B38
+    sw      ra, -0x0004 (sp)
+    jal     get_inverted_clock_diamond_color_r_hook
+    nop
+    lw      ra, -0x0004 (sp)
+
+; Custom color for inverted clock (green).
+; Replaces:
+;   lh      t5, 0xFBD0 (t5)
+;   lh      a2, 0xFBF0 (a2)
+;   lui     a3, 0x801C
+;   lui     t3, 0x801C
+.orga 0xAFFC64 ; In memory: 0x80119C04
+    sw      ra, -0x0004 (sp)
+    jal     get_inverted_clock_diamond_color_g_hook
+    lh      t5, 0xFBD0 (t5)
+    lw      ra, -0x0004 (sp)
+
+; Custom color for inverted clock (blue).
+; Replaces:
+;   lui     a0, 0x801C
+;   addu    a0, a0, t2
+;   lh      a3, 0xFBD4 (a3)
+;   lh      a0, 0xFBF4 (a0)
+.orga 0xAFFD28 ; In memory: 0x80119CC8
+    sw      ra, -0x0004 (sp)
+    jal     get_inverted_clock_diamond_color_b_hook
+    lh      a3, 0xFBD4 (a3)
+    lw      ra, -0x0004 (sp)
