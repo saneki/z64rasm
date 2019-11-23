@@ -3,6 +3,7 @@
 #include "external_effects.h"
 #include "gfx.h"
 #include "hacks.h"
+#include "hud_colors.h"
 #include "icetrap.h"
 #include "util.h"
 
@@ -10,6 +11,7 @@ void c_init() {
     heap_init();
     gfx_init();
     dpad_init();
+    hud_colors_init();
 }
 
 //void before_game_state_update() {
