@@ -44,6 +44,13 @@ z64_color_rgb8_t HEART_COLOR_CONFIG = { 0xFF, 0x46, 0x32 };
 // Heart (double defense) color.
 z64_color_rgb8_t HEART_DD_COLOR_CONFIG = { 0xC8, 0x00, 0x00 };
 
+// Rupee colors.
+z64_color_rgb8_t RUPEE_COLOR_CONFIG[3] = {
+    { 0xC8, 0xFF, 0x64 },
+    { 0xAA, 0xAA, 0xFF },
+    { 0xFF, 0x69, 0x69 },
+};
+
 static uint32_t color_rgb8_to_int(z64_color_rgb8_t color, uint8_t alpha) {
     return (color.r << 24) | (color.g << 16) | (color.b << 8) | alpha;
 }
@@ -145,4 +152,20 @@ void update_heart_colors(z64_game_t *game) {
     heart_dd_beating->r = HEART_DD_COLOR_CONFIG.r;
     heart_dd_beating->g = HEART_DD_COLOR_CONFIG.g;
     heart_dd_beating->b = HEART_DD_COLOR_CONFIG.b;
+}
+
+static void update_rupee_colors(uint16_t *rupee_colors) {
+    for (int i = 0; i < 3; i++) {
+        int idx = i * 3;
+        rupee_colors[idx] = RUPEE_COLOR_CONFIG[i].r;
+        rupee_colors[idx + 1] = RUPEE_COLOR_CONFIG[i].g;
+        rupee_colors[idx + 2] = RUPEE_COLOR_CONFIG[i].b;
+    }
+}
+
+void hud_colors_init() {
+    uint16_t *rupee_colors = (uint16_t *)0x801BFD2C;
+
+    // The rupee colors never seem to get modified, so just update them once
+    update_rupee_colors(rupee_colors);
 }

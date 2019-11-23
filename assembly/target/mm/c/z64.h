@@ -686,7 +686,14 @@ typedef struct
     };
     uint8_t item_count[0x18];    // 0x00A0
     uint8_t unk_B8_[2];          // 0x00B8
-    uint8_t wallet;              // 0x00BA
+    union {
+        uint8_t flag_BA;         // 0x00BA
+        struct {
+            uint8_t        : 2;
+            uint8_t wallet : 2;  // 0 = child, 1 = adult, 2 = giant
+            uint8_t        : 4;
+        };
+    };
     union {
         uint8_t flag_BB;         // 0x00BB
         struct {
