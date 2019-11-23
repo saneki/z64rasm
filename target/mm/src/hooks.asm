@@ -160,6 +160,59 @@
     lh      a3, 0xFBD4 (a3)
     lw      ra, -0x0004 (sp)
 
+; Custom color for clock diamond sun icon.
+; Replaces:
+;   lui     at, 0xFFFF
+;   ori     at, at, 0x6E00
+;   andi    t9, t7, 0x00FF
+;   or      t6, t9, at
+.orga 0xB003FC ; In memory: 0x8011A39C
+    or      a3, t7, r0
+    jal     get_clock_diamond_sun_color_hook
+    swc1    f2, 0x01D0 (sp)
+    lwc1    f2, 0x01D0 (sp)
+
+; Custom color for clock diamond sun icon (blinking).
+; Replaces:
+;   lui     at, 0xFFFF
+;   addiu   t8, v0, 0x0008
+;   sw      t8, 0x02A0 (s0)
+;   sw      t7, 0x0000 (v0)
+;   lh      t9, 0x0000 (a1)
+;   ori     at, at, 0x6E00
+;   andi    t6, t9, 0x00FF
+;   or      t8, t6, at
+.orga 0xB00420 ; In memory: 0x8011A3C0
+    addiu   t8, v0, 0x0008
+    sw      t8, 0x02A0 (s0)
+    sw      t7, 0x0000 (v0)
+    lh      a3, 0x0000 (a1)
+    jal     get_clock_diamond_sun_color_hook
+    swc1    f2, 0x01D0 (sp)
+    lwc1    f2, 0x01D0 (sp)
+    ; Move return value from T6 to T8
+    or      t8, t6, r0
+
+; Custom color for clock sun icon.
+; Replaces:
+;   ori     at, at, 0x6E00
+;   andi    t8, t6, 0x00FF
+;   or      t7, t8, at
+.orga 0xB0079C ; In memory: 0x8011A73C
+    jal     get_clock_sun_color_hook
+    sh      t0, 0x01C6 (sp)
+    lh      t0, 0x01C6 (sp)
+
+; Custom color for clock moon icon.
+; Replaces:
+;   ori     at, at, 0x3700
+;   andi    t9, t7, 0x00FF
+;   or      t6, t9, at
+.orga 0xB008EC ; In memory: 0x8011A88C
+    jal     get_clock_moon_color_hook
+    sh      t0, 0x01C6 (sp)
+    lh      t0, 0x01C6 (sp)
+
 ;==================================================================================================
 ; A, B, C buttons color hooks
 ;==================================================================================================

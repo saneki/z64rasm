@@ -190,6 +190,78 @@ get_inverted_clock_diamond_color_b_hook:
     jr      ra
     addiu   sp, sp, 0x20
 
+get_clock_diamond_sun_color_hook:
+    addiu   sp, sp, -0x18
+    sw      ra, 0x0000 (sp)
+    sw      v0, 0x0004 (sp)
+    sw      s0, 0x0008 (sp)
+    sw      a0, 0x000C (sp)
+    sw      a1, 0x0010 (sp)
+    sw      a2, 0x0014 (sp)
+
+    ; Hook stub passes alpha in A3
+    jal     get_clock_diamond_sun_color
+    or      a0, a3, r0
+
+    ; Put return value in T6
+    or      t6, v0, r0
+
+    lw      ra, 0x0000 (sp)
+    lw      v0, 0x0004 (sp)
+    lw      s0, 0x0008 (sp)
+    lw      a0, 0x000C (sp)
+    lw      a1, 0x0010 (sp)
+    lw      a2, 0x0014 (sp)
+
+    jr      ra
+    addiu   sp, sp, 0x18
+
+get_clock_sun_color_hook:
+    addiu   sp, sp, -0x18
+    sw      ra, 0x0000 (sp)
+    sw      v0, 0x0004 (sp)
+    sw      a0, 0x0008 (sp)
+    sw      a1, 0x000C (sp)
+    sw      a2, 0x0010 (sp)
+
+    jal     get_clock_sun_color
+    nop
+
+    ; Put return value in T7
+    or      t7, v0, r0
+
+    lw      ra, 0x0000 (sp)
+    lw      v0, 0x0004 (sp)
+    lw      a0, 0x0008 (sp)
+    lw      a1, 0x000C (sp)
+    lw      a2, 0x0010 (sp)
+
+    jr      ra
+    addiu   sp, sp, 0x18
+
+get_clock_moon_color_hook:
+    addiu   sp, sp, -0x18
+    sw      ra, 0x0000 (sp)
+    sw      v0, 0x0004 (sp)
+    sw      a0, 0x0008 (sp)
+    sw      a1, 0x000C (sp)
+    sw      a2, 0x0010 (sp)
+
+    jal     get_clock_moon_color
+    nop
+
+    ; Put return value in T6
+    or      t6, v0, r0
+
+    lw      ra, 0x0000 (sp)
+    lw      v0, 0x0004 (sp)
+    lw      a0, 0x0008 (sp)
+    lw      a1, 0x000C (sp)
+    lw      a2, 0x0010 (sp)
+
+    jr      ra
+    addiu   sp, sp, 0x18
+
 get_a_button_color_hook:
     addiu   sp, sp, -0x18
     sw      ra, 0x0000 (sp)
