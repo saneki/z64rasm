@@ -169,3 +169,21 @@ void hud_colors_init() {
     // The rupee colors never seem to get modified, so just update them once
     update_rupee_colors(rupee_colors);
 }
+
+void hud_colors_main_menu_init() {
+    uint16_t *rupee_colors = (uint16_t *)0x8077F814;
+
+    // Update rupee colors
+    update_rupee_colors(rupee_colors);
+
+    // Update hearts colors
+    z64_color_rgb16_t *heart = (z64_color_rgb16_t *)0x8077F83C;
+    z64_color_rgb16_t *heart_dd = (z64_color_rgb16_t *)0x8077F842;
+
+    heart->r = HEART_COLOR_CONFIG.r;
+    heart->g = HEART_COLOR_CONFIG.g;
+    heart->b = HEART_COLOR_CONFIG.b;
+    heart_dd->r = HEART_DD_COLOR_CONFIG.r;
+    heart_dd->g = HEART_DD_COLOR_CONFIG.g;
+    heart_dd->b = HEART_DD_COLOR_CONFIG.b;
+}

@@ -205,3 +205,16 @@
 ;   jal     0x8010069C
 .orga 0xB07594 ; In memory: 0x80121534
     jal     update_heart_colors
+
+;==================================================================================================
+; Main Menu draw hook
+;==================================================================================================
+
+; Replaces:
+;   sw      s0, 0x0020 (sp)
+;   or      s0, a0, r0
+;   sw      ra, 0x0024 (sp)
+.orga 0xBDD26C ; In memory: 0x8077E3BC
+    sw      ra, 0x0024 (sp)
+    jal     before_main_menu_draw_hook
+    sw      s0, 0x0020 (sp)
