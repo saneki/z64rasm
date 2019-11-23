@@ -3,6 +3,7 @@
 
 #include <n64.h>
 #include <stdint.h>
+#include "color.h"
 
 #define Z64_SCREEN_WIDTH         320
 #define Z64_SCREEN_HEIGHT        240
@@ -569,10 +570,10 @@ typedef struct
     uint8_t  unk_0_[0x226];                // 0x0000
     uint16_t heartbeat_timer;              // 0x0226
     uint16_t heartbeat_mode;               // 0x0228
-    uint16_t heartbeat_inner_rgb[3];       // 0x022A
-    uint16_t heartbeat_outer_rgb[3];       // 0x0230
-    uint16_t heart_inner_rrggbb[6];        // 0x0236
-    uint16_t heart_outer_rrggbb[6];        // 0x0242
+    z64_color_rgb16_t heartbeat_inner_rgb; // 0x022A
+    z64_color_rgb16_t heartbeat_outer_rgb; // 0x0230
+    z64_color_rgb16_2_t heart_inner_rgb;   // 0x0236
+    z64_color_rgb16_2_t heart_outer_rgb;   // 0x0242
     uint8_t  unk_24E_[0x18];               // 0x024E
     uint16_t a_button_alpha;               // 0x0266
     uint16_t b_button_alpha;               // 0x0268
@@ -774,6 +775,10 @@ typedef struct
     uint16_t sub_game_state;     // 0x3F26, might be "previous" game state but not sure
     uint8_t unk_3F28_[0x6];      // 0x3F28
     uint16_t magic_meter_size;   // 0x3F2E
+    uint8_t unk_3F30_[0x19A8];   // 0x3F30
+    z64_color_rgb16_t heart_dd_beating_rgb; // 0x58D8
+    uint8_t unk_58DE_[0x12];                // 0x58DE
+    z64_color_rgb16_t heart_dd_rgb;         // 0x58F0
 } z64_file_t;
 
 typedef struct
@@ -925,6 +930,7 @@ typedef struct {
 #define z64_SpawnActor_addr               0x800BAC60
 #define z64_UpdateButtonUsability_addr    0x80110038
 #define z64_UseItem_addr                  0x8074EE20
+#define z64_WriteHeartColors_addr         0x8010069C
 
 // function prototypes
 typedef int (*z64_CanInteract_proc)(z64_game_t *game);
@@ -940,6 +946,7 @@ typedef void (*z64_ReadFile_proc)(void *mem_addr, uint32_t vrom_addr, uint32_t s
 typedef z64_actor_t* (*z64_SpawnActor_proc)(void *unk0, z64_game_t *game, uint16_t id, float x, float y, float z, uint16_t rotx, uint16_t roty, uint16_t rotz, uint32_t inst);
 typedef void (*z64_UpdateButtonUsability_proc)(z64_ctxt_t *ctxt);
 typedef void (*z64_UseItem_proc)(z64_ctxt_t *ctxt, z64_link_t *link, uint8_t item);
+typedef void (*z64_WriteHeartColors_proc)(z64_game_t *game);
 
 // functions
 #define z64_CanInteract                   ((z64_CanInteract_proc) z64_CanInteract_addr)
@@ -955,5 +962,6 @@ typedef void (*z64_UseItem_proc)(z64_ctxt_t *ctxt, z64_link_t *link, uint8_t ite
 #define z64_SpawnActor                    ((z64_SpawnActor_proc) z64_SpawnActor_addr)
 #define z64_UpdateButtonUsability         ((z64_UpdateButtonUsability_proc) z64_UpdateButtonUsability_addr)
 #define z64_UseItem                       ((z64_UseItem_proc) z64_UseItem_addr)
+#define z64_WriteHeartColors              ((z64_WriteHeartColors_proc) z64_WriteHeartColors_addr)
 
 #endif // Z64_H

@@ -195,3 +195,13 @@
     jal     get_c_start_button_color_hook
     lh      t8, 0x002A (sp)
     lw      ra, -0x0004 (sp)
+
+;==================================================================================================
+; Heart colors hooks
+;==================================================================================================
+
+; Custom colors for hearts.
+; Replaces:
+;   jal     0x8010069C
+.orga 0xB07594 ; In memory: 0x80121534
+    jal     update_heart_colors
