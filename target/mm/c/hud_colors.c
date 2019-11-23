@@ -1,28 +1,6 @@
 #include <stdbool.h>
+#include "color.h"
 #include "z64.h"
-
-typedef struct {
-    union {
-        uint8_t bytes[3];
-        struct {
-            uint8_t r;
-            uint8_t g;
-            uint8_t b;
-        };
-    };
-} z64_color_rgb8_t;
-
-typedef struct {
-    union {
-        uint8_t bytes[4];
-        struct {
-            uint8_t r;
-            uint8_t g;
-            uint8_t b;
-            uint8_t a;
-        };
-    };
-} z64_color_rgba8_t;
 
 // Infinite magic meter color (blue).
 z64_color_rgb8_t MAGIC_INF_COLOR_CONFIG = { 0x00, 0x00, 0xC8 };
@@ -59,6 +37,12 @@ z64_color_rgb8_t C_BUTTON_COLOR_CONFIG = { 0xFF, 0xF0, 0x00 };
 
 // Start button color.
 z64_color_rgb8_t START_BUTTON_COLOR_CONFIG = { 0xFF, 0x82, 0x3C };
+
+// Heart color.
+z64_color_rgb8_t HEART_COLOR_CONFIG = { 0xFF, 0x46, 0x32 };
+
+// Heart (double defense) color.
+z64_color_rgb8_t HEART_DD_COLOR_CONFIG = { 0xC8, 0x00, 0x00 };
 
 static uint32_t color_rgb8_to_int(z64_color_rgb8_t color, uint8_t alpha) {
     return (color.r << 24) | (color.g << 16) | (color.b << 8) | alpha;
@@ -131,4 +115,34 @@ uint32_t get_c_button_color(uint16_t alpha) {
 
 uint32_t get_start_button_color(uint16_t alpha) {
     return color_rgb8_to_int(START_BUTTON_COLOR_CONFIG, alpha & 0xFF);
+}
+
+void update_heart_colors(z64_game_t *game) {
+    // Normal heart colors
+    z64_color_rgb16_2_t *heart = &(z64_game.sub_169E8.heart_inner_rgb);
+    z64_color_rgb16_t *heart_beating = &(z64_game.sub_169E8.heartbeat_inner_rgb);
+
+    // Double defense heart colors
+    z64_color_rgb16_t *heart_dd = &(z64_file.heart_dd_rgb);
+    z64_color_rgb16_t *heart_dd_beating = &(z64_file.heart_dd_beating_rgb);
+
+    // This function writes constant values to where the heart colors are stored.
+    // It might also do other things.
+    z64_WriteHeartColors(game);
+
+    // Update heart colors (normal)
+    heart->r1 = HEART_COLOR_CONFIG.r;
+    heart->g1 = HEART_COLOR_CONFIG.g;
+    heart->b1 = HEART_COLOR_CONFIG.b;
+    heart_beating->r = HEART_COLOR_CONFIG.r;
+    heart_beating->g = HEART_COLOR_CONFIG.g;
+    heart_beating->b = HEART_COLOR_CONFIG.b;
+
+    // Update heart colors (double defense)
+    heart_dd->r = HEART_DD_COLOR_CONFIG.r;
+    heart_dd->g = HEART_DD_COLOR_CONFIG.g;
+    heart_dd->b = HEART_DD_COLOR_CONFIG.b;
+    heart_dd_beating->r = HEART_DD_COLOR_CONFIG.r;
+    heart_dd_beating->g = HEART_DD_COLOR_CONFIG.g;
+    heart_dd_beating->b = HEART_DD_COLOR_CONFIG.b;
 }
