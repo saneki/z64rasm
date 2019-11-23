@@ -34,6 +34,7 @@ PAYLOAD_START:
 .include "every_frame.asm"
 .include "colors.asm"
 .include "dpad.asm"
+.include "main_menu.asm"
 .importobj "../build/bundle.o"
 .align 8
 DPAD_TEXTURE:
