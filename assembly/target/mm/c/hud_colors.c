@@ -26,6 +26,15 @@ z64_color_rgb8_t CLOCK_INVERTED_DIAMOND_COLOR1_CONFIG = { 0x64, 0xCD, 0xFF };
 // Inverted clock diamond color (2).
 z64_color_rgb8_t CLOCK_INVERTED_DIAMOND_COLOR2_CONFIG = { 0x00, 0x9B, 0xFF };
 
+// Clock diamond sun color.
+z64_color_rgb8_t CLOCK_DIAMOND_SUN_COLOR_CONFIG = { 0xFF, 0xFF, 0x6E };
+
+// Clock sun color.
+z64_color_rgb8_t CLOCK_SUN_COLOR_CONFIG = { 0xFF, 0x64, 0x6E };
+
+// Clock moon color.
+z64_color_rgb8_t CLOCK_MOON_COLOR_CONFIG = { 0xFF, 0xFF, 0x37 };
+
 // A button color.
 z64_color_rgb8_t A_BUTTON_COLOR_CONFIG = { 0x64, 0xC8, 0xFF };
 
@@ -103,6 +112,20 @@ uint16_t get_inverted_clock_diamond_color(uint8_t idx) {
     }
 
     return colors.bytes[idx];
+}
+
+uint32_t get_clock_diamond_sun_color(uint16_t alpha) {
+    return color_rgb8_to_int(CLOCK_DIAMOND_SUN_COLOR_CONFIG, alpha & 0xFF);
+}
+
+uint32_t get_clock_sun_color() {
+    uint8_t alpha = (*(uint16_t *)0x801BFB2C) & 0xFF;
+    return color_rgb8_to_int(CLOCK_SUN_COLOR_CONFIG, alpha);
+}
+
+uint32_t get_clock_moon_color() {
+    uint8_t alpha = (*(uint16_t *)0x801BFB2C) & 0xFF;
+    return color_rgb8_to_int(CLOCK_MOON_COLOR_CONFIG, alpha);
 }
 
 uint32_t get_a_button_color() {
