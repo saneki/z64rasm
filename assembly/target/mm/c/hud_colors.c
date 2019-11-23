@@ -48,6 +48,18 @@ z64_color_rgb8_t CLOCK_INVERTED_DIAMOND_COLOR1_CONFIG = { 0x64, 0xCD, 0xFF };
 // Inverted clock diamond color (2).
 z64_color_rgb8_t CLOCK_INVERTED_DIAMOND_COLOR2_CONFIG = { 0x00, 0x9B, 0xFF };
 
+// A button color.
+z64_color_rgb8_t A_BUTTON_COLOR_CONFIG = { 0x64, 0xC8, 0xFF };
+
+// B button color.
+z64_color_rgb8_t B_BUTTON_COLOR_CONFIG = { 0x64, 0xFF, 0x78 };
+
+// C buttons color.
+z64_color_rgb8_t C_BUTTON_COLOR_CONFIG = { 0xFF, 0xF0, 0x00 };
+
+// Start button color.
+z64_color_rgb8_t START_BUTTON_COLOR_CONFIG = { 0xFF, 0x82, 0x3C };
+
 static uint32_t color_rgb8_to_int(z64_color_rgb8_t color, uint8_t alpha) {
     return (color.r << 24) | (color.g << 16) | (color.b << 8) | alpha;
 }
@@ -100,4 +112,23 @@ uint16_t get_inverted_clock_diamond_color(uint8_t idx) {
     }
 
     return colors.bytes[idx];
+}
+
+uint32_t get_a_button_color() {
+    uint8_t alpha = z64_game.sub_169E8.a_button_alpha & 0xFF;
+    return color_rgb8_to_int(A_BUTTON_COLOR_CONFIG, alpha);
+}
+
+uint32_t get_b_button_color() {
+    // Alpha won't be used but set it anyway
+    uint8_t alpha = z64_game.sub_169E8.b_button_alpha & 0xFF;
+    return color_rgb8_to_int(B_BUTTON_COLOR_CONFIG, alpha);
+}
+
+uint32_t get_c_button_color(uint16_t alpha) {
+    return color_rgb8_to_int(C_BUTTON_COLOR_CONFIG, alpha & 0xFF);
+}
+
+uint32_t get_start_button_color(uint16_t alpha) {
+    return color_rgb8_to_int(START_BUTTON_COLOR_CONFIG, alpha & 0xFF);
 }
