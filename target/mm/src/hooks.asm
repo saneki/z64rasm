@@ -159,3 +159,39 @@
     jal     get_inverted_clock_diamond_color_b_hook
     lh      a3, 0xFBD4 (a3)
     lw      ra, -0x0004 (sp)
+
+;==================================================================================================
+; A, B, C buttons color hooks
+;==================================================================================================
+
+; Custom color for A button.
+; Replaces:
+;   andi    t4, t3, 0x00FF
+;   or      t5, t4, at
+.orga 0xAFEE5C ; In memory: 0x80118DFC
+    jal     get_a_button_color_hook
+    nop
+
+; Custom color for B button.
+; Replaces:
+;   addiu   t8, r0, 0x0078
+;   ori     at, at, 0x69E8
+;   addiu   t7, r0, 0x0064
+;   addiu   t6, r0, 0x00FF
+.orga 0xAFD200 ; In memory: 0x801171A0
+    jal     get_b_button_color_hook
+    ori     at, at, 0x69E8
+    andi    t6, t6, 0x00FF
+    andi    t8, t8, 0x00FF
+
+; Custom colors for C buttons and Start button.
+; Replaces:
+;   lh      t8, 0x002A (sp)
+;   or      t9, t6, t7
+;   andi    t6, t8, 0x00FF
+;   or      t7, t9, t6
+.orga 0xAF346C ; In memory: 0x8010D40C
+    sw      ra, -0x0004 (sp)
+    jal     get_c_start_button_color_hook
+    lh      t8, 0x002A (sp)
+    lw      ra, -0x0004 (sp)
