@@ -40,3 +40,11 @@ static void fix_deku_hover_button_fade() {
 void do_hacks_per_game_frame() {
     // fix_deku_hover_button_fade();
 }
+
+void draw_c_button_amounts_fix(z64_game_t *game, uint32_t arg1, uint16_t alpha) {
+    // Clear the Env color before drawing amounts
+    z64_disp_buf_t *db = &(z64_ctxt.gfx->overlay);
+    gDPSetEnvColor(db->p++, 0x00, 0x00, 0x00, 0xFF);
+
+    z64_DrawCButtonAmounts(game, arg1, alpha);
+}
