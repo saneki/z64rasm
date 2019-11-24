@@ -23,7 +23,13 @@
 ; Replaces:
 ;   jal     0x80117BD0
 .orga 0xAFE9F8 ; In memory: 0x80118998
-    jal     draw_c_button_amounts_fix
+    jal     draw_button_amounts_fix
+
+; Same as above but for the B button (needed for mid-air Deku nuts).
+; Replaces:
+;   jal     0x80117BD0
+.orga 0xAFE204 ; In memory: 0x801181A4
+    jal     draw_button_amounts_fix
 
 ;==================================================================================================
 ; Deku Magic Hack
