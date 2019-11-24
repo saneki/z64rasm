@@ -2,7 +2,6 @@
 #include "dpad.h"
 #include "external_effects.h"
 #include "gfx.h"
-#include "hacks.h"
 #include "hud_colors.h"
 #include "icetrap.h"
 #include "util.h"
@@ -21,7 +20,6 @@ void c_init() {
 //}
 
 void before_non_menu_update() {
-    do_hacks_per_game_frame();
     do_dpad_per_game_frame();
     handle_external_effects();
 }

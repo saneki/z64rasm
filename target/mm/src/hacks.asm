@@ -30,20 +30,3 @@
 ;   jal     0x80117BD0
 .orga 0xAFE204 ; In memory: 0x801181A4
     jal     draw_button_amounts_fix
-
-;==================================================================================================
-; Deku Magic Hack
-;==================================================================================================
-
-; Replaces:
-;   bgezl   t6, 0x80110698
-;.orga 0xAF663C ; In memory: 0x801105DC
-;    bgezl   t6, label_0x80110694
-
-; Replaces:
-;   lbu     t7, 0x0040 (t0)
-;   bnezl   t7, 0x80110728
-;.orga 0xAF66F4 ; In memory: 0x80110694
-;label_0x80110694:
-;    jal     fix_deku_has_magic_check
-;    nop
