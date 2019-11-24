@@ -370,3 +370,31 @@ get_c_start_button_color_hook:
 
     jr      ra
     addiu   sp, sp, 0x30
+
+get_c_button_triangle_color_hook:
+    addiu   sp, sp, -0x20
+    sw      ra, 0x0000 (sp)
+    sw      a2, 0x0004 (sp)
+    sw      a3, 0x0008 (sp)
+    sw      s0, 0x000C (sp)
+    sw      v1, 0x0010 (sp)
+    sw      t1, 0x0014 (sp)
+    sw      t4, 0x0018 (sp)
+
+    ; Use alpha in T6 as argument
+    jal     get_c_button_color
+    or      a0, t6, r0
+
+    ; Put return value in T9
+    or      t9, v0, r0
+
+    lw      ra, 0x0000 (sp)
+    lw      a2, 0x0004 (sp)
+    lw      a3, 0x0008 (sp)
+    lw      s0, 0x000C (sp)
+    lw      v1, 0x0010 (sp)
+    lw      t1, 0x0014 (sp)
+    lw      t4, 0x0018 (sp)
+
+    jr      ra
+    addiu   sp, sp, 0x20

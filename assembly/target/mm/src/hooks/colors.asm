@@ -34,6 +34,36 @@
     lh      t8, 0x002A (sp)
     lw      ra, -0x0004 (sp)
 
+; Custom color for C button triangle (left).
+; Replaces:
+;   lh      t6, 0x026A (t4)
+;   andi    t8, t6, 0x00FF
+;   or      t9, t8, t2
+.orga 0xAFD954 ; In memory: 0x801178F4
+    nop
+    jal     get_c_button_triangle_color_hook
+    lh      t6, 0x026A (t4)
+
+; Custom color for C button triangle (bottom).
+; Replaces:
+;   lh      t6, 0x026C (t4)
+;   andi    t8, t6, 0x00FF
+;   or      t9, t8, t2
+.orga 0xAFD988 ; In memory: 0x80117928
+    nop
+    jal     get_c_button_triangle_color_hook
+    lh      t6, 0x026C (t4)
+
+; Custom color for C button triangle (right).
+; Replaces:
+;   lh      t6, 0x026E (t4)
+;   andi    t8, t6, 0x00FF
+;   or      t9, t8, t2
+.orga 0xAFD9B0 ; In memory: 0x80117950
+    nop
+    jal     get_c_button_triangle_color_hook
+    lh      t6, 0x026E (t4)
+
 ;==================================================================================================
 ; Clock color hooks
 ;==================================================================================================
