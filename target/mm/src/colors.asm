@@ -92,13 +92,13 @@ get_map_entrance_cursor_color_hook:
     jr      ra
     addiu   sp, sp, 0x10
 
-get_clock_diamond_color_hook:
+get_clock_emblem_color_hook:
     addiu   sp, sp, -0x10
     sw      ra, 0x0000 (sp)
     sw      v0, 0x0004 (sp)
     sw      s0, 0x0008 (sp)
 
-    jal     get_clock_diamond_color
+    jal     get_clock_emblem_color
     nop
 
     ; Put return value in T8
@@ -111,7 +111,7 @@ get_clock_diamond_color_hook:
     jr      ra
     addiu   sp, sp, 0x10
 
-get_inverted_clock_diamond_color_r_hook:
+get_inverted_clock_emblem_color_r_hook:
     ; Displaced code
     lh      a0, 0xFBCC (a0)
 
@@ -121,7 +121,7 @@ get_inverted_clock_diamond_color_r_hook:
     sw      s0, 0x0008 (sp)
     sw      t2, 0x000C (sp)
 
-    jal get_inverted_clock_diamond_color
+    jal     get_clock_emblem_inverted_color
     ori     a0, r0, 0
 
     ; Put return value in T0
@@ -138,7 +138,7 @@ get_inverted_clock_diamond_color_r_hook:
     jr      ra
     addiu   sp, sp, 0x18
 
-get_inverted_clock_diamond_color_g_hook:
+get_inverted_clock_emblem_color_g_hook:
     addiu   sp, sp, -0x18
     sw      ra, 0x0000 (sp)
     sw      a0, 0x0004 (sp)
@@ -146,7 +146,7 @@ get_inverted_clock_diamond_color_g_hook:
     sw      t2, 0x000C (sp)
     sw      t5, 0x0010 (sp)
 
-    jal get_inverted_clock_diamond_color
+    jal     get_clock_emblem_inverted_color
     ori     a0, r0, 1
 
     ; Put return value in A2
@@ -165,7 +165,7 @@ get_inverted_clock_diamond_color_g_hook:
     jr      ra
     addiu   sp, sp, 0x18
 
-get_inverted_clock_diamond_color_b_hook:
+get_inverted_clock_emblem_color_b_hook:
     addiu   sp, sp, -0x20
     sw      ra, 0x0000 (sp)
     sw      s0, 0x0004 (sp)
@@ -174,7 +174,7 @@ get_inverted_clock_diamond_color_b_hook:
     sw      t4, 0x0010 (sp)
     sw      t5, 0x0014 (sp)
 
-    jal get_inverted_clock_diamond_color
+    jal     get_clock_emblem_inverted_color
     ori     a0, r0, 2
 
     ; Put return value in A0
@@ -190,7 +190,7 @@ get_inverted_clock_diamond_color_b_hook:
     jr      ra
     addiu   sp, sp, 0x20
 
-get_clock_diamond_sun_color_hook:
+get_clock_emblem_sun_color_hook:
     addiu   sp, sp, -0x18
     sw      ra, 0x0000 (sp)
     sw      v0, 0x0004 (sp)
@@ -200,7 +200,7 @@ get_clock_diamond_sun_color_hook:
     sw      a2, 0x0014 (sp)
 
     ; Hook stub passes alpha in A3
-    jal     get_clock_diamond_sun_color
+    jal     get_clock_emblem_sun_color
     or      a0, a3, r0
 
     ; Put return value in T6

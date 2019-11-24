@@ -88,12 +88,12 @@ uint32_t get_map_entrance_cursor_color() {
     return color_rgb8_to_int(HUD_COLOR_CONFIG.map_entrance_cursor, alpha);
 }
 
-uint32_t get_clock_diamond_color() {
+uint32_t get_clock_emblem_color() {
     uint8_t alpha = (uint8_t)(*(uint16_t *)(0x801BFB2C));
     return color_rgb8_to_int(HUD_COLOR_CONFIG.clock_emblem, alpha);
 }
 
-uint16_t get_inverted_clock_diamond_color(uint8_t idx) {
+uint16_t get_clock_emblem_inverted_color(uint8_t idx) {
     z64_color_rgb8_t colors;
     int16_t mode = *(int16_t *)0x801BFBE8;
 
@@ -111,7 +111,7 @@ uint16_t get_inverted_clock_diamond_color(uint8_t idx) {
     return colors.bytes[idx];
 }
 
-uint32_t get_clock_diamond_sun_color(uint16_t alpha) {
+uint32_t get_clock_emblem_sun_color(uint16_t alpha) {
     return color_rgb8_to_int(HUD_COLOR_CONFIG.clock_emblem_sun, alpha & 0xFF);
 }
 
