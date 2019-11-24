@@ -46,7 +46,7 @@ before_damage_process_hook:
     jal     before_damage_process
     nop
 
-    bnez    v0, before_damage_process_hook_caller_return
+    bnez    v0, @@caller_return
     nop
 
     lw      s0, 4 (sp)
@@ -54,7 +54,7 @@ before_damage_process_hook:
     jr      ra
     addiu   sp, sp, 0x10
 
-before_damage_process_hook_caller_return:
+@@caller_return:
     ; Will be returning from caller function, so restore S0
     addiu   sp, sp, 0x10
     lw      s0, 0x0028 (sp)

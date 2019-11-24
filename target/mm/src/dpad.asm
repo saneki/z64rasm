@@ -22,7 +22,7 @@ dpad_handle:
     jal     handle_dpad
     nop
 
-    bnez    v0, dpad_handle_caller_return
+    bnez    v0, @@caller_return
     nop
 
     ; Displaced code (restore to s0)
@@ -44,7 +44,7 @@ dpad_handle:
 ;
 ; To fix this, we return non-zero if z64_UseItem was called, and if so return from the caller function
 ; immediately.
-dpad_handle_caller_return:
+@@caller_return:
     ; Will be returning from caller function, so restore S0
     addiu   sp, sp, 0x10
     lw      s0, 0x0030 (sp)
