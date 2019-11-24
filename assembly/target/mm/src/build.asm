@@ -34,6 +34,7 @@ PAYLOAD_START:
 .include "init.asm"
 .include "every_frame.asm"
 .include "colors.asm"
+.include "damage.asm"
 .include "dpad.asm"
 .include "main_menu.asm"
 .importobj "../build/bundle.o"
