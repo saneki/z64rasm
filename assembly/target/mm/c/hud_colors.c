@@ -2,62 +2,56 @@
 #include "color.h"
 #include "z64.h"
 
-// Infinite magic meter color (blue).
-z64_color_rgb8_t MAGIC_INF_COLOR_CONFIG = { 0x00, 0x00, 0xC8 };
+struct hud_color_config {
+    uint32_t version;
 
-// Magic meter color (green).
-z64_color_rgb8_t MAGIC_COLOR_CONFIG = { 0x00, 0xC8, 0x00 };
+    // Version 0
+    z64_color_rgb8_t button_a;
+    z64_color_rgb8_t button_b;
+    z64_color_rgb8_t button_c;
+    z64_color_rgb8_t button_start;
+    z64_color_rgb8_t clock_emblem;
+    z64_color_rgb8_t clock_emblem_inverted_1;
+    z64_color_rgb8_t clock_emblem_inverted_2;
+    z64_color_rgb8_t clock_emblem_sun;
+    z64_color_rgb8_t clock_moon;
+    z64_color_rgb8_t clock_sun;
+    z64_color_rgb8_t heart;
+    z64_color_rgb8_t heart_dd;
+    z64_color_rgb8_t magic;
+    z64_color_rgb8_t magic_inf;
+    z64_color_rgba8_t map;
+    z64_color_rgb8_t map_entrance_cursor;
+    z64_color_rgb8_t map_player_cursor;
+    z64_color_rgb8_t rupee[3];
+};
 
-// Map color.
-z64_color_rgba8_t MAP_COLOR_CONFIG = { 0x00, 0xFF, 0xFF, 0xA0 };
+struct hud_color_config HUD_COLOR_CONFIG = {
+    .version = 0,
 
-// Map player cursor color.
-z64_color_rgb8_t MAP_PLAYER_CURSOR_COLOR_CONFIG = { 0xC8, 0xFF, 0x00 };
-
-// Map entrance cursor color.
-z64_color_rgb8_t MAP_ENTRANCE_CURSOR_COLOR_CONFIG = { 0xC8, 0x00, 0x00 };
-
-// Clock diamond color.
-z64_color_rgb8_t CLOCK_DIAMOND_COLOR_CONFIG = { 0x00, 0xAA, 0x64 };
-
-// Inverted clock diamond color (1).
-z64_color_rgb8_t CLOCK_INVERTED_DIAMOND_COLOR1_CONFIG = { 0x64, 0xCD, 0xFF };
-
-// Inverted clock diamond color (2).
-z64_color_rgb8_t CLOCK_INVERTED_DIAMOND_COLOR2_CONFIG = { 0x00, 0x9B, 0xFF };
-
-// Clock diamond sun color.
-z64_color_rgb8_t CLOCK_DIAMOND_SUN_COLOR_CONFIG = { 0xFF, 0xFF, 0x6E };
-
-// Clock sun color.
-z64_color_rgb8_t CLOCK_SUN_COLOR_CONFIG = { 0xFF, 0x64, 0x6E };
-
-// Clock moon color.
-z64_color_rgb8_t CLOCK_MOON_COLOR_CONFIG = { 0xFF, 0xFF, 0x37 };
-
-// A button color.
-z64_color_rgb8_t A_BUTTON_COLOR_CONFIG = { 0x64, 0xC8, 0xFF };
-
-// B button color.
-z64_color_rgb8_t B_BUTTON_COLOR_CONFIG = { 0x64, 0xFF, 0x78 };
-
-// C buttons color.
-z64_color_rgb8_t C_BUTTON_COLOR_CONFIG = { 0xFF, 0xF0, 0x00 };
-
-// Start button color.
-z64_color_rgb8_t START_BUTTON_COLOR_CONFIG = { 0xFF, 0x82, 0x3C };
-
-// Heart color.
-z64_color_rgb8_t HEART_COLOR_CONFIG = { 0xFF, 0x46, 0x32 };
-
-// Heart (double defense) color.
-z64_color_rgb8_t HEART_DD_COLOR_CONFIG = { 0xC8, 0x00, 0x00 };
-
-// Rupee colors.
-z64_color_rgb8_t RUPEE_COLOR_CONFIG[3] = {
-    { 0xC8, 0xFF, 0x64 },
-    { 0xAA, 0xAA, 0xFF },
-    { 0xFF, 0x69, 0x69 },
+    // Version 0
+    .button_a                = { 0x64, 0xC8, 0xFF },
+    .button_b                = { 0x64, 0xFF, 0x78 },
+    .button_c                = { 0xFF, 0xF0, 0x00 },
+    .button_start            = { 0xFF, 0x82, 0x3C },
+    .clock_emblem            = { 0x00, 0xAA, 0x64 },
+    .clock_emblem_inverted_1 = { 0x64, 0xCD, 0xFF },
+    .clock_emblem_inverted_2 = { 0x00, 0x9B, 0xFF },
+    .clock_emblem_sun        = { 0xFF, 0xFF, 0x6E },
+    .clock_moon              = { 0xFF, 0xFF, 0x37 },
+    .clock_sun               = { 0xFF, 0x64, 0x6E },
+    .heart                   = { 0xFF, 0x46, 0x32 },
+    .heart_dd                = { 0xC8, 0x00, 0x00 },
+    .magic                   = { 0x00, 0xC8, 0x00 },
+    .magic_inf               = { 0x00, 0x00, 0xC8 },
+    .map                     = { 0x00, 0xFF, 0xFF, 0xA0 },
+    .map_entrance_cursor     = { 0xC8, 0x00, 0x00 },
+    .map_player_cursor       = { 0xC8, 0xFF, 0x00 },
+    .rupee                   = {
+                               { 0xC8, 0xFF, 0x64 },
+                               { 0xAA, 0xAA, 0xFF },
+                               { 0xFF, 0x69, 0x69 },
+    },
 };
 
 static uint32_t color_rgb8_to_int(z64_color_rgb8_t color, uint8_t alpha) {
@@ -71,29 +65,29 @@ static uint32_t color_rgba8_to_int(z64_color_rgba8_t color) {
 uint32_t get_magic_meter_color(bool inf) {
     uint8_t alpha = z64_game.sub_169E8.rupees_alpha & 0xFF;
     if (inf) {
-        return color_rgb8_to_int(MAGIC_INF_COLOR_CONFIG, alpha);
+        return color_rgb8_to_int(HUD_COLOR_CONFIG.magic_inf, alpha);
     } else {
-        return color_rgb8_to_int(MAGIC_COLOR_CONFIG, alpha);
+        return color_rgb8_to_int(HUD_COLOR_CONFIG.magic, alpha);
     }
 }
 
 uint32_t get_map_color() {
-    return color_rgba8_to_int(MAP_COLOR_CONFIG);
+    return color_rgba8_to_int(HUD_COLOR_CONFIG.map);
 }
 
 uint32_t get_map_player_cursor_color() {
     uint8_t alpha = z64_game.sub_169E8.minimap_alpha & 0xFF;
-    return color_rgb8_to_int(MAP_PLAYER_CURSOR_COLOR_CONFIG, alpha);
+    return color_rgb8_to_int(HUD_COLOR_CONFIG.map_player_cursor, alpha);
 }
 
 uint32_t get_map_entrance_cursor_color() {
     uint8_t alpha = z64_game.sub_169E8.minimap_alpha & 0xFF;
-    return color_rgb8_to_int(MAP_ENTRANCE_CURSOR_COLOR_CONFIG, alpha);
+    return color_rgb8_to_int(HUD_COLOR_CONFIG.map_entrance_cursor, alpha);
 }
 
 uint32_t get_clock_diamond_color() {
     uint8_t alpha = (uint8_t)(*(uint16_t *)(0x801BFB2C));
-    return color_rgb8_to_int(CLOCK_DIAMOND_COLOR_CONFIG, alpha);
+    return color_rgb8_to_int(HUD_COLOR_CONFIG.clock_emblem, alpha);
 }
 
 uint16_t get_inverted_clock_diamond_color(uint8_t idx) {
@@ -106,45 +100,45 @@ uint16_t get_inverted_clock_diamond_color(uint8_t idx) {
 
     // Mode should be either 0 (first color) or 1 (second color)
     if (!mode) {
-        colors = CLOCK_INVERTED_DIAMOND_COLOR1_CONFIG;
+        colors = HUD_COLOR_CONFIG.clock_emblem_inverted_1;
     } else {
-        colors = CLOCK_INVERTED_DIAMOND_COLOR2_CONFIG;
+        colors = HUD_COLOR_CONFIG.clock_emblem_inverted_2;
     }
 
     return colors.bytes[idx];
 }
 
 uint32_t get_clock_diamond_sun_color(uint16_t alpha) {
-    return color_rgb8_to_int(CLOCK_DIAMOND_SUN_COLOR_CONFIG, alpha & 0xFF);
+    return color_rgb8_to_int(HUD_COLOR_CONFIG.clock_emblem_sun, alpha & 0xFF);
 }
 
 uint32_t get_clock_sun_color() {
     uint8_t alpha = (*(uint16_t *)0x801BFB2C) & 0xFF;
-    return color_rgb8_to_int(CLOCK_SUN_COLOR_CONFIG, alpha);
+    return color_rgb8_to_int(HUD_COLOR_CONFIG.clock_sun, alpha);
 }
 
 uint32_t get_clock_moon_color() {
     uint8_t alpha = (*(uint16_t *)0x801BFB2C) & 0xFF;
-    return color_rgb8_to_int(CLOCK_MOON_COLOR_CONFIG, alpha);
+    return color_rgb8_to_int(HUD_COLOR_CONFIG.clock_moon, alpha);
 }
 
 uint32_t get_a_button_color() {
     uint8_t alpha = z64_game.sub_169E8.a_button_alpha & 0xFF;
-    return color_rgb8_to_int(A_BUTTON_COLOR_CONFIG, alpha);
+    return color_rgb8_to_int(HUD_COLOR_CONFIG.button_a, alpha);
 }
 
 uint32_t get_b_button_color() {
     // Alpha won't be used but set it anyway
     uint8_t alpha = z64_game.sub_169E8.b_button_alpha & 0xFF;
-    return color_rgb8_to_int(B_BUTTON_COLOR_CONFIG, alpha);
+    return color_rgb8_to_int(HUD_COLOR_CONFIG.button_b, alpha);
 }
 
 uint32_t get_c_button_color(uint16_t alpha) {
-    return color_rgb8_to_int(C_BUTTON_COLOR_CONFIG, alpha & 0xFF);
+    return color_rgb8_to_int(HUD_COLOR_CONFIG.button_c, alpha & 0xFF);
 }
 
 uint32_t get_start_button_color(uint16_t alpha) {
-    return color_rgb8_to_int(START_BUTTON_COLOR_CONFIG, alpha & 0xFF);
+    return color_rgb8_to_int(HUD_COLOR_CONFIG.button_start, alpha & 0xFF);
 }
 
 void update_heart_colors(z64_game_t *game) {
@@ -161,28 +155,28 @@ void update_heart_colors(z64_game_t *game) {
     z64_WriteHeartColors(game);
 
     // Update heart colors (normal)
-    heart->r1 = HEART_COLOR_CONFIG.r;
-    heart->g1 = HEART_COLOR_CONFIG.g;
-    heart->b1 = HEART_COLOR_CONFIG.b;
-    heart_beating->r = HEART_COLOR_CONFIG.r;
-    heart_beating->g = HEART_COLOR_CONFIG.g;
-    heart_beating->b = HEART_COLOR_CONFIG.b;
+    heart->r1 = HUD_COLOR_CONFIG.heart.r;
+    heart->g1 = HUD_COLOR_CONFIG.heart.g;
+    heart->b1 = HUD_COLOR_CONFIG.heart.b;
+    heart_beating->r = HUD_COLOR_CONFIG.heart.r;
+    heart_beating->g = HUD_COLOR_CONFIG.heart.g;
+    heart_beating->b = HUD_COLOR_CONFIG.heart.b;
 
     // Update heart colors (double defense)
-    heart_dd->r = HEART_DD_COLOR_CONFIG.r;
-    heart_dd->g = HEART_DD_COLOR_CONFIG.g;
-    heart_dd->b = HEART_DD_COLOR_CONFIG.b;
-    heart_dd_beating->r = HEART_DD_COLOR_CONFIG.r;
-    heart_dd_beating->g = HEART_DD_COLOR_CONFIG.g;
-    heart_dd_beating->b = HEART_DD_COLOR_CONFIG.b;
+    heart_dd->r = HUD_COLOR_CONFIG.heart_dd.r;
+    heart_dd->g = HUD_COLOR_CONFIG.heart_dd.g;
+    heart_dd->b = HUD_COLOR_CONFIG.heart_dd.b;
+    heart_dd_beating->r = HUD_COLOR_CONFIG.heart_dd.r;
+    heart_dd_beating->g = HUD_COLOR_CONFIG.heart_dd.g;
+    heart_dd_beating->b = HUD_COLOR_CONFIG.heart_dd.b;
 }
 
 static void update_rupee_colors(uint16_t *rupee_colors) {
     for (int i = 0; i < 3; i++) {
         int idx = i * 3;
-        rupee_colors[idx] = RUPEE_COLOR_CONFIG[i].r;
-        rupee_colors[idx + 1] = RUPEE_COLOR_CONFIG[i].g;
-        rupee_colors[idx + 2] = RUPEE_COLOR_CONFIG[i].b;
+        rupee_colors[idx] = HUD_COLOR_CONFIG.rupee[i].r;
+        rupee_colors[idx + 1] = HUD_COLOR_CONFIG.rupee[i].g;
+        rupee_colors[idx + 2] = HUD_COLOR_CONFIG.rupee[i].b;
     }
 }
 
@@ -203,10 +197,10 @@ void hud_colors_main_menu_init() {
     z64_color_rgb16_t *heart = (z64_color_rgb16_t *)0x8077F83C;
     z64_color_rgb16_t *heart_dd = (z64_color_rgb16_t *)0x8077F842;
 
-    heart->r = HEART_COLOR_CONFIG.r;
-    heart->g = HEART_COLOR_CONFIG.g;
-    heart->b = HEART_COLOR_CONFIG.b;
-    heart_dd->r = HEART_DD_COLOR_CONFIG.r;
-    heart_dd->g = HEART_DD_COLOR_CONFIG.g;
-    heart_dd->b = HEART_DD_COLOR_CONFIG.b;
+    heart->r = HUD_COLOR_CONFIG.heart.r;
+    heart->g = HUD_COLOR_CONFIG.heart.g;
+    heart->b = HUD_COLOR_CONFIG.heart.b;
+    heart_dd->r = HUD_COLOR_CONFIG.heart_dd.r;
+    heart_dd->g = HUD_COLOR_CONFIG.heart_dd.g;
+    heart_dd->b = HUD_COLOR_CONFIG.heart_dd.b;
 }
