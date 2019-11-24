@@ -2,6 +2,9 @@
 #include "color.h"
 #include "z64.h"
 
+// Uncomment to apply theme for testing
+// #define USE_THEME
+
 struct hud_color_config {
     uint32_t version;
 
@@ -180,8 +183,39 @@ static void update_rupee_colors(uint16_t *rupee_colors) {
     }
 }
 
+static void apply_objectively_best_theme() {
+#define APPLY(FIELD, R, G, B)     \
+    HUD_COLOR_CONFIG.FIELD.r = R; \
+    HUD_COLOR_CONFIG.FIELD.g = G; \
+    HUD_COLOR_CONFIG.FIELD.b = B;
+
+    APPLY(button_a,                0xFF, 0x60, 0xA0);
+    APPLY(button_b,                0x58, 0xA4, 0xED);
+    APPLY(button_c,                0xF0, 0xF0, 0xF0);
+    APPLY(clock_emblem,            0xF0, 0xF0, 0xF0);
+    APPLY(clock_emblem_inverted_1, 0xFF, 0xA0, 0xC0);
+    APPLY(clock_emblem_inverted_2, 0xFF, 0xC0, 0xE0);
+    APPLY(heart,                   0x58, 0xA4, 0xED);
+    APPLY(heart_dd,                0x14, 0x87, 0xCD);
+    APPLY(magic,                   0xFF, 0x60, 0xA0);
+    APPLY(magic_inf,               0xFF, 0x80, 0xC0);
+    APPLY(map,                     0xF0, 0xF0, 0xF0);
+    APPLY(map_entrance_cursor,     0x38, 0x94, 0xDD);
+    APPLY(map_player_cursor,       0xFF, 0x60, 0xA0);
+    APPLY(rupee[0],                0xF0, 0xF0, 0xF0);
+    APPLY(rupee[1],                0xFF, 0x60, 0xA0);
+    APPLY(rupee[2],                0x58, 0xA4, 0xED);
+
+#undef APPLY
+}
+
 void hud_colors_init() {
     uint16_t *rupee_colors = (uint16_t *)0x801BFD2C;
+
+#ifdef USE_THEME
+    // Apply theme
+    apply_objectively_best_theme();
+#endif // USE_THEME
 
     // The rupee colors never seem to get modified, so just update them once
     update_rupee_colors(rupee_colors);
