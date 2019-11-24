@@ -17,9 +17,9 @@
 
 .include "boot.asm"
 .include "hacks.asm"
-.include "hooks.asm"
-.include "hooks_dpad.asm"
 .include "hooks/colors.asm"
+.include "hooks/dpad.asm"
+.include "hooks/general.asm"
 
 ;==================================================================================================
 ; New code region
