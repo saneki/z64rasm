@@ -12,6 +12,7 @@ typedef struct {
             uint8_t b;
         };
     };
+    uint8_t padding;
 } z64_color_rgb8_t;
 
 typedef struct {
