@@ -120,7 +120,7 @@
 .orga 0xB00170 ; In memory: 0x8011A110
     addiu   t9, v0, 0x0008
     sw      ra, -0x0004 (sp)
-    jal     get_clock_diamond_color_hook
+    jal     get_clock_emblem_color_hook
     sw      t9, 0x02A0 (s0)
     lw      ra, -0x0004 (sp)
 
@@ -132,7 +132,7 @@
 ;   lui     t5, 0x801C
 .orga 0xAFFB98 ; In memory: 0x80119B38
     sw      ra, -0x0004 (sp)
-    jal     get_inverted_clock_diamond_color_r_hook
+    jal     get_inverted_clock_emblem_color_r_hook
     nop
     lw      ra, -0x0004 (sp)
 
@@ -144,7 +144,7 @@
 ;   lui     t3, 0x801C
 .orga 0xAFFC64 ; In memory: 0x80119C04
     sw      ra, -0x0004 (sp)
-    jal     get_inverted_clock_diamond_color_g_hook
+    jal     get_inverted_clock_emblem_color_g_hook
     lh      t5, 0xFBD0 (t5)
     lw      ra, -0x0004 (sp)
 
@@ -156,11 +156,11 @@
 ;   lh      a0, 0xFBF4 (a0)
 .orga 0xAFFD28 ; In memory: 0x80119CC8
     sw      ra, -0x0004 (sp)
-    jal     get_inverted_clock_diamond_color_b_hook
+    jal     get_inverted_clock_emblem_color_b_hook
     lh      a3, 0xFBD4 (a3)
     lw      ra, -0x0004 (sp)
 
-; Custom color for clock diamond sun icon.
+; Custom color for clock emblem sun icon.
 ; Replaces:
 ;   lui     at, 0xFFFF
 ;   ori     at, at, 0x6E00
@@ -168,11 +168,11 @@
 ;   or      t6, t9, at
 .orga 0xB003FC ; In memory: 0x8011A39C
     or      a3, t7, r0
-    jal     get_clock_diamond_sun_color_hook
+    jal     get_clock_emblem_sun_color_hook
     swc1    f2, 0x01D0 (sp)
     lwc1    f2, 0x01D0 (sp)
 
-; Custom color for clock diamond sun icon (blinking).
+; Custom color for clock emblem sun icon (blinking).
 ; Replaces:
 ;   lui     at, 0xFFFF
 ;   addiu   t8, v0, 0x0008
@@ -187,7 +187,7 @@
     sw      t8, 0x02A0 (s0)
     sw      t7, 0x0000 (v0)
     lh      a3, 0x0000 (a1)
-    jal     get_clock_diamond_sun_color_hook
+    jal     get_clock_emblem_sun_color_hook
     swc1    f2, 0x01D0 (sp)
     lwc1    f2, 0x01D0 (sp)
     ; Move return value from T6 to T8
