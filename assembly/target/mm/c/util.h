@@ -16,4 +16,4 @@ typedef struct {
 
 void file_init(file_t *file);
 
-#endif
+#endif // UTIL_H

@@ -25,4 +25,4 @@ void sprite_load(z64_disp_buf_t *db, sprite_t *sprite,
 void sprite_draw(z64_disp_buf_t *db, sprite_t *sprite, int tile_index,
         int left, int top, int width, int height);
 
-#endif
+#endif // GFX_H
