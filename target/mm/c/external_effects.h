@@ -11,6 +11,7 @@ typedef struct {
     uint32_t version;
 
     // Effects added in version 0
+    uint8_t camera_overlook;
     uint8_t chateau;
     uint8_t fairy;
     uint8_t freeze;

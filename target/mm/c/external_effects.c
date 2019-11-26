@@ -20,6 +20,7 @@
 external_effects_t g_external_effects = {
     .magic = EXTERNAL_EFFECTS_MAGIC,
     .version = 0,
+    .camera_overlook = 0,
     .chateau = 0,
     .fairy = 0,
     .freeze = 0,
@@ -29,6 +30,101 @@ external_effects_t g_external_effects = {
     .paper_link = 0,
     .reverse_controls = 0,
     .wallet_fill = 0,
+};
+
+// Specifies camera states that can be changed via an effect.
+static const bool g_freecam_modes[0x5B] = {
+    1, // 0x00 NONE
+    1, // 0x01 NORMAL0
+    1, // 0x02 NORMAL3
+    1, // 0x03 CIRCLE5
+    1, // 0x04 HORSE0
+    1, // 0x05 ZORA0
+    1, // 0x06 PREREND0
+    1, // 0x07 PREREND1
+    1, // 0x08 DOORC
+    1, // 0x09 DEMO0
+    1, // 0x0A FREE0
+    1, // 0x0B FUKAN0
+    1, // 0x0C NORMAL1
+    1, // 0x0D NANAME
+    1, // 0x0E CIRCLE0
+    1, // 0x0F FIXED0
+    1, // 0x10 SPIRAL
+    1, // 0x11 DUNGEON0
+    1, // 0x12 ITEM0
+    1, // 0x13 ITEM1
+    1, // 0x14 ITEM2
+    1, // 0x15 ITEM3
+    1, // 0x16 NAVI
+    1, // 0x17 WARP0
+    1, // 0x18 DEATH
+    1, // 0x19 REBIRTH
+    1, // 0x1A TREASURE
+    1, // 0x1B TRANSFORM
+    1, // 0x1C ATTENTION
+    1, // 0x1D WARP1
+    1, // 0x1E DUNGEON1
+    1, // 0x1F FIXED1
+    1, // 0x20 FIXED2
+    1, // 0x21 MAZE
+    1, // 0x22 REMOTEBOMB
+    1, // 0x23 CIRCLE1
+    1, // 0x24 CIRCLE2
+    1, // 0x25 CIRCLE3
+    1, // 0x26 CIRCLE4
+    1, // 0x27 FIXED3
+    1, // 0x28 TOWER0
+    1, // 0x29 PARALLEL0
+    1, // 0x2A NORMALD
+    1, // 0x2B SUBJECTD
+    1, // 0x2C START0
+    1, // 0x2D START2
+    1, // 0x2E STOP0
+    1, // 0x2F JCRUISING
+    1, // 0x30 CLIMEMAZE
+    1, // 0x31 SIDED
+    1, // 0x32 DUNGEON2
+    1, // 0x33 BOSS_SHIGE
+    1, // 0x34 KEEPBACK
+    1, // 0x35 CIRCLE6
+    1, // 0x36 CIRCLE7
+    1, // 0x37 CHUBOSS
+    1, // 0x38 RFIXED1
+    1, // 0x39 TRESURE1
+    1, // 0x3A BOMBBASKET
+    1, // 0x3B CIRCLE8
+    1, // 0x3C FUKAN1
+    1, // 0x3D DUNGEON3
+    1, // 0x3E TELESCOPE
+    1, // 0x3F ROOM0
+    1, // 0x40 RCIRC0
+    1, // 0x41 CIRCLE9
+    1, // 0x42 ONTHEPOLE
+    1, // 0x43 INBUSH
+    1, // 0x44 BOSS_LAST
+    1, // 0x45 BOSS_INI
+    1, // 0x46 BOSS_HAK
+    1, // 0x47 BOSS_KON
+    1, // 0x48 CONNECT0
+    1, // 0x49 MORAY
+    1, // 0x4A NORMAL2
+    1, // 0x4B BOMBBOWL
+    1, // 0x4C CIRCLEa
+    1, // 0x4D WHIRLPOOL
+    1, // 0x4E KOKKOGAME
+    1, // 0x4F GIANT
+    1, // 0x50 SCENE0
+    1, // 0x51 ROOM1
+    1, // 0x52 WATER2
+    1, // 0x53 SOKONASI
+    1, // 0x54 FORCEKEEP
+    1, // 0x55 PARALLEL1
+    1, // 0x56 START1
+    1, // 0x57 ROOM2
+    1, // 0x58 NORMAL4
+    1, // 0x59 SHELL
+    1, // 0x5A DUNGEON4
 };
 
 // Whether or not to refill some magic on this frame.
@@ -45,6 +141,19 @@ static uint32_t g_fairy_cooldown = 0;
 
 // Most recent scene, tracked for fairy usage.
 static uint16_t g_fairy_scene = 0;
+
+static void handle_camera_overlook_effect() {
+    // Handle "Camera Overlook" effect.
+    if (g_external_effects.camera_fukan) {
+        int16_t curstate = z64_game.cameras[0].state;
+        if (g_freecam_modes[curstate] && curstate != Z64_CAMERA_STATE_FUKAN1) {
+            z64_game.cameras[0].state = Z64_CAMERA_STATE_FUKAN1;
+
+            // Camera mode used while Z-targetting, it should trigger the camera to begin drifting over Link
+            z64_game.cameras[0].mode = Z64_CAMERA_MODE_PARALLEL;
+        }
+    }
+}
 
 static void handle_chateau_effect() {
     // Handle "Chateau" effect
@@ -198,6 +307,7 @@ static void handle_wallet_fill_effect() {
 }
 
 void handle_external_effects() {
+    handle_camera_overlook_effect();
     handle_chateau_effect();
     handle_fairy_effect();
     handle_freeze_effect();

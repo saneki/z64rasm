@@ -444,6 +444,136 @@ typedef enum {
     Z64_DAMAGE_EFFECT_ELECTRIC = 4,
 } z64_damage_effect_t;
 
+// Source: https://wiki.cloudmodding.com/mm/Notes:Mini-Cutscenes#0x02
+// More specifically, strings are in Yaz0 chunk in 0xBB1320 in debug ROM.
+typedef enum {
+    Z64_CAMERA_STATE_NONE,
+    Z64_CAMERA_STATE_NORMAL0,
+    Z64_CAMERA_STATE_NORMAL3,
+    Z64_CAMERA_STATE_CIRCLE5,
+    Z64_CAMERA_STATE_HORSE0,
+    Z64_CAMERA_STATE_ZORA0,
+    Z64_CAMERA_STATE_PREREND0,
+    Z64_CAMERA_STATE_PREREND1,
+    Z64_CAMERA_STATE_DOORC,
+    Z64_CAMERA_STATE_DEMO0,
+    Z64_CAMERA_STATE_FREE0,
+    Z64_CAMERA_STATE_FUKAN0,
+    Z64_CAMERA_STATE_NORMAL1,
+    Z64_CAMERA_STATE_NANAME,
+    Z64_CAMERA_STATE_CIRCLE0,
+    Z64_CAMERA_STATE_FIXED0,
+    Z64_CAMERA_STATE_SPIRAL,
+    Z64_CAMERA_STATE_DUNGEON0,
+    Z64_CAMERA_STATE_ITEM0,
+    Z64_CAMERA_STATE_ITEM1,
+    Z64_CAMERA_STATE_ITEM2,
+    Z64_CAMERA_STATE_ITEM3,
+    Z64_CAMERA_STATE_NAVI,
+    Z64_CAMERA_STATE_WARP0,
+    Z64_CAMERA_STATE_DEATH,
+    Z64_CAMERA_STATE_REBIRTH,
+    Z64_CAMERA_STATE_TREASURE,
+    Z64_CAMERA_STATE_TRANSFORM,
+    Z64_CAMERA_STATE_ATTENTION,
+    Z64_CAMERA_STATE_WARP1,
+    Z64_CAMERA_STATE_DUNGEON1,
+    Z64_CAMERA_STATE_FIXED1,
+    Z64_CAMERA_STATE_FIXED2,
+    Z64_CAMERA_STATE_MAZE,
+    Z64_CAMERA_STATE_REMOTEBOMB,
+    Z64_CAMERA_STATE_CIRCLE1,
+    Z64_CAMERA_STATE_CIRCLE2,
+    Z64_CAMERA_STATE_CIRCLE3,
+    Z64_CAMERA_STATE_CIRCLE4,
+    Z64_CAMERA_STATE_FIXED3,
+    Z64_CAMERA_STATE_TOWER0,
+    Z64_CAMERA_STATE_PARALLEL0,
+    Z64_CAMERA_STATE_NORMALD,
+    Z64_CAMERA_STATE_SUBJECTD,
+    Z64_CAMERA_STATE_START0,
+    Z64_CAMERA_STATE_START2,
+    Z64_CAMERA_STATE_STOP0,
+    Z64_CAMERA_STATE_JCRUISING,
+    Z64_CAMERA_STATE_CLIMEMAZE,
+    Z64_CAMERA_STATE_SIDED,
+    Z64_CAMERA_STATE_DUNGEON2,
+    Z64_CAMERA_STATE_BOSS_SHIGE,
+    Z64_CAMERA_STATE_KEEPBACK,
+    Z64_CAMERA_STATE_CIRCLE6,
+    Z64_CAMERA_STATE_CIRCLE7,
+    Z64_CAMERA_STATE_CHUBOSS,
+    Z64_CAMERA_STATE_RFIXED1,
+    Z64_CAMERA_STATE_TRESURE1,
+    Z64_CAMERA_STATE_BOMBBASKET,
+    Z64_CAMERA_STATE_CIRCLE8,
+    Z64_CAMERA_STATE_FUKAN1,
+    Z64_CAMERA_STATE_DUNGEON3,
+    Z64_CAMERA_STATE_TELESCOPE,
+    Z64_CAMERA_STATE_ROOM0,
+    Z64_CAMERA_STATE_RCIRC0,
+    Z64_CAMERA_STATE_CIRCLE9,
+    Z64_CAMERA_STATE_ONTHEPOLE,
+    Z64_CAMERA_STATE_INBUSH,
+    Z64_CAMERA_STATE_BOSS_LAST,
+    Z64_CAMERA_STATE_BOSS_INI,
+    Z64_CAMERA_STATE_BOSS_HAK,
+    Z64_CAMERA_STATE_BOSS_KON,
+    Z64_CAMERA_STATE_CONNECT0,
+    Z64_CAMERA_STATE_MORAY,
+    Z64_CAMERA_STATE_NORMAL2,
+    Z64_CAMERA_STATE_BOMBBOWL,
+    Z64_CAMERA_STATE_CIRCLEa,
+    Z64_CAMERA_STATE_WHIRLPOOL,
+    Z64_CAMERA_STATE_KOKKOGAME,
+    Z64_CAMERA_STATE_GIANT,
+    Z64_CAMERA_STATE_SCENE0,
+    Z64_CAMERA_STATE_ROOM1,
+    Z64_CAMERA_STATE_WATER2,
+    Z64_CAMERA_STATE_SOKONASI,
+    Z64_CAMERA_STATE_FORCEKEEP,
+    Z64_CAMERA_STATE_PARALLEL1,
+    Z64_CAMERA_STATE_START1,
+    Z64_CAMERA_STATE_ROOM2,
+    Z64_CAMERA_STATE_NORMAL4,
+    Z64_CAMERA_STATE_SHELL,
+    Z64_CAMERA_STATE_DUNGEON4,
+} z64_camera_state;
+
+// Source: https://wiki.cloudmodding.com/mm/Notes:Mini-Cutscenes#MM_.28J.29_addresses:_Camera_assembly_stuff
+typedef enum {
+    Z64_CAMERA_MODE_NORMAL,
+    Z64_CAMERA_MODE_JUMP,
+    Z64_CAMERA_MODE_GORONDASH,
+    Z64_CAMERA_MODE_NUTSSHOT,
+    Z64_CAMERA_MODE_BOWARROWZ,
+    Z64_CAMERA_MODE_NUTSFLY,
+    Z64_CAMERA_MODE_SUBJECT,
+    Z64_CAMERA_MODE_BOOKEEPON,
+    Z64_CAMERA_MODE_ZORAFIN,
+    Z64_CAMERA_MODE_KEEPON,
+    Z64_CAMERA_MODE_PARALLEL,
+    Z64_CAMERA_MODE_TALK,
+    Z64_CAMERA_MODE_PACHINCO,
+    Z64_CAMERA_MODE_BOWARROW,
+    Z64_CAMERA_MODE_BATTLE,
+    Z64_CAMERA_MODE_NUTSHIDE,
+    Z64_CAMERA_MODE_STILL,
+    Z64_CAMERA_MODE_CHARGE,
+    Z64_CAMERA_MODE_CLIMB,
+    Z64_CAMERA_MODE_CLIMBZ,
+    Z64_CAMERA_MODE_FOOKSHOT,
+    Z64_CAMERA_MODE_FREEFALL,
+    Z64_CAMERA_MODE_HANG,
+    Z64_CAMERA_MODE_HANGZ,
+    Z64_CAMERA_MODE_PUSHPULL,
+    Z64_CAMERA_MODE_NUTSFLYZ,
+    Z64_CAMERA_MODE_GORONJUMP,
+    Z64_CAMERA_MODE_BOOMERANG,
+    Z64_CAMERA_MODE_CHARGEZ,
+    Z64_CAMERA_MODE_ZORAFINZ,
+} z64_camera_mode;
+
 typedef struct
 {
   int16_t x;                               // 0x0000
@@ -547,6 +677,22 @@ typedef struct
 
 typedef struct
 {
+    uint8_t unk_00_[0x7C];                 // 0x0000
+    void *ctxt;                            // 0x007C
+    void *link;                            // 0x0080
+    uint8_t unk_84_[0xBC];                 // 0x0084
+    int16_t unk_140_;                      // 0x0140
+    int16_t state;                         // 0x0142
+    int16_t mode;                          // 0x0144
+    int16_t unk_146_;                      // 0x0146
+    int16_t unk_148_;                      // 0x0148
+    int16_t unk_14A_;                      // 0x014A
+    int16_t flag_14C;                      // 0x014C
+    uint8_t unk_14E_[0x2A];                // 0x014E
+} z64_camera_t;                            // 0x0178
+
+typedef struct
+{
     z64_gfx_t      *gfx;                   // 0x0000
     void           *state_main;            // 0x0004
     void           *state_dtor;            // 0x0008
@@ -598,7 +744,9 @@ typedef struct
     z64_ctxt_t         common;             // 0x00000
     uint16_t           scene_number;       // 0x000A4
     uint8_t            scene_code_index;   // 0x000A6
-    uint8_t            unk_A7_[0x1BF9];    // 0x000A7
+    uint8_t            unk_A7_[0x179];     // 0x000A7
+    z64_camera_t       cameras[4];         // 0x00220
+    uint8_t            unk_800_[0x14A0];   // 0x00800
     uint8_t            unk_1CA0_;          // 0x01CA0
     uint8_t            unk_1CA1_[0x14D47]; // 0x01CA1
     z64_game_sub_169E8 sub_169E8;          // 0x169E8
