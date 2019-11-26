@@ -144,7 +144,7 @@ static uint16_t g_fairy_scene = 0;
 
 static void handle_camera_overlook_effect() {
     // Handle "Camera Overlook" effect.
-    if (g_external_effects.camera_fukan) {
+    if (g_external_effects.camera_overlook) {
         int16_t curstate = z64_game.cameras[0].state;
         if (g_freecam_modes[curstate] && curstate != Z64_CAMERA_STATE_FUKAN1) {
             z64_game.cameras[0].state = Z64_CAMERA_STATE_FUKAN1;
