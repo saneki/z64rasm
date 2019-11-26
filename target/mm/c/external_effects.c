@@ -27,9 +27,7 @@ external_effects_t g_external_effects = {
     .ice_physics = 0,
     .jinx = 0,
     .no_z = 0,
-    .paper_link = 0,
     .reverse_controls = 0,
-    .wallet_fill = 0,
 };
 
 // Specifies camera states that can be changed via an effect.
@@ -277,15 +275,6 @@ static void handle_no_z_effect() {
     }
 }
 
-static void handle_paper_link_effect() {
-    // Handle "Paper Link" effect.
-    if (g_external_effects.paper_link) {
-        z64_link.common.scale.x = 0.001;
-    } else {
-        z64_link.common.scale.x = 0.01;
-    }
-}
-
 static void handle_reverse_controls_effect() {
     // Handle "Reverse Controls" effect.
     if (g_external_effects.reverse_controls) {
@@ -298,14 +287,6 @@ static void handle_reverse_controls_effect() {
     }
 }
 
-static void handle_wallet_fill_effect() {
-    // Handle "Wallet Fill" effect.
-    if (g_external_effects.wallet_fill) {
-        z64_file.rupee_timer = 0x7FFF;
-        g_external_effects.wallet_fill = 0;
-    }
-}
-
 void handle_external_effects() {
     handle_camera_overlook_effect();
     handle_chateau_effect();
@@ -314,7 +295,5 @@ void handle_external_effects() {
     handle_ice_physics_effect();
     handle_jinx_effect();
     handle_no_z_effect();
-    handle_paper_link_effect();
     handle_reverse_controls_effect();
-    handle_wallet_fill_effect();
 }

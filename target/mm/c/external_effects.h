@@ -18,9 +18,7 @@ typedef struct {
     uint8_t ice_physics;
     uint8_t jinx;
     uint8_t no_z;
-    uint8_t paper_link;
     uint8_t reverse_controls;
-    uint8_t wallet_fill;
 } external_effects_t;
 
 void handle_external_effects();
