@@ -342,15 +342,21 @@ typedef enum {
     Z64_ACTION_STATE2_DIVING       = 0x00000800,
     // Diving, swimming as Zora.
     Z64_ACTION_STATE2_DIVING_2     = 0x00000400,
+    // Grabbing onto a block.
+    Z64_ACTION_STATE2_GRABBING     = 0x00000100,
     // Climbing. Also occurs during: transforming, hanging from ledge,
     // deku spinning, goron ball, sliding
     Z64_ACTION_STATE2_CLIMBING     = 0x00000040,
     // Running / moving.
     Z64_ACTION_STATE2_MOVING       = 0x00000020,
+    // Pushing or pulling a block.
+    Z64_ACTION_STATE2_PUSH_PULL    = 0x00000010,
     // Is set for some movement frames.
     Z64_ACTION_STATE2_MOVING_2     = 0x00000008,
     // "Check" or "Speak" prompt may appear.
     Z64_ACTION_STATE2_CHECK        = 0x00000002,
+    // "Grab" prompt may appear.
+    Z64_ACTION_STATE2_MAY_GRAB     = 0x00000001,
 } z64_action_state2_t;
 
 typedef enum {
