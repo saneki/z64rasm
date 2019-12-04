@@ -18,11 +18,25 @@
 ;==================================================================================================
 ; Draw C Button Amounts Fix
 ;==================================================================================================
-
+;
 ; Fixes C button item amounts being drawn in green if magic has not yet been obtained.
+
+; Fix for C-button left.
 ; Replaces:
 ;   jal     0x80117BD0
 .orga 0xAFE9F8 ; In memory: 0x80118998
+    jal     draw_button_amounts_fix
+
+; Fix for C-button down.
+; Replaces:
+;   jal     0x80117BD0
+.orga 0xAFEAF4 ; In memory: 0x80118A94
+    jal     draw_button_amounts_fix
+
+; Fix for C-button right.
+; Replaces:
+;   jal     0x80117BD0
+.orga 0xAFEBEC ; In memory: 0x80118B8C
     jal     draw_button_amounts_fix
 
 ; Same as above but for the B button (needed for mid-air Deku nuts).
