@@ -1082,6 +1082,8 @@ typedef struct {
 #define z64_CanInteract2_addr             0x80123358
 #define z64_CheckTimeOfDayTransition_addr 0x8074AF20
 #define z64_DrawButtonAmounts_addr        0x80117BD0
+#define z64_DrawBButtonIcon_addr          0x80118084
+#define z64_DrawCButtonIcons_addr         0x80118890
 #define z64_GetFloorPhysicsType_addr      0x800C99D4
 #define z64_GetPhysicalAddrOfFile_addr    0x80080950
 #define z64_LinkDamage_addr               0x80750FA8
@@ -1099,6 +1101,8 @@ typedef int (*z64_CanInteract_proc)(z64_game_t *game);
 typedef int (*z64_CanInteract2_proc)(z64_game_t *game, z64_link_t *link);
 typedef uint32_t (*z64_CheckTimeOfDayTransition_proc)(z64_game_t *game);
 typedef void (*z64_DrawButtonAmounts_proc)(z64_game_t *game, uint32_t arg1, uint16_t alpha);
+typedef void (*z64_DrawBButtonIcon_proc)(z64_game_t *game);
+typedef void (*z64_DrawCButtonIcons_proc)(z64_game_t *game);
 typedef uint32_t (*z64_GetFloorPhysicsType_proc)(void *arg0, void *arg1, uint8_t arg2);
 typedef uint32_t (*z64_GetPhysicalAddrOfFile_proc)(uint32_t vrom_addr);
 typedef void (*z64_LinkDamage_proc)(z64_game_t *game, z64_link_t *link, uint32_t type, uint32_t arg3);
@@ -1116,6 +1120,8 @@ typedef void (*z64_WriteHeartColors_proc)(z64_game_t *game);
 #define z64_CanInteract2                  ((z64_CanInteract2_proc) z64_CanInteract2_addr)
 #define z64_CheckTimeOfDayTransition      ((z64_CheckTimeOfDayTransition_proc) z64_CheckTimeOfDayTransition_addr)
 #define z64_DrawButtonAmounts             ((z64_DrawButtonAmounts_proc) z64_DrawButtonAmounts_addr)
+#define z64_DrawBButtonIcon               ((z64_DrawBButtonIcon_proc) z64_DrawBButtonIcon_addr)
+#define z64_DrawCButtonIcons              ((z64_DrawCButtonIcons_proc) z64_DrawCButtonIcons_addr)
 #define z64_GetFloorPhysicsType           ((z64_GetFloorPhysicsType_proc) z64_GetFloorPhysicsType_addr)
 #define z64_GetPhysicalAddrOfFile         ((z64_GetPhysicalAddrOfFile_proc) z64_GetPhysicalAddrOfFile_addr)
 #define z64_LinkDamage                    ((z64_LinkDamage_proc) z64_LinkDamage_addr)
