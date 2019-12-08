@@ -1062,6 +1062,19 @@ typedef struct {
     uint16_t floor_type;        // 0x0B72, determines sound effect used while walking
 } z64_link_t;
 
+typedef struct
+{
+    int16_t     unk_00_;        // 0x0000
+    int16_t     unk_02_;        // 0x0002
+    int16_t     unk_04_;        // 0x0004
+    int16_t     unk_06_;        // 0x0006
+    uint32_t    unk_08_;        // 0x0008
+    uint32_t    unk_0C_;        // 0x000C
+    z64_game_t *game;           // 0x0010
+    int16_t     unk_14_;        // 0x0014
+    int16_t     unk_16_;        // 0x0016
+} z64_801BD8B0_t;
+
 // virtual file addresses
 #define z64_item_texture_file             0xA36C10
 
@@ -1071,11 +1084,17 @@ typedef struct {
 #define z64_game_addr                     z64_ctxt_addr
 #define z64_link_addr                     0x803FFDB0
 
+// dram addresses (unknown)
+#define z64_801BD8B0_addr                 0x801BD8B0
+
 // data
 #define z64_ctxt                          (*(z64_ctxt_t*) z64_ctxt_addr)
 #define z64_file                          (*(z64_file_t*) z64_file_addr)
 #define z64_game                          (*(z64_game_t*) z64_game_addr)
 #define z64_link                          (*(z64_link_t*) z64_link_addr)
+
+// data (unknown)
+#define z64_801BD8B0                      (*(z64_801BD8B0_t*) z64_801BD8B0_addr)
 
 // dram function addresses
 #define z64_CanInteract_addr              0x801233E4
