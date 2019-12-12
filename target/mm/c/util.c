@@ -1,11 +1,11 @@
 #include "util.h"
 #include "z64.h"
 
-extern char C_HEAP;
+extern char G_C_HEAP;
 char *heap_next = NULL;
 
 void heap_init() {
-    heap_next = &C_HEAP;
+    heap_next = &G_C_HEAP;
 }
 
 void *heap_alloc(int bytes) {

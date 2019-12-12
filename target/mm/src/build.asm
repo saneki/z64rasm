@@ -8,8 +8,7 @@
 ; Constants
 ;==================================================================================================
 
-;.include "constants.asm"
-.include "addresses.asm"
+.include "constants.asm"
 
 ;==================================================================================================
 ; Base game editing region
@@ -25,10 +24,10 @@
 ; New code region
 ;==================================================================================================
 
-.headersize (0x807A9E00 - 0x03800000)
+.headersize (G_PAYLOAD_ADDR - G_PAYLOAD_VROM)
 
-.org 0x807A9E00
-.area 0xE200 //payload max memory
+.org G_PAYLOAD_ADDR
+.area (G_PAYLOAD_SIZE - G_C_HEAP_SIZE) // Payload max memory
 PAYLOAD_START:
 
 .include "init.asm"
@@ -44,6 +43,6 @@ DPAD_TEXTURE:
 
 .align 0x10
 PAYLOAD_END:
-.endarea //payload max memory
+.endarea // Payload max memory
 
 .close
