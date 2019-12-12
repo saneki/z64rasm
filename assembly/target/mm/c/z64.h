@@ -1062,6 +1062,16 @@ typedef struct {
     uint16_t floor_type;        // 0x0B72, determines sound effect used while walking
 } z64_link_t;
 
+typedef struct {
+    void               *ram;                    /* 0x0000 */
+    uint32_t            vrom_start;             /* 0x0004 */
+    uint32_t            vrom_end;               /* 0x0008 */
+    uint32_t            vram_start;             /* 0x000C */
+    uint32_t            vram_end;               /* 0x0010 */
+    char                unk_0x14[4];            /* 0x0014 */
+    char               *filename;               /* 0x0018 */
+} z64_player_ovl_table_t;                       /* 0x001C */
+
 typedef struct
 {
     int16_t     unk_00_;        // 0x0000
@@ -1073,7 +1083,14 @@ typedef struct
     z64_game_t *game;           // 0x0010
     int16_t     unk_14_;        // 0x0014
     int16_t     unk_16_;        // 0x0016
-} z64_801BD8B0_t;
+} z64_0x801BD8B0_t;
+
+typedef struct {
+    z64_player_ovl_table_t  pause_ovl;
+    z64_player_ovl_table_t  player_ovl;
+    void                   *start;
+    z64_player_ovl_table_t *selected;
+} z64_0x801D0B70_t;
 
 // virtual file addresses
 #define z64_item_texture_file             0xA36C10
@@ -1084,9 +1101,6 @@ typedef struct
 #define z64_game_addr                     z64_ctxt_addr
 #define z64_link_addr                     0x803FFDB0
 
-// dram addresses (unknown)
-#define z64_801BD8B0_addr                 0x801BD8B0
-
 // data
 #define z64_ctxt                          (*(z64_ctxt_t*) z64_ctxt_addr)
 #define z64_file                          (*(z64_file_t*) z64_file_addr)
@@ -1094,31 +1108,32 @@ typedef struct
 #define z64_link                          (*(z64_link_t*) z64_link_addr)
 
 // data (unknown)
-#define z64_801BD8B0                      (*(z64_801BD8B0_t*) z64_801BD8B0_addr)
+#define z64_0x801BD8B0                    (*(z64_0x801BD8B0_t*) 0x801BD8B0)
+#define z64_0x801D0B70                    (*(z64_0x801D0B70_t*) 0x801D0B70)
 
 // dram function addresses
 #define z64_CanInteract_addr              0x801233E4
 #define z64_CanInteract2_addr             0x80123358
-#define z64_CheckTimeOfDayTransition_addr 0x8074AF20
 #define z64_DrawButtonAmounts_addr        0x80117BD0
 #define z64_DrawBButtonIcon_addr          0x80118084
 #define z64_DrawCButtonIcons_addr         0x80118890
 #define z64_GetFloorPhysicsType_addr      0x800C99D4
 #define z64_GetPhysicalAddrOfFile_addr    0x80080950
-#define z64_LinkDamage_addr               0x80750FA8
-#define z64_LinkInvincibility_addr        0x80750E28
 #define z64_LoadItemTexture_addr          0x80178DAC
 #define z64_PlaySfx_addr                  0x8019F0C8
 #define z64_ReadFile_addr                 0x80080C90
 #define z64_SpawnActor_addr               0x800BAC60
 #define z64_UpdateButtonUsability_addr    0x80110038
-#define z64_UseItem_addr                  0x8074EE20
 #define z64_WriteHeartColors_addr         0x8010069C
+
+// Relocatable functions relative to player_ovl
+#define z64_LinkDamage_offset             0x6088
+#define z64_LinkInvincibility_offset      0x5F08
+#define z64_UseItem_offset                0x3F00
 
 // function prototypes
 typedef int (*z64_CanInteract_proc)(z64_game_t *game);
 typedef int (*z64_CanInteract2_proc)(z64_game_t *game, z64_link_t *link);
-typedef uint32_t (*z64_CheckTimeOfDayTransition_proc)(z64_game_t *game);
 typedef void (*z64_DrawButtonAmounts_proc)(z64_game_t *game, uint32_t arg1, uint16_t alpha);
 typedef void (*z64_DrawBButtonIcon_proc)(z64_game_t *game);
 typedef void (*z64_DrawCButtonIcons_proc)(z64_game_t *game);
@@ -1137,20 +1152,16 @@ typedef void (*z64_WriteHeartColors_proc)(z64_game_t *game);
 // functions
 #define z64_CanInteract                   ((z64_CanInteract_proc) z64_CanInteract_addr)
 #define z64_CanInteract2                  ((z64_CanInteract2_proc) z64_CanInteract2_addr)
-#define z64_CheckTimeOfDayTransition      ((z64_CheckTimeOfDayTransition_proc) z64_CheckTimeOfDayTransition_addr)
 #define z64_DrawButtonAmounts             ((z64_DrawButtonAmounts_proc) z64_DrawButtonAmounts_addr)
 #define z64_DrawBButtonIcon               ((z64_DrawBButtonIcon_proc) z64_DrawBButtonIcon_addr)
 #define z64_DrawCButtonIcons              ((z64_DrawCButtonIcons_proc) z64_DrawCButtonIcons_addr)
 #define z64_GetFloorPhysicsType           ((z64_GetFloorPhysicsType_proc) z64_GetFloorPhysicsType_addr)
 #define z64_GetPhysicalAddrOfFile         ((z64_GetPhysicalAddrOfFile_proc) z64_GetPhysicalAddrOfFile_addr)
-#define z64_LinkDamage                    ((z64_LinkDamage_proc) z64_LinkDamage_addr)
-#define z64_LinkInvincibility             ((z64_LinkInvincibility_proc) z64_LinkInvincibility_addr)
 #define z64_LoadItemTexture               ((z64_LoadItemTexture_proc) z64_LoadItemTexture_addr)
 #define z64_PlaySfx                       ((z64_PlaySfx_proc) z64_PlaySfx_addr)
 #define z64_ReadFile                      ((z64_ReadFile_proc) z64_ReadFile_addr)
 #define z64_SpawnActor                    ((z64_SpawnActor_proc) z64_SpawnActor_addr)
 #define z64_UpdateButtonUsability         ((z64_UpdateButtonUsability_proc) z64_UpdateButtonUsability_addr)
-#define z64_UseItem                       ((z64_UseItem_proc) z64_UseItem_addr)
 #define z64_WriteHeartColors              ((z64_WriteHeartColors_proc) z64_WriteHeartColors_addr)
 
 #endif // Z64_H

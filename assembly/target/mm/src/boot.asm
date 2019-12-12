@@ -12,10 +12,13 @@
 ;   - this isn't strictly necessary, but adds flexibility for the future
 .orga 0x20580
 .area 0x70, 0
-    .word 0x03800000, 0x03800000 + PAYLOAD_END - PAYLOAD_START, 0x03800000, 0
+    .word G_PAYLOAD_VROM, G_PAYLOAD_VROM + G_PAYLOAD_SIZE, G_PAYLOAD_VROM, 0
 .endarea
 
+;==================================================================================================
 ; Load new code from ROM
+;==================================================================================================
+
 ; Replaces:
 ;   sw      s0, 0x0018 (sp)
 ;   lui     s0, 0x801C
@@ -26,18 +29,38 @@
 ;   sw      s2, 0x0020 (sp)
 ;   sw      s1, 0x001C (sp)
 ;   sw      a0, 0x0340 (sp)
+;   lui     a0, 0x0004
+;   or      s2, s0, r0
 .orga 0xB5A904 ; In memory: 0x801748A4
-.area 0x24, 0
+.area 0x2C, 0
     sw      ra, 0x002C (sp)
     sw      a0, 0x0340 (sp)
 
     ; Load first code file from ROM
-    lui     a0, 0x807A
-    ori     a0, a0, 0x9E00
-    li      a2, PAYLOAD_END - PAYLOAD_START
+    lui     a0, hi(G_PAYLOAD_ADDR)
+    ori     a0, lo(G_PAYLOAD_ADDR)
+    lui     a1, hi(G_PAYLOAD_VROM)
+    ori     a1, lo(G_PAYLOAD_VROM)
+    lui     a2, hi(G_PAYLOAD_SIZE)
     jal     0x80080C90
-    lui     a1, 0x0380
+    ori     a2, lo(G_PAYLOAD_SIZE)
 
     jal     init
     sw      s0, 0x0018 (sp)
 .endarea
+
+;==================================================================================================
+; Set the size of the main heap
+;==================================================================================================
+
+; Replaces:
+;   lui     t8, 0x8078
+;   addiu   v1, v1, 0x1528
+.orga 0xB5ACAC ; In memory: 0x80174C4C
+    lui     t8, hi(G_PAYLOAD_ADDR)
+    ori     t8, lo(G_PAYLOAD_ADDR)
+
+; Replaces:
+;   sw      a1, 0x0000 (v1)
+.orga 0xB5ACBC ; In memory: 0x80174C5C
+    sw      a1, 0x1528 (v1)
