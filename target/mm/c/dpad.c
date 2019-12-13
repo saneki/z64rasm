@@ -140,6 +140,9 @@ static uint16_t update_y_position(uint16_t x, uint16_t y, uint16_t padding) {
     bool hearts = heart_count > 10;
     // Check if we have magic
     bool magic = z64_file.has_magic != 0;
+    // Check if there's a timer
+    bool timer = IS_TIMER_VISIBLE(z64_file.timer_state[4]) ||
+                 IS_TIMER_VISIBLE(z64_file.timer_state[5]);
 
     // If on left-half of screen
     if (x < 160) {
@@ -150,6 +153,13 @@ static uint16_t update_y_position(uint16_t x, uint16_t y, uint16_t padding) {
             minimum += 10;
         if (magic)
             minimum += 16;
+        if (timer) {
+            if (magic) {
+                minimum += 10;
+            } else {
+                minimum += 26;
+            }
+        }
         y = (y > minimum ? y : minimum);
     }
 
