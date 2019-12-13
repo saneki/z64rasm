@@ -609,6 +609,17 @@ typedef enum {
     Z64_TIMER_TYPE_NONE = 0x63,
 } z64_timer_type_t;
 
+typedef enum {
+    // Treasure Chest Shop game.
+    Z64_TIMER_INDEX_TREASURE_CHEST_GAME = 4,
+    // Drowning.
+    Z64_TIMER_INDEX_DROWNING = 5,
+    // Clock tower skull kid encounter.
+    Z64_TIMER_INDEX_SKULL_KID = 0x13,
+    // Honey & Darling game.
+    Z64_TIMER_INDEX_HONEY_DARLING = 0x14,
+} z64_timer_index_t;
+
 typedef struct
 {
   int16_t x;                               // 0x0000
@@ -955,7 +966,7 @@ typedef struct
     uint16_t jinx_timer;         // 0x1016
     int16_t rupee_timer;         // 0x1018
     uint8_t unk_101A_[0x2DB6];   // 0x101A
-    uint8_t timer_state[0x40];   // 0x3DD0
+    uint8_t timers[0x40];        // 0x3DD0
     uint8_t unk_3E10_[0x108];    // 0x3E10‬
     uint8_t b_button_usable;     // 0x3F18
     uint8_t c_buttons_usable[3]; // 0x3F19

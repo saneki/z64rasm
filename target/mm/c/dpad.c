@@ -141,8 +141,8 @@ static uint16_t update_y_position(uint16_t x, uint16_t y, uint16_t padding) {
     // Check if we have magic
     bool magic = z64_file.has_magic != 0;
     // Check if there's a timer
-    bool timer = IS_TIMER_VISIBLE(z64_file.timer_state[4]) ||
-                 IS_TIMER_VISIBLE(z64_file.timer_state[5]);
+    bool timer = IS_TIMER_VISIBLE(z64_file.timers[Z64_TIMER_INDEX_TREASURE_CHEST_GAME]) ||
+                 IS_TIMER_VISIBLE(z64_file.timers[Z64_TIMER_INDEX_DROWNING]);
 
     // If on left-half of screen
     if (x < 160) {
