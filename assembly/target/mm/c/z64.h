@@ -1086,11 +1086,11 @@ typedef struct
 } z64_0x801BD8B0_t;
 
 typedef struct {
-    z64_player_ovl_table_t  pause_ovl;
-    z64_player_ovl_table_t  player_ovl;
-    void                   *start;
-    z64_player_ovl_table_t *selected;
-} z64_0x801D0B70_t;
+    z64_player_ovl_table_t  pause_ovl;          /* 0x0000, VRAM: [0x808160A0, 0x8082DA90) */
+    z64_player_ovl_table_t  player_ovl;         /* 0x001C, VRAM: [0x8082DA90, 0x80862B70) */
+    void                   *start;              /* 0x0038, RAM start address to use. */
+    z64_player_ovl_table_t *selected;           /* 0x003C, points to selected overlay. */
+} z64_0x801D0B70_t;                             /* 0x0040 */
 
 // virtual file addresses
 #define z64_item_texture_file             0xA36C10
@@ -1126,10 +1126,10 @@ typedef struct {
 #define z64_UpdateButtonUsability_addr    0x80110038
 #define z64_WriteHeartColors_addr         0x8010069C
 
-// Relocatable functions relative to player_ovl
-#define z64_LinkDamage_offset             0x6088
-#define z64_LinkInvincibility_offset      0x5F08
-#define z64_UseItem_offset                0x3F00
+// Relocatable functions
+#define z64_LinkDamage_vram               0x80833B18
+#define z64_LinkInvincibility_vram        0x80833998
+#define z64_UseItem_vram                  0x80831990
 
 // function prototypes
 typedef int (*z64_CanInteract_proc)(z64_game_t *game);

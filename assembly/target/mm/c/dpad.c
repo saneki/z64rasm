@@ -94,7 +94,6 @@ static bool have_any(uint8_t *dpad) {
 
 static bool try_use_inventory_item(uint8_t item, uint8_t slot) {
     if (z64_file.inventory[slot] == item) {
-        GET_RELOC_PLAYER_FUNC(z64_UseItem);
         z64_UseItem(&z64_ctxt, &z64_link, item);
         return true;
     }
