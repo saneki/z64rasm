@@ -580,6 +580,35 @@ typedef enum {
     Z64_CAMERA_MODE_ZORAFINZ,
 } z64_camera_mode;
 
+typedef enum {
+    // No timer.
+    Z64_TIMER_STATE_NONE,
+    // Timer is not being displayed yet.
+    Z64_TIMER_STATE_PRE,
+    // Timer is in middle of screen.
+    Z64_TIMER_STATE_INIT,
+    // Timer is moving into position.
+    Z64_TIMER_STATE_MOVING,
+    // Timer is positioned.
+    Z64_TIMER_STATE_SET,
+    // Timer is finished and no longer displaying.
+    Z64_TIMER_STATE_FINISHED,
+} z64_timer_state_t;
+
+/* Macro for checking if a timer state is visible. */
+#define IS_TIMER_VISIBLE(TSTATE) (Z64_TIMER_STATE_INIT <= (TSTATE) && (TSTATE) < Z64_TIMER_STATE_FINISHED)
+
+typedef enum {
+    // Skull kid on clock tower.
+    Z64_TIMER_TYPE_SKULL_KID = 3,
+    // Treasure chest game, maybe others.
+    Z64_TIMER_TYPE_TCG = 4,
+    // Drowning.
+    Z64_TIMER_TYPE_DROWNING = 5,
+    // None.
+    Z64_TIMER_TYPE_NONE = 0x63,
+} z64_timer_type_t;
+
 typedef struct
 {
   int16_t x;                               // 0x0000
@@ -925,7 +954,9 @@ typedef struct
     uint8_t unk_FF0_[0x26];      // 0x0FF0
     uint16_t jinx_timer;         // 0x1016
     int16_t rupee_timer;         // 0x1018
-    uint8_t unk_101A_[0x2EFE];   // 0x101A
+    uint8_t unk_101A_[0x2DB6];   // 0x101A
+    uint8_t timer_state[0x40];   // 0x3DD0
+    uint8_t unk_3E10_[0x108];    // 0x3E10‬
     uint8_t b_button_usable;     // 0x3F18
     uint8_t c_buttons_usable[3]; // 0x3F19
     uint8_t a_button_usable;     // 0x3F1C
@@ -1091,6 +1122,21 @@ typedef struct {
     void                   *start;              /* 0x0038, RAM start address to use. */
     z64_player_ovl_table_t *selected;           /* 0x003C, points to selected overlay. */
 } z64_0x801D0B70_t;                             /* 0x0040 */
+
+typedef struct {
+    union {
+        uint16_t digits[8];                     /* 0x0000 */
+        struct {
+            uint16_t minutes[2];                /* 0x0000 */
+            uint16_t colon1;                    /* 0x0004 */
+            uint16_t seconds[2];                /* 0x0006 */
+            uint16_t colon2;                    /* 0x000A */
+            uint16_t milliseconds[2];           /* 0x000C */
+            uint16_t beep_seconds;              /* 0x0010, previous seconds[1] value that had a beep. */
+                                                /*         Likely used to determine when to do the next beep. */
+        };
+    };
+} z64_timer_digits_t;                           /* 0x0012 */
 
 // virtual file addresses
 #define z64_item_texture_file             0xA36C10
