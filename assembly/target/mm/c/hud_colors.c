@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include "color.h"
+#include "reloc.h"
 #include "z64.h"
 
 // Uncomment to apply theme for testing
@@ -222,19 +223,14 @@ void hud_colors_init() {
 }
 
 void hud_colors_main_menu_init() {
-    uint16_t *rupee_colors = (uint16_t *)0x8077F814;
-
     // Update rupee colors
-    update_rupee_colors(rupee_colors);
+    update_rupee_colors(z64_file_select_ctxt.rupee_colors);
 
     // Update hearts colors
-    z64_color_rgb16_t *heart = (z64_color_rgb16_t *)0x8077F83C;
-    z64_color_rgb16_t *heart_dd = (z64_color_rgb16_t *)0x8077F842;
-
-    heart->r = HUD_COLOR_CONFIG.heart.r;
-    heart->g = HUD_COLOR_CONFIG.heart.g;
-    heart->b = HUD_COLOR_CONFIG.heart.b;
-    heart_dd->r = HUD_COLOR_CONFIG.heart_dd.r;
-    heart_dd->g = HUD_COLOR_CONFIG.heart_dd.g;
-    heart_dd->b = HUD_COLOR_CONFIG.heart_dd.b;
+    z64_file_select_ctxt.heart_rgb[0].r = HUD_COLOR_CONFIG.heart.r;
+    z64_file_select_ctxt.heart_rgb[0].g = HUD_COLOR_CONFIG.heart.g;
+    z64_file_select_ctxt.heart_rgb[0].b = HUD_COLOR_CONFIG.heart.b;
+    z64_file_select_ctxt.heart_rgb[1].r = HUD_COLOR_CONFIG.heart_dd.r;
+    z64_file_select_ctxt.heart_rgb[1].g = HUD_COLOR_CONFIG.heart_dd.g;
+    z64_file_select_ctxt.heart_rgb[1].b = HUD_COLOR_CONFIG.heart_dd.b;
 }
