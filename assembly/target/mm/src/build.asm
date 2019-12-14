@@ -36,6 +36,7 @@ PAYLOAD_START:
 .include "damage.asm"
 .include "dpad.asm"
 .include "main_menu.asm"
+.include "underwater_ocarina.asm"
 .importobj "../build/bundle.o"
 .align 8
 DPAD_TEXTURE:
