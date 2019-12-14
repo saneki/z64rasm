@@ -1149,6 +1149,41 @@ typedef struct {
     };
 } z64_timer_digits_t;                           /* 0x0012 */
 
+typedef struct {
+    void               *ram;                    /* 0x0000 */
+    uint32_t            vrom_start;             /* 0x0004 */
+    uint32_t            vrom_end;               /* 0x0008 */
+    uint32_t            vram_start;             /* 0x000C */
+    uint32_t            vram_end;               /* 0x0010 */
+    char                unk_0x14[0x04];         /* 0x0014 */
+    void               *vram_ctor;              /* 0x0018 */
+    void               *vram_dtor;              /* 0x001C */
+    char                unk_0x20[0xC];          /* 0x0020 */
+    uint32_t            alloc_size;             /* 0x002C */
+} z64_gamestate_entry_t;                        /* 0x0030 */
+
+typedef struct {
+    union {
+        z64_gamestate_entry_t states[7];         /* 0x0000 */
+        struct {
+            z64_gamestate_entry_t unk_0x00[2];   /* 0x0000 */
+            z64_gamestate_entry_t n64_logo;      /* 0x0060 */
+            z64_gamestate_entry_t unk_0x90[2];   /* 0x0090 */
+            z64_gamestate_entry_t file_select;   /* 0x00F0 */
+            z64_gamestate_entry_t new_day;       /* 0x0120 */
+        };
+    };
+} z64_gamestate_table_t;
+
+typedef struct {
+    uint8_t           unk_0x00[0x8D4];     /* 0x0000 */
+    uint16_t          rupee_colors[9];     /* 0x08D4 */
+    uint8_t           unk_0x8E6[0x16];     /* 0x08E6 */
+    z64_color_rgb16_t heart_rgb[2];        /* 0x08FC */
+    z64_color_rgb16_t heart_under_rgb[2];  /* 0x0908 */
+    uint8_t           unk_0x914[0x7AC];    /* 0x0914 */
+} z64_file_select_ctxt_t;                  /* 0x10C0 */
+
 // virtual file addresses
 #define z64_item_texture_file             0xA36C10
 
@@ -1157,12 +1192,14 @@ typedef struct {
 #define z64_ctxt_addr                     0x803E6B20
 #define z64_game_addr                     z64_ctxt_addr
 #define z64_link_addr                     0x803FFDB0
+#define z64_gamestate_table_addr          0x801BD910
 
 // data
 #define z64_ctxt                          (*(z64_ctxt_t*) z64_ctxt_addr)
 #define z64_file                          (*(z64_file_t*) z64_file_addr)
 #define z64_game                          (*(z64_game_t*) z64_game_addr)
 #define z64_link                          (*(z64_link_t*) z64_link_addr)
+#define z64_gamestate_table               (*(z64_gamestate_table_t*) z64_gamestate_table_addr)
 
 // data (unknown)
 #define z64_0x801BD8B0                    (*(z64_0x801BD8B0_t*) 0x801BD8B0)
@@ -1187,6 +1224,9 @@ typedef struct {
 #define z64_LinkDamage_vram               0x80833B18
 #define z64_LinkInvincibility_vram        0x80833998
 #define z64_UseItem_vram                  0x80831990
+
+// Relocatable types
+#define z64_file_select_ctxt_vram         0x80813DF0
 
 // function prototypes
 typedef int (*z64_CanInteract_proc)(z64_game_t *game);
