@@ -8,25 +8,27 @@
 
 #define ITEM_TEXTURE_LEN 0x1000
 
-// D-Pad config values that can be set by a randomizer.
-// Order: Up, Right, Down, Left
-uint8_t DPAD_CONFIG[4] = {
-    Z64_ITEM_NONE,
-    Z64_ITEM_NONE,
-    Z64_ITEM_NONE,
-    Z64_ITEM_NONE,
+// D-Pad configuration structure that can be set by a randomizer.
+struct dpad_config DPAD_CONFIG = {
+    .version = 0,
+    .items = {
+        { .values = { Z64_ITEM_NONE, Z64_ITEM_NONE, Z64_ITEM_NONE, Z64_ITEM_NONE } },
+        { .values = { Z64_ITEM_NONE, Z64_ITEM_NONE, Z64_ITEM_NONE, Z64_ITEM_NONE } },
+        { .values = { Z64_ITEM_NONE, Z64_ITEM_NONE, Z64_ITEM_NONE, Z64_ITEM_NONE } },
+        { .values = { Z64_ITEM_NONE, Z64_ITEM_NONE, Z64_ITEM_NONE, Z64_ITEM_NONE } },
+    },
+    .state = DPAD_STATE_TYPE_DEFAULTS,
+    .display = DPAD_DISPLAY_LEFT,
+    .reserved = { 0 },
 };
 
 // Default D-Pad values that will be used if config values undefined.
-uint8_t DPAD_DEFAULT[4] = {
+const static uint8_t g_dpad_default[4] = {
     Z64_ITEM_DEKU_MASK,
     Z64_ITEM_ZORA_MASK,
     Z64_ITEM_OCARINA,
     Z64_ITEM_GORON_MASK,
 };
-
-// State of D-pad usage (disabled, enabled, defaults).
-uint8_t DPAD_STATE = DPAD_STATE_TYPE_DEFAULTS;
 
 // Textures buffer pointer.
 static uint8_t *textures;
@@ -45,10 +47,13 @@ static uint8_t texture_items[4] = {
 };
 
 // Position of D-Pad texture.
-static uint16_t position[2] = { 30, 60 };
+const static uint16_t position[2][2] = {
+    { 30,  60 },  // Left
+    { 270, 75 },  // Right
+};
 
 // Positions of D-Pad item textures, relative to main texture.
-static int16_t positions[4][2] = {
+const static int16_t positions[4][2] = {
     { 1, -15 },
     { 15, 0 },
     { 1, 13 },
@@ -114,7 +119,7 @@ static bool try_use_item(uint8_t item) {
 static void get_dpad_item_usability(bool *dest)
 {
     for (int i = 0; i < 4; i++)
-        dest[i] = check_c_item_usable(DPAD_CONFIG[i]);
+        dest[i] = check_c_item_usable(DPAD_CONFIG.primary.values[i]);
 }
 
 static bool check_action_state() {
@@ -188,10 +193,10 @@ bool is_minigame_frame()
 }
 
 void dpad_init() {
-    // If using default values, overwrite DPAD_CONFIG with DPAD_DEFAULT
-    if (DPAD_STATE == DPAD_STATE_TYPE_DEFAULTS) {
+    // If using default values, overwrite DPAD_CONFIG items with defaults
+    if (DPAD_CONFIG.state == DPAD_STATE_TYPE_DEFAULTS) {
         for (int i = 0; i < 4; i++) {
-            DPAD_CONFIG[i] = DPAD_DEFAULT[i];
+            DPAD_CONFIG.primary.values[i] = g_dpad_default[i];
         }
     }
 
@@ -201,13 +206,13 @@ void dpad_init() {
 
     // Load textures
     for (int i = 0; i < 4; i++)
-        load_texture(i, DPAD_CONFIG[i]);
+        load_texture(i, DPAD_CONFIG.primary.values[i]);
 }
 
 void do_dpad_per_game_frame()
 {
     // If disabled, do nothing
-    if (DPAD_STATE == DPAD_STATE_TYPE_DISABLED)
+    if (DPAD_CONFIG.state == DPAD_STATE_TYPE_DISABLED)
         return;
 
     // Update usability flags for later use in draw_dpad
@@ -218,7 +223,7 @@ bool handle_dpad() {
     pad_t pad_pressed = z64_ctxt.input[0].pad_pressed;
 
     // If disabled, do nothing
-    if (DPAD_STATE == DPAD_STATE_TYPE_DISABLED)
+    if (DPAD_CONFIG.state == DPAD_STATE_TYPE_DISABLED)
         return false;
 
     // Check general game state to know if we can use C buttons at all
@@ -233,13 +238,13 @@ bool handle_dpad() {
         return false;
 
     if (pad_pressed.du && usable[0]) {
-        return try_use_item(DPAD_CONFIG[0]);
+        return try_use_item(DPAD_CONFIG.primary.du);
     } else if (pad_pressed.dr && usable[1]) {
-        return try_use_item(DPAD_CONFIG[1]);
+        return try_use_item(DPAD_CONFIG.primary.dr);
     } else if (pad_pressed.dd && usable[2]) {
-        return try_use_item(DPAD_CONFIG[2]);
+        return try_use_item(DPAD_CONFIG.primary.dd);
     } else if (pad_pressed.dl && usable[3]) {
-        return try_use_item(DPAD_CONFIG[3]);
+        return try_use_item(DPAD_CONFIG.primary.dl);
     }
 
     return false;
@@ -256,12 +261,12 @@ static bool is_any_item_usable(uint8_t *dpad, bool *usable)
 }
 
 void draw_dpad() {
-    // If disabled, don't draw
-    if (DPAD_STATE == DPAD_STATE_TYPE_DISABLED)
+    // If disabled or hiding, don't draw
+    if (DPAD_CONFIG.state == DPAD_STATE_TYPE_DISABLED || DPAD_CONFIG.display == DPAD_DISPLAY_NONE)
         return;
 
     // If we don't have any D-Pad items, draw nothing
-    if (!have_any(DPAD_CONFIG))
+    if (!have_any(DPAD_CONFIG.primary.values))
         return;
 
     // Check for minigame frame, and do nothing unless transitioning into minigame
@@ -280,16 +285,19 @@ void draw_dpad() {
 
     // Check if any items shown on the D-Pad are usable
     // If none are, draw main D-Pad sprite faded
-    if (!is_any_item_usable(DPAD_CONFIG, usable) && prim_alpha > 0x4A)
+    if (!is_any_item_usable(DPAD_CONFIG.primary.values, usable) && prim_alpha > 0x4A)
         prim_alpha = 0x4A;
 
     // Show faded while flying as a Deku
     if (((z64_link.action_state3 & Z64_ACTION_STATE3_DEKU_AIR) != 0) && prim_alpha > 0x4A)
         prim_alpha = 0x4A;
 
+    // Get index of main sprite position (left or right)
+    uint8_t posidx = (DPAD_CONFIG.display == DPAD_DISPLAY_LEFT) ? 0 : 1;
+
     // Main sprite position
-    uint16_t x = position[0];
-    uint16_t y = position[1];
+    uint16_t x = position[posidx][0];
+    uint16_t y = position[posidx][1];
     y = update_y_position(x, y, 10);
 
     z64_disp_buf_t *db = &(z64_ctxt.gfx->overlay);
@@ -301,7 +309,7 @@ void draw_dpad() {
     sprite_draw(db, &dpad_sprite, 0, x, y, 16, 16);
 
     for (int i = 0; i < 4; i++) {
-        uint8_t value = DPAD_CONFIG[i];
+        uint8_t value = DPAD_CONFIG.primary.values[i];
 
         // Calculate x/y from relative positions
         uint16_t ix = x + positions[i][0];
