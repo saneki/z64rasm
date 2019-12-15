@@ -41,9 +41,9 @@
     ori     a0, lo(G_PAYLOAD_ADDR)
     lui     a1, hi(G_PAYLOAD_VROM)
     ori     a1, lo(G_PAYLOAD_VROM)
-    lui     a2, hi(G_PAYLOAD_SIZE)
+    lui     a2, hi(PAYLOAD_END - PAYLOAD_START)
     jal     0x80080C90
-    ori     a2, lo(G_PAYLOAD_SIZE)
+    ori     a2, lo(PAYLOAD_END - PAYLOAD_START)
 
     jal     init
     sw      s0, 0x0018 (sp)
