@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-// Magic number: "EXFX"
+// Magic number for external_effects: "EXFX"
 #define EXTERNAL_EFFECTS_MAGIC 0x45584658
 
 typedef struct {

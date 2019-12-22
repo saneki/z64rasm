@@ -10,6 +10,7 @@
 
 // D-Pad configuration structure that can be set by a randomizer.
 struct dpad_config DPAD_CONFIG = {
+    .magic = DPAD_CONFIG_MAGIC,
     .version = 0,
     .items = {
         { .values = { Z2_ITEM_NONE, Z2_ITEM_NONE, Z2_ITEM_NONE, Z2_ITEM_NONE } },

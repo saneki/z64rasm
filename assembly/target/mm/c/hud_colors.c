@@ -5,7 +5,11 @@
 // Uncomment to apply theme for testing
 // #define USE_THEME
 
+// Magic number for hud_color_config: "HUDC"
+#define HUD_COLOR_CONFIG_MAGIC 0x48554443
+
 struct hud_color_config {
+    u32 magic;
     u32 version;
 
     // Version 0
@@ -21,7 +25,7 @@ struct hud_color_config {
     z2_color_rgb8_t clock_sun;
     z2_color_rgb8_t heart;
     z2_color_rgb8_t heart_dd;
-    z2_color_rgb8_t magic;
+    z2_color_rgb8_t magic_normal;
     z2_color_rgb8_t magic_inf;
     z2_color_rgba8_t map;
     z2_color_rgb8_t map_entrance_cursor;
@@ -30,6 +34,7 @@ struct hud_color_config {
 };
 
 struct hud_color_config HUD_COLOR_CONFIG = {
+    .magic = HUD_COLOR_CONFIG_MAGIC,
     .version = 0,
 
     // Version 0
@@ -45,7 +50,7 @@ struct hud_color_config HUD_COLOR_CONFIG = {
     .clock_sun               = { 0xFF, 0x64, 0x6E },
     .heart                   = { 0xFF, 0x46, 0x32 },
     .heart_dd                = { 0xC8, 0x00, 0x00 },
-    .magic                   = { 0x00, 0xC8, 0x00 },
+    .magic_normal            = { 0x00, 0xC8, 0x00 },
     .magic_inf               = { 0x00, 0x00, 0xC8 },
     .map                     = { 0x00, 0xFF, 0xFF, 0xA0 },
     .map_entrance_cursor     = { 0xC8, 0x00, 0x00 },
@@ -70,7 +75,7 @@ u32 get_magic_meter_color(bool inf) {
     if (inf) {
         return color_rgb8_to_int(HUD_COLOR_CONFIG.magic_inf, alpha);
     } else {
-        return color_rgb8_to_int(HUD_COLOR_CONFIG.magic, alpha);
+        return color_rgb8_to_int(HUD_COLOR_CONFIG.magic_normal, alpha);
     }
 }
 
@@ -197,7 +202,7 @@ static void apply_objectively_best_theme() {
     APPLY(clock_emblem_inverted_2, 0xFF, 0xC0, 0xE0);
     APPLY(heart,                   0x58, 0xA4, 0xED);
     APPLY(heart_dd,                0x14, 0x87, 0xCD);
-    APPLY(magic,                   0xFF, 0x60, 0xA0);
+    APPLY(magic_normal,            0xFF, 0x60, 0xA0);
     APPLY(magic_inf,               0xFF, 0x80, 0xC0);
     APPLY(map,                     0xF0, 0xF0, 0xF0);
     APPLY(map_entrance_cursor,     0x38, 0x94, 0xDD);
