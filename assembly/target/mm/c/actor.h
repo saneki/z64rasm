@@ -3,6 +3,6 @@
 
 #include "z64.h"
 
-z64_actor_t* spawn_actor(uint8_t type, z64_xyzf_t pos, z64_rot_t rot, uint32_t instance);
+z2_actor_t* spawn_actor(uint8_t id, z2_xyzf_t pos, z2_rot_t rot, uint16_t var);
 
 #endif // ACTOR_H

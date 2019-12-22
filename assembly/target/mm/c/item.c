@@ -5,50 +5,43 @@ void check_item_usability(bool *dest, uint8_t b, uint8_t c1, uint8_t c2, uint8_t
     uint8_t previous[4], prevstates[5];
 
     // Backup modified fields
-    uint8_t game_state = z64_file.game_state;
-    uint8_t pre_game_state = z64_file.pre_game_state;
-    uint8_t alpha_transition = z64_file.alpha_transition;
-    uint8_t sub_game_state = z64_file.sub_game_state;
+    uint8_t game_state = z2_file.game_state;
+    uint8_t pre_game_state = z2_file.pre_game_state;
+    uint8_t alpha_transition = z2_file.alpha_transition;
+    uint8_t sub_game_state = z2_file.sub_game_state;
 
     // Backup button items
-    previous[0] = z64_file.b_button;
-    for (int i = 0; i < 3; i++)
-        previous[i+1] = z64_file.c_buttons[i];
+    for (int i = 0; i < 4; i++)
+        previous[i] = z2_file.form_button_item[0].button_item[i];
 
     // Backup button states
-    prevstates[0] = z64_file.a_button_usable;
-    prevstates[1] = z64_file.b_button_usable;
-    for (int i = 0; i < 3; i++)
-        prevstates[i+2] = z64_file.c_buttons_usable[i];
+    for (int i = 0; i < 5; i++)
+        prevstates[i] = z2_file.buttons_usable[i];
 
-    z64_file.b_button = b;
-    z64_file.c_buttons[0] = c1;
-    z64_file.c_buttons[1] = c2;
-    z64_file.c_buttons[2] = c3;
+    z2_file.form_button_item[0].b      = b;
+    z2_file.form_button_item[0].cleft  = c1;
+    z2_file.form_button_item[0].cdown  = c2;
+    z2_file.form_button_item[0].cright = c3;
 
-    z64_UpdateButtonUsability(&z64_ctxt);
+    z2_UpdateButtonUsability(&z2_ctxt);
 
     // Set dest to enabled-states (which are either 0x00 or 0xFF)
-    dest[0] = (z64_file.b_button_usable == 0);
-    for (int i = 0; i < 3; i++)
-        dest[i+1] = (z64_file.c_buttons_usable[i] == 0);
+    for (int i = 0; i < 4; i++)
+        dest[i] = (z2_file.buttons_usable[i] == 0);
 
     // Restore button items
-    z64_file.b_button = previous[0];
-    for (int i = 0; i < 3; i++)
-        z64_file.c_buttons[i] = previous[i+1];
+    for (int i = 0; i < 4; i++)
+        z2_file.form_button_item[0].button_item[i] = previous[i];
 
     // Restore button states
-    z64_file.a_button_usable = prevstates[0];
-    z64_file.b_button_usable = prevstates[1];
-    for (int i = 0; i < 3; i++)
-        z64_file.c_buttons_usable[i] = prevstates[i+2];
+    for (int i = 0; i < 5; i++)
+        z2_file.buttons_usable[i] = prevstates[i];
 
     // Restore modified fields
-    z64_file.game_state = game_state;
-    z64_file.pre_game_state = pre_game_state;
-    z64_file.alpha_transition = alpha_transition;
-    z64_file.sub_game_state = sub_game_state;
+    z2_file.game_state = game_state;
+    z2_file.pre_game_state = pre_game_state;
+    z2_file.alpha_transition = alpha_transition;
+    z2_file.sub_game_state = sub_game_state;
 }
 
 bool check_c_item_usable(uint8_t c) {

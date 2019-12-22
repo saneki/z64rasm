@@ -143,12 +143,12 @@ static uint16_t g_fairy_scene = 0;
 static void handle_camera_overlook_effect() {
     // Handle "Camera Overlook" effect.
     if (g_external_effects.camera_overlook) {
-        int16_t curstate = z64_game.cameras[0].state;
-        if (g_freecam_modes[curstate] && curstate != Z64_CAMERA_STATE_FUKAN1) {
-            z64_game.cameras[0].state = Z64_CAMERA_STATE_FUKAN1;
+        int16_t curstate = z2_game.cameras[0].state;
+        if (g_freecam_modes[curstate] && curstate != Z2_CAMERA_STATE_FUKAN1) {
+            z2_game.cameras[0].state = Z2_CAMERA_STATE_FUKAN1;
 
             // Camera mode used while Z-targetting, it should trigger the camera to begin drifting over Link
-            z64_game.cameras[0].mode = Z64_CAMERA_MODE_PARALLEL;
+            z2_game.cameras[0].mode = Z2_CAMERA_MODE_PARALLEL;
         }
     }
 }
@@ -156,28 +156,28 @@ static void handle_camera_overlook_effect() {
 static void handle_chateau_effect() {
     // Handle "Chateau" effect
     if (g_external_effects.chateau) {
-        z64_file.infinite_magic = 1;
+        z2_file.week_event_inf.infinite_magic = 1;
         g_refill_magic = true;
         g_external_effects.chateau = 0;
     }
 
     // Refill magic
     if (g_refill_magic) {
-        uint8_t total = (uint8_t)z64_file.magic_meter_size;
-        uint8_t remaining = total - z64_file.magic;
+        uint8_t total = (uint8_t)z2_file.magic_meter_size;
+        uint8_t remaining = total - z2_file.current_magic;
 
         // Increment by 2 magic points per frame
         if (remaining >= 2) {
-            z64_file.magic += 2;
-            z64_PlaySfx(0x401F);
+            z2_file.current_magic += 2;
+            z2_PlaySfx(0x401F);
         } else if (remaining == 1) {
-            z64_file.magic += 1;
-            z64_PlaySfx(0x401F);
+            z2_file.current_magic += 1;
+            z2_PlaySfx(0x401F);
         }
 
         // If full, stop refilling magic
-        if (z64_file.magic >= total) {
-            z64_file.magic = total; // Just in case
+        if (z2_file.current_magic >= total) {
+            z2_file.current_magic = total; // Just in case
             g_refill_magic = false;
         }
     }
@@ -185,9 +185,9 @@ static void handle_chateau_effect() {
 
 static void handle_fairy_effect() {
     // Reset fairy instance usages when scene changes
-    if (z64_game.scene_number != g_fairy_scene) {
+    if (z2_game.scene_index != g_fairy_scene) {
         reset_fairy_instance_usage();
-        g_fairy_scene = z64_game.scene_number;
+        g_fairy_scene = z2_game.scene_index;
         g_fairy_cooldown = 0;
     }
 
@@ -199,10 +199,10 @@ static void handle_fairy_effect() {
     // Check state type to see if we can receive a fairy during this frame
     if (g_external_effects.fairy && g_fairy_cooldown == 0 && can_interact_with_fairy()) {
         // Spawn fairy on top of Link, and call the function to interact
-        z64_actor_t *fairy = spawn_next_fairy_actor(z64_link.common.pos1);
+        z2_actor_t *fairy = spawn_next_fairy_actor(z2_link.common.pos_1);
         if (fairy) {
-            if (fairy->Main != NULL) {
-                fairy->Main(fairy, &z64_game);
+            if (fairy->main_proc != NULL) {
+                fairy->main_proc(fairy, &z2_game);
             }
             g_fairy_cooldown = FAIRY_COOLDOWN;
             g_external_effects.fairy -= 1;
@@ -226,7 +226,7 @@ static void handle_freeze_effect() {
 static void handle_ice_physics_effect() {
     // Handle "Ice Physics" effect.
     if (g_external_effects.ice_physics) {
-        override_floor_physics_type(true, Z64_FLOOR_PHYSICS_ICE);
+        override_floor_physics_type(true, Z2_FLOOR_PHYSICS_ICE);
     } else {
         override_floor_physics_type(false, 0);
     }
@@ -237,14 +237,14 @@ static void handle_jinx_effect() {
     if (g_external_effects.jinx) {
         // Add multiple of JINX_AMOUNT to jinx timer
         uint32_t amount = g_external_effects.jinx * JINX_AMOUNT;
-        uint32_t timer = z64_file.jinx_timer + amount;
+        uint32_t timer = z2_file.jinx_timer + amount;
         timer = (timer < JINX_MAX ? timer : JINX_MAX);
-        z64_file.jinx_timer = (uint16_t)timer;
+        z2_file.jinx_timer = (uint16_t)timer;
 
         g_external_effects.jinx = 0;
         g_jinxed = true;
 
-        g_previous_jinx_value = z64_file.jinx_timer;
+        g_previous_jinx_value = z2_file.jinx_timer;
     }
 
     // This is a special jinx, players cannot Song of Storms out of it.
@@ -256,34 +256,34 @@ static void handle_jinx_effect() {
         }
 
         // If actual value is less than expected, this means Song of Storms was played or went back in time.
-        if (z64_file.jinx_timer < expected) {
-            z64_file.jinx_timer = expected;
-        } else if (z64_file.jinx_timer == 0) {
+        if (z2_file.jinx_timer < expected) {
+            z2_file.jinx_timer = expected;
+        } else if (z2_file.jinx_timer == 0) {
             // Once the timer hits 0, disable our special jinx state.
             g_jinxed = false;
         }
 
-        g_previous_jinx_value = z64_file.jinx_timer;
+        g_previous_jinx_value = z2_file.jinx_timer;
     }
 }
 
 static void handle_no_z_effect() {
     // Handle "No Z" effect.
     if (g_external_effects.no_z) {
-        z64_game.common.input[0].raw.pad.z = 0;
-        z64_game.common.input[0].pad_pressed.z = 0;
+        z2_game.common.input[0].raw.pad.z = 0;
+        z2_game.common.input[0].pad_pressed.z = 0;
     }
 }
 
 static void handle_reverse_controls_effect() {
     // Handle "Reverse Controls" effect.
     if (g_external_effects.reverse_controls) {
-        z64_game.common.input[0].raw.x = -z64_game.common.input[0].raw.x;
-        z64_game.common.input[0].raw.y = -z64_game.common.input[0].raw.y;
-        z64_game.common.input[0].x_diff = -z64_game.common.input[0].x_diff;
-        z64_game.common.input[0].y_diff = -z64_game.common.input[0].y_diff;
-        z64_game.common.input[0].adjusted_x = -z64_game.common.input[0].adjusted_x;
-        z64_game.common.input[0].adjusted_y = -z64_game.common.input[0].adjusted_y;
+        z2_game.common.input[0].raw.x = -z2_game.common.input[0].raw.x;
+        z2_game.common.input[0].raw.y = -z2_game.common.input[0].raw.y;
+        z2_game.common.input[0].x_diff = -z2_game.common.input[0].x_diff;
+        z2_game.common.input[0].y_diff = -z2_game.common.input[0].y_diff;
+        z2_game.common.input[0].adjusted_x = -z2_game.common.input[0].adjusted_x;
+        z2_game.common.input[0].adjusted_y = -z2_game.common.input[0].adjusted_y;
     }
 }
 

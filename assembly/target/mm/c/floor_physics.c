@@ -13,5 +13,5 @@ uint32_t override_get_floor_physics_type(void *arg0, void *arg1, uint8_t arg2) {
     if (g_override_floor_physics_type)
         return g_override_floor_physics_type_value;
     else
-        return z64_GetFloorPhysicsType(arg0, arg1, arg2);
+        return z2_GetFloorPhysicsType(arg0, arg1, arg2);
 }

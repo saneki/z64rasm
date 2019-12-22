@@ -12,10 +12,10 @@
 struct dpad_config DPAD_CONFIG = {
     .version = 0,
     .items = {
-        { .values = { Z64_ITEM_NONE, Z64_ITEM_NONE, Z64_ITEM_NONE, Z64_ITEM_NONE } },
-        { .values = { Z64_ITEM_NONE, Z64_ITEM_NONE, Z64_ITEM_NONE, Z64_ITEM_NONE } },
-        { .values = { Z64_ITEM_NONE, Z64_ITEM_NONE, Z64_ITEM_NONE, Z64_ITEM_NONE } },
-        { .values = { Z64_ITEM_NONE, Z64_ITEM_NONE, Z64_ITEM_NONE, Z64_ITEM_NONE } },
+        { .values = { Z2_ITEM_NONE, Z2_ITEM_NONE, Z2_ITEM_NONE, Z2_ITEM_NONE } },
+        { .values = { Z2_ITEM_NONE, Z2_ITEM_NONE, Z2_ITEM_NONE, Z2_ITEM_NONE } },
+        { .values = { Z2_ITEM_NONE, Z2_ITEM_NONE, Z2_ITEM_NONE, Z2_ITEM_NONE } },
+        { .values = { Z2_ITEM_NONE, Z2_ITEM_NONE, Z2_ITEM_NONE, Z2_ITEM_NONE } },
     },
     .state = DPAD_STATE_TYPE_DEFAULTS,
     .display = DPAD_DISPLAY_LEFT,
@@ -24,10 +24,10 @@ struct dpad_config DPAD_CONFIG = {
 
 // Default D-Pad values that will be used if config values undefined.
 const static uint8_t g_dpad_default[4] = {
-    Z64_ITEM_DEKU_MASK,
-    Z64_ITEM_ZORA_MASK,
-    Z64_ITEM_OCARINA,
-    Z64_ITEM_GORON_MASK,
+    Z2_ITEM_DEKU_MASK,
+    Z2_ITEM_ZORA_MASK,
+    Z2_ITEM_OCARINA,
+    Z2_ITEM_GORON_MASK,
 };
 
 // Textures buffer pointer.
@@ -40,10 +40,10 @@ static sprite_t dpad_item_sprites = {
 
 // Indicates which item textures are currently loaded into our buffer.
 static uint8_t texture_items[4] = {
-    Z64_ITEM_NONE,
-    Z64_ITEM_NONE,
-    Z64_ITEM_NONE,
-    Z64_ITEM_NONE,
+    Z2_ITEM_NONE,
+    Z2_ITEM_NONE,
+    Z2_ITEM_NONE,
+    Z2_ITEM_NONE,
 };
 
 // Position of D-Pad texture.
@@ -60,7 +60,7 @@ const static int16_t positions[4][2] = {
     { -14, 0 },
 };
 
-// Whether or not D-Pad items are usable, according to z64_UpdateButtonUsability.
+// Whether or not D-Pad items are usable, according to z2_UpdateButtonUsability.
 static bool usable[4];
 
 // Whether the previous frame was a "minigame" frame.
@@ -78,9 +78,9 @@ static bool get_slot(uint8_t item, uint8_t *slot, uint8_t *array, uint8_t length
 }
 
 static bool get_inventory_slot(uint8_t item, uint8_t *slot) {
-    if (item == Z64_ITEM_NONE)
+    if (item == Z2_ITEM_NONE)
         return false;
-    return get_slot(item, slot, (uint8_t *)&z64_file.inventory, sizeof(z64_file.inventory));
+    return get_slot(item, slot, (uint8_t *)&z2_file.inventory, sizeof(z2_file.inventory));
 }
 
 static bool has_inventory_item(uint8_t item) {
@@ -98,8 +98,8 @@ static bool have_any(uint8_t *dpad) {
 }
 
 static bool try_use_inventory_item(uint8_t item, uint8_t slot) {
-    if (z64_file.inventory[slot] == item) {
-        z64_UseItem(&z64_ctxt, &z64_link, item);
+    if (z2_file.inventory[slot] == item) {
+        z2_UseItem(&z2_ctxt, &z2_link, item);
         return true;
     }
 
@@ -124,7 +124,7 @@ static void get_dpad_item_usability(bool *dest)
 
 static bool check_action_state() {
     // Make sure certain action state flags are cleared before processing input
-    if ((z64_link.action_state1 & DPAD_ACTION_STATE1) != 0)
+    if ((z2_link.action_state1 & DPAD_ACTION_STATE1) != 0)
         return false;
     else
         return true;
@@ -132,22 +132,22 @@ static bool check_action_state() {
 
 static void load_texture(int idx, uint8_t item)
 {
-    uint32_t phys = z64_GetPhysicalAddrOfFile(z64_item_texture_file);
+    uint32_t phys = z2_GetPhysicalAddrOfFile(z2_item_texture_file);
     uint8_t *dest = textures + (idx * ITEM_TEXTURE_LEN);
-    z64_LoadItemTexture(phys, item, dest, ITEM_TEXTURE_LEN);
+    z2_LoadItemTexture(phys, item, dest, ITEM_TEXTURE_LEN);
     texture_items[idx] = item;
 }
 
 static uint16_t update_y_position(uint16_t x, uint16_t y, uint16_t padding) {
-    uint16_t heart_count = z64_file.hearts / 0x10;
+    uint16_t heart_count = z2_file.max_health / 0x10;
 
     // Check if we have second row of hearts
     bool hearts = heart_count > 10;
     // Check if we have magic
-    bool magic = z64_file.has_magic != 0;
+    bool magic = z2_file.has_magic != 0;
     // Check if there's a timer
-    bool timer = IS_TIMER_VISIBLE(z64_file.timers[Z64_TIMER_INDEX_TREASURE_CHEST_GAME]) ||
-                 IS_TIMER_VISIBLE(z64_file.timers[Z64_TIMER_INDEX_DROWNING]);
+    bool timer = IS_TIMER_VISIBLE(z2_file.timers[Z2_TIMER_INDEX_TREASURE_CHEST_GAME]) ||
+                 IS_TIMER_VISIBLE(z2_file.timers[Z2_TIMER_INDEX_DROWNING]);
 
     // If on left-half of screen
     if (x < 160) {
@@ -186,9 +186,9 @@ bool is_minigame_frame()
     // Note on state 1 (transition):
     // In the Deku playground, can go from 0xC to 0x1 when cutscene-transitioning to the business scrub.
     // Thus, if the minigame state goes directly to the transition state, consider that a minigame frame.
-    g_was_minigame = (z64_file.game_state == Z64_GAME_STATE_MINIGAME ||
-                      (g_was_minigame && z64_file.game_state == Z64_GAME_STATE_TRANSITION) ||
-                      z64_file.game_state == 6);
+    g_was_minigame = (z2_file.game_state == Z2_GAME_STATE_MINIGAME ||
+                      (g_was_minigame && z2_file.game_state == Z2_GAME_STATE_TRANSITION) ||
+                      z2_file.game_state == 6);
     return result || g_was_minigame;
 }
 
@@ -220,7 +220,7 @@ void do_dpad_per_game_frame()
 }
 
 bool handle_dpad() {
-    pad_t pad_pressed = z64_ctxt.input[0].pad_pressed;
+    z2_pad_t pad_pressed = z2_ctxt.input[0].pad_pressed;
 
     // If disabled, do nothing
     if (DPAD_CONFIG.state == DPAD_STATE_TYPE_DISABLED)
@@ -229,8 +229,8 @@ bool handle_dpad() {
     // Check general game state to know if we can use C buttons at all
     // Note: After collecting a stray fairy (and possibly in other cases) the state flags are set
     // to 0 despite the game running normally.
-    if (z64_file.game_state != Z64_GAME_STATE_NORMAL &&
-        z64_file.game_state != Z64_GAME_STATE_BLACK_SCREEN)
+    if (z2_file.game_state != Z2_GAME_STATE_NORMAL &&
+        z2_file.game_state != Z2_GAME_STATE_BLACK_SCREEN)
         return false;
 
     // Check action state flags
@@ -271,17 +271,17 @@ void draw_dpad() {
 
     // Check for minigame frame, and do nothing unless transitioning into minigame
     // In which case the C-buttons alpha will be used instead for fade-in
-    if (is_minigame_frame() && z64_file.pre_game_state != Z64_GAME_STATE_MINIGAME)
+    if (is_minigame_frame() && z2_file.pre_game_state != Z2_GAME_STATE_MINIGAME)
         return;
 
     // Use minimap alpha by default for fading textures out
-    uint8_t prim_alpha = z64_game.sub_169E8.minimap_alpha & 0xFF;
+    uint8_t prim_alpha = z2_game.hud_ctxt.minimap_alpha & 0xFF;
     // If in minigame, the C buttons fade out and so should the D-Pad
-    if (z64_file.game_state == Z64_GAME_STATE_MINIGAME ||
-        z64_file.game_state == Z64_GAME_STATE_BOAT_ARCHERY ||
-        z64_file.game_state == Z64_GAME_STATE_SWORDSMAN_GAME ||
+    if (z2_file.game_state == Z2_GAME_STATE_MINIGAME ||
+        z2_file.game_state == Z2_GAME_STATE_BOAT_ARCHERY ||
+        z2_file.game_state == Z2_GAME_STATE_SWORDSMAN_GAME ||
         is_minigame_frame())
-        prim_alpha = z64_game.sub_169E8.c_left_button_alpha & 0xFF;
+        prim_alpha = z2_game.hud_ctxt.c_left_alpha & 0xFF;
 
     // Check if any items shown on the D-Pad are usable
     // If none are, draw main D-Pad sprite faded
@@ -289,7 +289,7 @@ void draw_dpad() {
         prim_alpha = 0x4A;
 
     // Show faded while flying as a Deku
-    if (((z64_link.action_state3 & Z64_ACTION_STATE3_DEKU_AIR) != 0) && prim_alpha > 0x4A)
+    if (((z2_link.action_state3 & Z2_ACTION_STATE3_DEKU_AIR) != 0) && prim_alpha > 0x4A)
         prim_alpha = 0x4A;
 
     // Get index of main sprite position (left or right)
@@ -300,7 +300,7 @@ void draw_dpad() {
     uint16_t y = position[posidx][1];
     y = update_y_position(x, y, 10);
 
-    z64_disp_buf_t *db = &(z64_ctxt.gfx->overlay);
+    z2_disp_buf_t *db = &(z2_ctxt.gfx->overlay);
     gSPDisplayList(db->p++, &setup_db);
     gDPPipeSync(db->p++);
     gDPSetPrimColor(db->p++, 0, 0, 0xFF, 0xFF, 0xFF, prim_alpha);
