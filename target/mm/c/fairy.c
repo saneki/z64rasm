@@ -6,9 +6,9 @@
 #define FAIRY_INST_COUNT 12
 
 struct fairy_inst {
-    uint16_t scene1;
-    uint16_t scene2;
-    uint16_t instance;
+    u16 scene1;
+    u16 scene2;
+    u16 instance;
     bool used;
 };
 
@@ -38,7 +38,7 @@ bool can_interact_with_fairy() {
 }
 
 // Get the next available fairy instance Id, and mark as "used" for this scene.
-bool get_next_fairy_instance(uint16_t *inst) {
+bool get_next_fairy_instance(u16 *inst) {
     for (int i = 0; i < FAIRY_INST_COUNT; i++) {
         struct fairy_inst *fairy = &g_fairy_table[i];
 
@@ -61,14 +61,14 @@ bool get_next_fairy_instance(uint16_t *inst) {
 }
 
 // Spawn a fairy actor.
-static z2_actor_t* spawn_fairy_actor(z2_xyzf_t pos, uint16_t inst) {
+static z2_actor_t* spawn_fairy_actor(z2_xyzf_t pos, u16 inst) {
     z2_rot_t rot = { 0, 0, 0 };
     return spawn_actor(Z2_ACTOR_ID_FAIRY, pos, rot, inst);
 }
 
 // Spawn the next avaiable fairy actor.
 z2_actor_t* spawn_next_fairy_actor(z2_xyzf_t pos) {
-    uint16_t inst;
+    u16 inst;
 
     if (get_next_fairy_instance(&inst)) {
         return spawn_fairy_actor(pos, inst);

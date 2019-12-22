@@ -1,24 +1,24 @@
 #ifndef EXTERNAL_EFFECTS_H
 #define EXTERNAL_EFFECTS_H
 
-#include <stdint.h>
+#include "types.h"
 
 // Magic number: "EXFX"
 #define EXTERNAL_EFFECTS_MAGIC 0x45584658
 
 typedef struct {
-    uint32_t magic;
-    uint32_t version;
+    u32 magic;
+    u32 version;
 
     // Effects added in version 0
-    uint8_t camera_overlook;
-    uint8_t chateau;
-    uint8_t fairy;
-    uint8_t freeze;
-    uint8_t ice_physics;
-    uint8_t jinx;
-    uint8_t no_z;
-    uint8_t reverse_controls;
+    u8 camera_overlook;
+    u8 chateau;
+    u8 fairy;
+    u8 freeze;
+    u8 ice_physics;
+    u8 jinx;
+    u8 no_z;
+    u8 reverse_controls;
 } external_effects_t;
 
 void handle_external_effects();

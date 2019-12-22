@@ -132,18 +132,18 @@ static bool g_refill_magic = false;
 static bool g_jinxed = false;
 
 // Previous jinx value in our special jinx state.
-static uint16_t g_previous_jinx_value = 0;
+static u16 g_previous_jinx_value = 0;
 
 // Cooldown for spawning fairies, in frames.
-static uint32_t g_fairy_cooldown = 0;
+static u32 g_fairy_cooldown = 0;
 
 // Most recent scene, tracked for fairy usage.
-static uint16_t g_fairy_scene = 0;
+static u16 g_fairy_scene = 0;
 
 static void handle_camera_overlook_effect() {
     // Handle "Camera Overlook" effect.
     if (g_external_effects.camera_overlook) {
-        int16_t curstate = z2_game.cameras[0].state;
+        s16 curstate = z2_game.cameras[0].state;
         if (g_freecam_modes[curstate] && curstate != Z2_CAMERA_STATE_FUKAN1) {
             z2_game.cameras[0].state = Z2_CAMERA_STATE_FUKAN1;
 
@@ -163,8 +163,8 @@ static void handle_chateau_effect() {
 
     // Refill magic
     if (g_refill_magic) {
-        uint8_t total = (uint8_t)z2_file.magic_meter_size;
-        uint8_t remaining = total - z2_file.current_magic;
+        u8 total = (u8)z2_file.magic_meter_size;
+        u8 remaining = total - z2_file.current_magic;
 
         // Increment by 2 magic points per frame
         if (remaining >= 2) {
@@ -236,10 +236,10 @@ static void handle_jinx_effect() {
     // Handle "Jinx" effect.
     if (g_external_effects.jinx) {
         // Add multiple of JINX_AMOUNT to jinx timer
-        uint32_t amount = g_external_effects.jinx * JINX_AMOUNT;
-        uint32_t timer = z2_file.jinx_timer + amount;
+        u32 amount = g_external_effects.jinx * JINX_AMOUNT;
+        u32 timer = z2_file.jinx_timer + amount;
         timer = (timer < JINX_MAX ? timer : JINX_MAX);
-        z2_file.jinx_timer = (uint16_t)timer;
+        z2_file.jinx_timer = (u16)timer;
 
         g_external_effects.jinx = 0;
         g_jinxed = true;
@@ -250,7 +250,7 @@ static void handle_jinx_effect() {
     // This is a special jinx, players cannot Song of Storms out of it.
     if (g_jinxed) {
         // Calculate current expected jinx value
-        uint16_t expected = 0;
+        u16 expected = 0;
         if (g_previous_jinx_value > 1) {
             expected = g_previous_jinx_value - 1;
         }
