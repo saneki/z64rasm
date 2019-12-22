@@ -2,7 +2,7 @@
 #include "util.h"
 
 extern char DPAD_TEXTURE;
-#define dpad_texture_raw ((uint8_t *)&DPAD_TEXTURE)
+#define dpad_texture_raw ((u8 *)&DPAD_TEXTURE)
 
 Gfx setup_db[] =
 {

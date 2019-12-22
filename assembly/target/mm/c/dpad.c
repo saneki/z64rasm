@@ -23,7 +23,7 @@ struct dpad_config DPAD_CONFIG = {
 };
 
 // Default D-Pad values that will be used if config values undefined.
-const static uint8_t g_dpad_default[4] = {
+const static u8 g_dpad_default[4] = {
     Z2_ITEM_DEKU_MASK,
     Z2_ITEM_ZORA_MASK,
     Z2_ITEM_OCARINA,
@@ -31,7 +31,7 @@ const static uint8_t g_dpad_default[4] = {
 };
 
 // Textures buffer pointer.
-static uint8_t *textures;
+static u8 *textures;
 
 static sprite_t dpad_item_sprites = {
     NULL, 32, 32, 4,
@@ -39,7 +39,7 @@ static sprite_t dpad_item_sprites = {
 };
 
 // Indicates which item textures are currently loaded into our buffer.
-static uint8_t texture_items[4] = {
+static u8 texture_items[4] = {
     Z2_ITEM_NONE,
     Z2_ITEM_NONE,
     Z2_ITEM_NONE,
@@ -47,13 +47,13 @@ static uint8_t texture_items[4] = {
 };
 
 // Position of D-Pad texture.
-const static uint16_t position[2][2] = {
+const static u16 position[2][2] = {
     { 30,  60 },  // Left
     { 270, 75 },  // Right
 };
 
 // Positions of D-Pad item textures, relative to main texture.
-const static int16_t positions[4][2] = {
+const static s16 positions[4][2] = {
     { 1, -15 },
     { 15, 0 },
     { 1, 13 },
@@ -66,8 +66,8 @@ static bool usable[4];
 // Whether the previous frame was a "minigame" frame.
 static bool g_was_minigame = false;
 
-static bool get_slot(uint8_t item, uint8_t *slot, uint8_t *array, uint8_t length) {
-    for (uint8_t i = 0; i < length; i++) {
+static bool get_slot(u8 item, u8 *slot, u8 *array, u8 length) {
+    for (u8 i = 0; i < length; i++) {
         if (item == array[i]) {
             *slot = i;
             return true;
@@ -77,18 +77,18 @@ static bool get_slot(uint8_t item, uint8_t *slot, uint8_t *array, uint8_t length
     return false;
 }
 
-static bool get_inventory_slot(uint8_t item, uint8_t *slot) {
+static bool get_inventory_slot(u8 item, u8 *slot) {
     if (item == Z2_ITEM_NONE)
         return false;
-    return get_slot(item, slot, (uint8_t *)&z2_file.inventory, sizeof(z2_file.inventory));
+    return get_slot(item, slot, (u8 *)&z2_file.inventory, sizeof(z2_file.inventory));
 }
 
-static bool has_inventory_item(uint8_t item) {
-    uint8_t slot;
+static bool has_inventory_item(u8 item) {
+    u8 slot;
     return get_inventory_slot(item, &slot);
 }
 
-static bool have_any(uint8_t *dpad) {
+static bool have_any(u8 *dpad) {
     for (int i = 0; i < 4; i++) {
         if (has_inventory_item(dpad[i]))
             return true;
@@ -97,7 +97,7 @@ static bool have_any(uint8_t *dpad) {
     return false;
 }
 
-static bool try_use_inventory_item(uint8_t item, uint8_t slot) {
+static bool try_use_inventory_item(u8 item, u8 slot) {
     if (z2_file.inventory[slot] == item) {
         z2_UseItem(&z2_ctxt, &z2_link, item);
         return true;
@@ -106,8 +106,8 @@ static bool try_use_inventory_item(uint8_t item, uint8_t slot) {
     return false;
 }
 
-static bool try_use_item(uint8_t item) {
-    uint8_t slot;
+static bool try_use_item(u8 item) {
+    u8 slot;
 
     // Try to find slot in item or mask inventories
     if (!get_inventory_slot(item, &slot))
@@ -130,16 +130,16 @@ static bool check_action_state() {
         return true;
 }
 
-static void load_texture(int idx, uint8_t item)
+static void load_texture(int idx, u8 item)
 {
-    uint32_t phys = z2_GetPhysicalAddrOfFile(z2_item_texture_file);
-    uint8_t *dest = textures + (idx * ITEM_TEXTURE_LEN);
+    u32 phys = z2_GetPhysicalAddrOfFile(z2_item_texture_file);
+    u8 *dest = textures + (idx * ITEM_TEXTURE_LEN);
     z2_LoadItemTexture(phys, item, dest, ITEM_TEXTURE_LEN);
     texture_items[idx] = item;
 }
 
-static uint16_t update_y_position(uint16_t x, uint16_t y, uint16_t padding) {
-    uint16_t heart_count = z2_file.max_health / 0x10;
+static u16 update_y_position(u16 x, u16 y, u16 padding) {
+    u16 heart_count = z2_file.max_health / 0x10;
 
     // Check if we have second row of hearts
     bool hearts = heart_count > 10;
@@ -153,7 +153,7 @@ static uint16_t update_y_position(uint16_t x, uint16_t y, uint16_t padding) {
     if (x < 160) {
         // Calculate a minimum y position based on heart rows and magic
         // This is to avoid the D-Pad textures interfering with the hearts/magic UI
-        uint16_t minimum = 50 + padding;
+        u16 minimum = 50 + padding;
         if (hearts)
             minimum += 10;
         if (magic)
@@ -250,7 +250,7 @@ bool handle_dpad() {
     return false;
 }
 
-static bool is_any_item_usable(uint8_t *dpad, bool *usable)
+static bool is_any_item_usable(u8 *dpad, bool *usable)
 {
     for (int i = 0; i < 4; i++) {
         if (has_inventory_item(dpad[i]) && usable[i])
@@ -275,7 +275,7 @@ void draw_dpad() {
         return;
 
     // Use minimap alpha by default for fading textures out
-    uint8_t prim_alpha = z2_game.hud_ctxt.minimap_alpha & 0xFF;
+    u8 prim_alpha = z2_game.hud_ctxt.minimap_alpha & 0xFF;
     // If in minigame, the C buttons fade out and so should the D-Pad
     if (z2_file.game_state == Z2_GAME_STATE_MINIGAME ||
         z2_file.game_state == Z2_GAME_STATE_BOAT_ARCHERY ||
@@ -293,11 +293,11 @@ void draw_dpad() {
         prim_alpha = 0x4A;
 
     // Get index of main sprite position (left or right)
-    uint8_t posidx = (DPAD_CONFIG.display == DPAD_DISPLAY_LEFT) ? 0 : 1;
+    u8 posidx = (DPAD_CONFIG.display == DPAD_DISPLAY_LEFT) ? 0 : 1;
 
     // Main sprite position
-    uint16_t x = position[posidx][0];
-    uint16_t y = position[posidx][1];
+    u16 x = position[posidx][0];
+    u16 y = position[posidx][1];
     y = update_y_position(x, y, 10);
 
     z2_disp_buf_t *db = &(z2_ctxt.gfx->overlay);
@@ -309,18 +309,18 @@ void draw_dpad() {
     sprite_draw(db, &dpad_sprite, 0, x, y, 16, 16);
 
     for (int i = 0; i < 4; i++) {
-        uint8_t value = DPAD_CONFIG.primary.values[i];
+        u8 value = DPAD_CONFIG.primary.values[i];
 
         // Calculate x/y from relative positions
-        uint16_t ix = x + positions[i][0];
-        uint16_t iy = y + positions[i][1];
+        u16 ix = x + positions[i][0];
+        u16 iy = y + positions[i][1];
 
         // Show nothing if not in inventory
         if (!has_inventory_item(value))
             continue;
 
         // Draw faded
-        uint8_t alpha = prim_alpha;
+        u8 alpha = prim_alpha;
         if (!usable[i] && alpha > 0x4A)
             alpha = 0x4A;
         gDPSetPrimColor(db->p++, 0, 0, 0xFF, 0xFF, 0xFF, alpha);

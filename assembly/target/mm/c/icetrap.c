@@ -2,7 +2,7 @@
 #include "reloc.h"
 #include "z2.h"
 
-static uint8_t g_pending_freezes = 0;
+static u8 g_pending_freezes = 0;
 
 bool icetrap_is_pending() {
     return g_pending_freezes > 0;

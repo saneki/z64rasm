@@ -1792,10 +1792,10 @@ typedef struct {
 
 typedef struct {
     void            *ram;                            /* 0x0000 */
-    uint32_t         vrom_start;                     /* 0x0004 */
-    uint32_t         vrom_end;                       /* 0x0008 */
-    uint32_t         vram_start;                     /* 0x000C */
-    uint32_t         vram_end;                       /* 0x0010 */
+    u32              vrom_start;                     /* 0x0004 */
+    u32              vrom_end;                       /* 0x0008 */
+    u32              vram_start;                     /* 0x000C */
+    u32              vram_end;                       /* 0x0010 */
     u8               unk_0x14[0x04];                 /* 0x0014 */
     char            *filename;                       /* 0x0018 */
 } z2_player_ovl_table_t;                             /* 0x001C */

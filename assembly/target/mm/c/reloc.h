@@ -18,7 +18,7 @@
 /* Relocatable file select data */
 #define z2_file_select_ctxt  GET_GS_RELOC_TYPE(z2_file_select_ctxt, z2_gamestate.file_select)
 
-void * get_ram_from_gamestate_vram(z2_gamestate_table_t *gs, uint32_t vram);
-void * get_ram_from_player_ovl_vram(z2_player_ovl_table_t *ovl, uint32_t vram);
+void * get_ram_from_gamestate_vram(z2_gamestate_table_t *gs, u32 vram);
+void * get_ram_from_player_ovl_vram(z2_player_ovl_table_t *ovl, u32 vram);
 
 #endif // RELOC_H

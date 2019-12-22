@@ -6,7 +6,7 @@
 // #define USE_THEME
 
 struct hud_color_config {
-    uint32_t version;
+    u32 version;
 
     // Version 0
     z2_color_rgb8_t button_a;
@@ -57,16 +57,16 @@ struct hud_color_config HUD_COLOR_CONFIG = {
     },
 };
 
-static uint32_t color_rgb8_to_int(z2_color_rgb8_t color, uint8_t alpha) {
+static u32 color_rgb8_to_int(z2_color_rgb8_t color, u8 alpha) {
     return (color.r << 24) | (color.g << 16) | (color.b << 8) | alpha;
 }
 
-static uint32_t color_rgba8_to_int(z2_color_rgba8_t color) {
+static u32 color_rgba8_to_int(z2_color_rgba8_t color) {
     return (color.r << 24) | (color.g << 16) | (color.b << 8) | color.a;
 }
 
-uint32_t get_magic_meter_color(bool inf) {
-    uint8_t alpha = z2_game.hud_ctxt.rupees_alpha & 0xFF;
+u32 get_magic_meter_color(bool inf) {
+    u8 alpha = z2_game.hud_ctxt.rupees_alpha & 0xFF;
     if (inf) {
         return color_rgb8_to_int(HUD_COLOR_CONFIG.magic_inf, alpha);
     } else {
@@ -74,28 +74,28 @@ uint32_t get_magic_meter_color(bool inf) {
     }
 }
 
-uint32_t get_map_color() {
+u32 get_map_color() {
     return color_rgba8_to_int(HUD_COLOR_CONFIG.map);
 }
 
-uint32_t get_map_player_cursor_color() {
-    uint8_t alpha = z2_game.hud_ctxt.minimap_alpha & 0xFF;
+u32 get_map_player_cursor_color() {
+    u8 alpha = z2_game.hud_ctxt.minimap_alpha & 0xFF;
     return color_rgb8_to_int(HUD_COLOR_CONFIG.map_player_cursor, alpha);
 }
 
-uint32_t get_map_entrance_cursor_color() {
-    uint8_t alpha = z2_game.hud_ctxt.minimap_alpha & 0xFF;
+u32 get_map_entrance_cursor_color() {
+    u8 alpha = z2_game.hud_ctxt.minimap_alpha & 0xFF;
     return color_rgb8_to_int(HUD_COLOR_CONFIG.map_entrance_cursor, alpha);
 }
 
-uint32_t get_clock_emblem_color() {
-    uint8_t alpha = (uint8_t)(*(uint16_t *)(0x801BFB2C));
+u32 get_clock_emblem_color() {
+    u8 alpha = (u8)(*(u16 *)(0x801BFB2C));
     return color_rgb8_to_int(HUD_COLOR_CONFIG.clock_emblem, alpha);
 }
 
-uint16_t get_clock_emblem_inverted_color(uint8_t idx) {
+u16 get_clock_emblem_inverted_color(u8 idx) {
     z2_color_rgb8_t colors;
-    int16_t mode = *(int16_t *)0x801BFBE8;
+    s16 mode = *(s16 *)0x801BFBE8;
 
     if (idx > 2) {
         return 0;
@@ -111,36 +111,36 @@ uint16_t get_clock_emblem_inverted_color(uint8_t idx) {
     return colors.bytes[idx];
 }
 
-uint32_t get_clock_emblem_sun_color(uint16_t alpha) {
+u32 get_clock_emblem_sun_color(u16 alpha) {
     return color_rgb8_to_int(HUD_COLOR_CONFIG.clock_emblem_sun, alpha & 0xFF);
 }
 
-uint32_t get_clock_sun_color() {
-    uint8_t alpha = (*(uint16_t *)0x801BFB2C) & 0xFF;
+u32 get_clock_sun_color() {
+    u8 alpha = (*(u16 *)0x801BFB2C) & 0xFF;
     return color_rgb8_to_int(HUD_COLOR_CONFIG.clock_sun, alpha);
 }
 
-uint32_t get_clock_moon_color() {
-    uint8_t alpha = (*(uint16_t *)0x801BFB2C) & 0xFF;
+u32 get_clock_moon_color() {
+    u8 alpha = (*(u16 *)0x801BFB2C) & 0xFF;
     return color_rgb8_to_int(HUD_COLOR_CONFIG.clock_moon, alpha);
 }
 
-uint32_t get_a_button_color() {
-    uint8_t alpha = z2_game.hud_ctxt.a_alpha & 0xFF;
+u32 get_a_button_color() {
+    u8 alpha = z2_game.hud_ctxt.a_alpha & 0xFF;
     return color_rgb8_to_int(HUD_COLOR_CONFIG.button_a, alpha);
 }
 
-uint32_t get_b_button_color() {
+u32 get_b_button_color() {
     // Alpha won't be used but set it anyway
-    uint8_t alpha = z2_game.hud_ctxt.b_alpha & 0xFF;
+    u8 alpha = z2_game.hud_ctxt.b_alpha & 0xFF;
     return color_rgb8_to_int(HUD_COLOR_CONFIG.button_b, alpha);
 }
 
-uint32_t get_c_button_color(uint16_t alpha) {
+u32 get_c_button_color(u16 alpha) {
     return color_rgb8_to_int(HUD_COLOR_CONFIG.button_c, alpha & 0xFF);
 }
 
-uint32_t get_start_button_color(uint16_t alpha) {
+u32 get_start_button_color(u16 alpha) {
     return color_rgb8_to_int(HUD_COLOR_CONFIG.button_start, alpha & 0xFF);
 }
 
@@ -174,7 +174,7 @@ void update_heart_colors(z2_game_t *game) {
     heart_dd_beating->b = HUD_COLOR_CONFIG.heart_dd.b;
 }
 
-static void update_rupee_colors(uint16_t *rupee_colors) {
+static void update_rupee_colors(u16 *rupee_colors) {
     for (int i = 0; i < 3; i++) {
         int idx = i * 3;
         rupee_colors[idx] = HUD_COLOR_CONFIG.rupee[i].r;
@@ -210,7 +210,7 @@ static void apply_objectively_best_theme() {
 }
 
 void hud_colors_init() {
-    uint16_t *rupee_colors = (uint16_t *)0x801BFD2C;
+    u16 *rupee_colors = (u16 *)0x801BFD2C;
 
 #ifdef USE_THEME
     // Apply theme
