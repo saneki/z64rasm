@@ -598,6 +598,8 @@ typedef enum {
 } z2_timer_type_t;
 
 typedef enum {
+    // Poe sisters fight.
+    Z2_TIMER_INDEX_POE_SISTERS = 1,
     // Treasure Chest Shop game.
     Z2_TIMER_INDEX_TREASURE_CHEST_GAME = 4,
     // Drowning.
