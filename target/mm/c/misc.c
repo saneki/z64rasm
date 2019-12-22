@@ -1,6 +1,7 @@
 #include "misc.h"
 
 struct misc_config MISC_CONFIG = {
+    .magic = MISC_CONFIG_MAGIC,
     .version = 0,
     .ocarina_underwater = 0,
 };

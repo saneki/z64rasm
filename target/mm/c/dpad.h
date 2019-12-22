@@ -4,6 +4,9 @@
 #include <stdbool.h>
 #include "types.h"
 
+// Magic number for dpad_config: "DPAD"
+#define DPAD_CONFIG_MAGIC 0x44504144
+
 // Most of these states get checked by the "UseItem" function itself.
 // We do need to handle some of them though.
 #define DPAD_ACTION_STATE1 (       \
@@ -36,18 +39,19 @@ struct dpad_items {
 };
 
 struct dpad_config {
-    u32 version;                        /* 0x0000 */
+    u32 magic;                          /* 0x0000 */
+    u32 version;                        /* 0x0004 */
     union {
-        struct dpad_items items[4];     /* 0x0004 */
+        struct dpad_items items[4];     /* 0x0008 */
         struct {
-            struct dpad_items primary;  /* 0x0004 */
-            struct dpad_items alts[3];  /* 0x0008 */
+            struct dpad_items primary;  /* 0x0008 */
+            struct dpad_items alts[3];  /* 0x000C */
         };
     };
-    u8 state;                           /* 0x0014 */
-    u8 display;                         /* 0x0015 */
-    u8 reserved[2];                     /* 0x0016 */
-};                                      /* 0x0018 */
+    u8 state;                           /* 0x0018 */
+    u8 display;                         /* 0x0019 */
+    u8 reserved[2];                     /* 0x001A */
+};                                      /* 0x001C */
 
 void do_dpad_per_game_frame();
 void dpad_init();
