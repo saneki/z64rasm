@@ -1,7 +1,7 @@
 #ifndef GFX_H
 #define GFX_H
 
-#include "z64.h"
+#include "z2.h"
 
 extern Gfx setup_db[];
 

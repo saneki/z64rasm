@@ -1,7 +1,7 @@
 #include <stdbool.h>
 #include "color.h"
 #include "reloc.h"
-#include "z64.h"
+#include "z2.h"
 
 // Uncomment to apply theme for testing
 // #define USE_THEME

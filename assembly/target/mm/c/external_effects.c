@@ -3,7 +3,7 @@
 #include "fairy.h"
 #include "floor_physics.h"
 #include "icetrap.h"
-#include "z64.h"
+#include "z2.h"
 
 // Fairy spawn cooldown (in frames).
 #define FAIRY_COOLDOWN 0x10

@@ -4,7 +4,7 @@
 #include "item.h"
 #include "reloc.h"
 #include "util.h"
-#include "z64.h"
+#include "z2.h"
 
 #define ITEM_TEXTURE_LEN 0x1000
 

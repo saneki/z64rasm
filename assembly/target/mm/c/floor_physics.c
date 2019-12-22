@@ -1,5 +1,5 @@
 #include <stdbool.h>
-#include "z64.h"
+#include "z2.h"
 
 static bool g_override_floor_physics_type = false;
 static uint32_t g_override_floor_physics_type_value = 0;

@@ -2,7 +2,7 @@
 #define FAIRY_H
 
 #include <stdbool.h>
-#include "z64.h"
+#include "z2.h"
 
 bool can_interact_with_fairy();
 bool get_next_fairy_instance(uint16_t *inst);

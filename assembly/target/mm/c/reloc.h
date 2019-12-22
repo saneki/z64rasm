@@ -1,7 +1,7 @@
 #ifndef RELOC_H
 #define RELOC_H
 
-#include "z64.h"
+#include "z2.h"
 
 #define GET_RELOC_FUNC(NAME, OVL) ((NAME##_proc)get_ram_from_player_ovl_vram(&OVL, NAME##_vram))
 #define GET_RELOC_PAUSE_FUNC(NAME)  GET_RELOC_FUNC(NAME, z2_0x801D0B70.pause_ovl)
