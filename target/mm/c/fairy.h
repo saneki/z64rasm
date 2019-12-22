@@ -7,6 +7,6 @@
 bool can_interact_with_fairy();
 bool get_next_fairy_instance(uint16_t *inst);
 void reset_fairy_instance_usage();
-z64_actor_t* spawn_next_fairy_actor(z64_xyzf_t pos);
+z2_actor_t* spawn_next_fairy_actor(z2_xyzf_t pos);
 
 #endif // FAIRY_H

@@ -20,9 +20,9 @@ sprite_t dpad_sprite;
 
 void gfx_init();
 
-void sprite_load(z64_disp_buf_t *db, sprite_t *sprite,
+void sprite_load(z2_disp_buf_t *db, sprite_t *sprite,
         int start_tile, int tile_count);
-void sprite_draw(z64_disp_buf_t *db, sprite_t *sprite, int tile_index,
+void sprite_draw(z2_disp_buf_t *db, sprite_t *sprite, int tile_index,
         int left, int top, int width, int height);
 
 #endif // GFX_H

@@ -19,5 +19,5 @@ void *heap_alloc(int bytes) {
 
 void file_init(file_t *file) {
     file->buf = heap_alloc(file->size);
-    z64_ReadFile(file->buf, file->vrom_start, file->size);
+    z2_ReadFile(file->buf, file->vrom_start, file->size);
 }
