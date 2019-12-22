@@ -1,5 +1,4 @@
 #include <stdbool.h>
-#include "color.h"
 #include "reloc.h"
 #include "z2.h"
 
