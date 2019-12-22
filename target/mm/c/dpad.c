@@ -147,7 +147,8 @@ static u16 update_y_position(u16 x, u16 y, u16 padding) {
     // Check if we have magic
     bool magic = z2_file.has_magic != 0;
     // Check if there's a timer
-    bool timer = IS_TIMER_VISIBLE(z2_file.timers[Z2_TIMER_INDEX_TREASURE_CHEST_GAME]) ||
+    bool timer = IS_TIMER_VISIBLE(z2_file.timers[Z2_TIMER_INDEX_POE_SISTERS]) ||
+                 IS_TIMER_VISIBLE(z2_file.timers[Z2_TIMER_INDEX_TREASURE_CHEST_GAME]) ||
                  IS_TIMER_VISIBLE(z2_file.timers[Z2_TIMER_INDEX_DROWNING]);
 
     // If on left-half of screen
