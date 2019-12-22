@@ -1,5 +1,5 @@
 #include "util.h"
-#include "z64.h"
+#include "z2.h"
 
 extern char G_C_HEAP;
 char *heap_next = NULL;

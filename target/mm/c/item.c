@@ -1,5 +1,5 @@
 #include <stdbool.h>
-#include "z64.h"
+#include "z2.h"
 
 void check_item_usability(bool *dest, uint8_t b, uint8_t c1, uint8_t c2, uint8_t c3) {
     uint8_t previous[4], prevstates[5];

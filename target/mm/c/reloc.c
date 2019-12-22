@@ -1,4 +1,4 @@
-#include "z64.h"
+#include "z2.h"
 
 void * get_ram_from_gamestate_vram(z2_gamestate_table_t *gs, uint32_t vram) {
     if (gs->ram && gs->vram_start <= vram && vram < gs->vram_end) {

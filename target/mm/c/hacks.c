@@ -1,5 +1,5 @@
 #include <stdbool.h>
-#include "z64.h"
+#include "z2.h"
 
 void draw_b_button_icon_color_fix(z2_game_t *game) {
     // Clear the Env color before drawing amounts/text
