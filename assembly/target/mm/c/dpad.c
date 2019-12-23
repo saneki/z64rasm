@@ -117,8 +117,7 @@ static bool try_use_item(u8 item) {
     return try_use_inventory_item(item, slot);
 }
 
-static void get_dpad_item_usability(bool *dest)
-{
+static void get_dpad_item_usability(bool *dest) {
     for (int i = 0; i < 4; i++)
         dest[i] = check_c_item_usable(DPAD_CONFIG.primary.values[i]);
 }
@@ -131,8 +130,7 @@ static bool check_action_state() {
         return true;
 }
 
-static void load_texture(int idx, u8 item)
-{
+static void load_texture(int idx, u8 item) {
     u32 phys = z2_GetFilePhysAddr(z2_item_texture_file);
     u8 *dest = textures + (idx * ITEM_TEXTURE_LEN);
     z2_LoadFileFromArchive(phys, item, dest, ITEM_TEXTURE_LEN);
@@ -173,8 +171,7 @@ static u16 update_y_position(u16 x, u16 y, u16 padding) {
     return y;
 }
 
-bool is_minigame_frame()
-{
+bool is_minigame_frame() {
     bool result = false;
 
     if (g_was_minigame)
@@ -211,8 +208,7 @@ void dpad_init() {
         load_texture(i, DPAD_CONFIG.primary.values[i]);
 }
 
-void do_dpad_per_game_frame()
-{
+void do_dpad_per_game_frame() {
     // If disabled, do nothing
     if (DPAD_CONFIG.state == DPAD_STATE_TYPE_DISABLED)
         return;
@@ -252,8 +248,7 @@ bool handle_dpad() {
     return false;
 }
 
-static bool is_any_item_usable(u8 *dpad, bool *usable)
-{
+static bool is_any_item_usable(u8 *dpad, bool *usable) {
     for (int i = 0; i < 4; i++) {
         if (has_inventory_item(dpad[i]) && usable[i])
             return true;
