@@ -1185,22 +1185,29 @@ typedef struct {
 /// Object Context
 /// =============================================================
 
-typedef struct{
+typedef struct {
     u32              vrom_addr;                      /* 0x0000 */
     void            *dram;                           /* 0x0004 */
     u32              size;                           /* 0x0008 */
+} z2_loadfile_t;                                     /* 0x000C */
+
+typedef struct {
+    /* file loading params */
+    z2_loadfile_t    common;                         /* 0x0000 */
+    /* debug stuff */
     char            *filename;                       /* 0x000C */
     s32              line;                           /* 0x0010 */
-    u8               unk_0x14[0x4];                  /* 0x0014 */
+    s32              unk_0x14;                       /* 0x0014 */
+    /* completion notification params */
     OSMesgQueue     *notify_mq;                      /* 0x0018 */
     OSMesg           notify_msg;                     /* 0x001C */
-} z2_loadfile_t;                                     /* 0x0020 */
+} z2_getfile_t;                                      /* 0x0020 */
 
 typedef struct{
     s16              id;                             /* 0x0000 */
     u8               pad_0x02[0x02];                 /* 0x0002 */
     void            *data;                           /* 0x0004 */
-    z2_loadfile_t    loadfile;                       /* 0x0008 */
+    z2_getfile_t     loadfile;                       /* 0x0008 */
     OSMesgQueue      load_mq;                        /* 0x0028 */
     OSMesg           load_msg;                       /* 0x0040 */
 } z2_obj_t;                                          /* 0x0044 */
@@ -1238,7 +1245,7 @@ typedef struct {
     u8               load_active;                    /* 0x0031 */
     u8               pad_0x32[0x02];                 /* 0x0032 */
     void            *load_addr;                      /* 0x0034 */
-    z2_loadfile_t    loadfile;                       /* 0x0038 */
+    z2_getfile_t     loadfile;                       /* 0x0038 */
     OSMesgQueue      load_mq;                        /* 0x0058 */
     OSMesg           load_msg;                       /* 0x0070 */
     u8               unk_0x0074[0x04];               /* 0x0074 */
@@ -1774,20 +1781,6 @@ typedef struct {
 } z2_gamestate_t;                                    /* 0x0150 */
 
 typedef struct {
-  /* file loading params */
-  u32                vrom_addr;                      /* 0x0000 */
-  void              *dram_addr;                      /* 0x0004 */
-  u32                size;                           /* 0x0008 */
-  /* debug stuff */
-  char              *filename;                       /* 0x000C */
-  s32                line;                           /* 0x0010 */
-  s32                unk_0x14;                       /* 0x0014 */
-  /* completion notification params */
-  OSMesgQueue       *notify_mq;                      /* 0x0018 */
-  OSMesg             notify_msg;                     /* 0x001C */
-} z2_getfile_t;                                      /* 0x0020 */
-
-typedef struct {
     u32              vrom_start;                     /* 0x0000 */
     u32              vrom_end;                       /* 0x0004 */
 } z2_obj_file_t;                                     /* 0x0008 */
@@ -1893,13 +1886,18 @@ typedef struct {
 #define z2_DrawBButtonIcon_addr          0x80118084
 #define z2_DrawCButtonIcons_addr         0x80118890
 #define z2_GetFloorPhysicsType_addr      0x800C99D4
-#define z2_GetPhysicalAddrOfFile_addr    0x80080950
-#define z2_LoadItemTexture_addr          0x80178DAC
 #define z2_PlaySfx_addr                  0x8019F0C8
-#define z2_ReadFile_addr                 0x80080C90
 #define z2_SpawnActor_addr               0x800BAC60
 #define z2_UpdateButtonUsability_addr    0x80110038
 #define z2_WriteHeartColors_addr         0x8010069C
+
+/* Function Addresses (File Loading) */
+#define z2_GetFileTable_addr             0x800808F4
+#define z2_GetFilePhysAddr_addr          0x80080950
+#define z2_GetFileNumber_addr            0x800809BC
+#define z2_LoadFile_addr                 0x80080A08
+#define z2_ReadFile_addr                 0x80080C90
+#define z2_LoadFileFromArchive_addr      0x80178DAC
 
 /* Relocatable Functions (VRAM) */
 #define z2_LinkDamage_vram               0x80833B18
@@ -1916,17 +1914,22 @@ typedef void (*z2_DrawButtonAmounts_proc)(z2_game_t *game, u32 arg1, u16 alpha);
 typedef void (*z2_DrawBButtonIcon_proc)(z2_game_t *game);
 typedef void (*z2_DrawCButtonIcons_proc)(z2_game_t *game);
 typedef u32 (*z2_GetFloorPhysicsType_proc)(void *arg0, void *arg1, u8 arg2);
-typedef u32 (*z2_GetPhysicalAddrOfFile_proc)(u32 vrom_addr);
 typedef void (*z2_LinkDamage_proc)(z2_game_t *game, z2_link_t *link, u32 type, u32 arg3);
 typedef void (*z2_LinkInvincibility_proc)(z2_link_t *link, u8 frames);
-typedef void (*z2_LoadItemTexture_proc)(u32 phys_file, u8 item, u8 *dest, u32 length);
 typedef void (*z2_PlaySfx_proc)(u32 id);
-typedef void (*z2_ReadFile_proc)(void *mem_addr, u32 vrom_addr, u32 size);
 typedef z2_actor_t* (*z2_SpawnActor_proc)(z2_actor_ctxt_t *actor_ctx, z2_game_t *game, u16 id,
                                           f32 x, f32 y, f32 z, u16 rx, u16 ry, u16 rz, u16 variable);
 typedef void (*z2_UpdateButtonUsability_proc)(z2_ctxt_t *ctxt);
 typedef void (*z2_UseItem_proc)(z2_ctxt_t *ctxt, z2_link_t *link, u8 item);
 typedef void (*z2_WriteHeartColors_proc)(z2_game_t *game);
+
+/* Function Prototypes (File Loading) */
+typedef s16 (*z2_GetFileNumber_proc)(u32 vrom_addr);
+typedef u32 (*z2_GetFilePhysAddr_proc)(u32 vrom_addr);
+typedef z2_file_table_t* (*z2_GetFileTable_proc)(u32 vrom_addr);
+typedef void (*z2_LoadFile_proc)(z2_loadfile_t *loadfile);
+typedef void (*z2_LoadFileFromArchive_proc)(u32 phys_file, u8 item, u8 *dest, u32 length);
+typedef void (*z2_ReadFile_proc)(void *mem_addr, u32 vrom_addr, u32 size);
 
 /* Functions */
 #define z2_CanInteract                   ((z2_CanInteract_proc) z2_CanInteract_addr)
@@ -1935,12 +1938,19 @@ typedef void (*z2_WriteHeartColors_proc)(z2_game_t *game);
 #define z2_DrawBButtonIcon               ((z2_DrawBButtonIcon_proc) z2_DrawBButtonIcon_addr)
 #define z2_DrawCButtonIcons              ((z2_DrawCButtonIcons_proc) z2_DrawCButtonIcons_addr)
 #define z2_GetFloorPhysicsType           ((z2_GetFloorPhysicsType_proc) z2_GetFloorPhysicsType_addr)
-#define z2_GetPhysicalAddrOfFile         ((z2_GetPhysicalAddrOfFile_proc) z2_GetPhysicalAddrOfFile_addr)
 #define z2_LoadItemTexture               ((z2_LoadItemTexture_proc) z2_LoadItemTexture_addr)
 #define z2_PlaySfx                       ((z2_PlaySfx_proc) z2_PlaySfx_addr)
 #define z2_ReadFile                      ((z2_ReadFile_proc) z2_ReadFile_addr)
 #define z2_SpawnActor                    ((z2_SpawnActor_proc) z2_SpawnActor_addr)
 #define z2_UpdateButtonUsability         ((z2_UpdateButtonUsability_proc) z2_UpdateButtonUsability_addr)
 #define z2_WriteHeartColors              ((z2_WriteHeartColors_proc) z2_WriteHeartColors_addr)
+
+/* Functions (File Loading) */
+#define z2_GetFileNumber                 ((z2_GetFileNumber_proc)         z2_GetFileNumber_addr)
+#define z2_GetFilePhysAddr               ((z2_GetFilePhysAddr_proc)       z2_GetFilePhysAddr_addr)
+#define z2_GetFileTable                  ((z2_GetFileTable_proc)          z2_GetFileTable_addr)
+#define z2_LoadFile                      ((z2_LoadFile_proc)              z2_LoadFile_addr)
+#define z2_LoadFileFromArchive           ((z2_LoadFileFromArchive_proc)   z2_LoadFileFromArchive_addr)
+#define z2_ReadFile                      ((z2_ReadFile_proc)              z2_ReadFile_addr)
 
 #endif // Z2_H
