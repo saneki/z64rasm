@@ -10,8 +10,7 @@
 /**
  * Correlates to form field in z2_file_t.
  **/
-typedef enum
-{
+typedef enum {
     Z2_FORM_FIERCE_DEITY,
     Z2_FORM_GORON,
     Z2_FORM_ZORA,
@@ -25,8 +24,7 @@ typedef enum {
     Z2_TIMESPEED_INVERTED = 0xFFFFFFFE,
 } z2_timespeed_t;
 
-typedef enum
-{
+typedef enum {
     // 0x00 (Inventory)
     Z2_ITEM_OCARINA,
     Z2_ITEM_BOW,
@@ -174,8 +172,7 @@ typedef enum
 /**
  * Item inventory slots.
  **/
-typedef enum
-{
+typedef enum {
     Z2_SLOT_OCARINA,
     Z2_SLOT_BOW,
     Z2_SLOT_FIRE_ARROW,
@@ -205,8 +202,7 @@ typedef enum
 /**
  * Mask inventory slots.
  **/
-typedef enum
-{
+typedef enum {
     Z2_SLOT_POSTMAN_HAT,
     Z2_SLOT_ALL_NIGHT_MASK,
     Z2_SLOT_BLAST_MASK,
@@ -610,7 +606,7 @@ typedef enum {
     Z2_TIMER_INDEX_HONEY_DARLING = 0x14,
 } z2_timer_index_t;
 
-/* */
+/* Actor structure type alias. */
 typedef struct z2_actor_s z2_actor_t;
 
 /**
@@ -1203,7 +1199,7 @@ typedef struct {
     OSMesg           notify_msg;                     /* 0x001C */
 } z2_getfile_t;                                      /* 0x0020 */
 
-typedef struct{
+typedef struct {
     s16              id;                             /* 0x0000 */
     u8               pad_0x02[0x02];                 /* 0x0002 */
     void            *data;                           /* 0x0004 */
@@ -1212,7 +1208,7 @@ typedef struct{
     OSMesg           load_msg;                       /* 0x0040 */
 } z2_obj_t;                                          /* 0x0044 */
 
-typedef struct{
+typedef struct {
     void            *obj_space_start;                /* 0x0000 */
     void            *obj_space_end;                  /* 0x0004 */
     u8               obj_cnt;                        /* 0x0008 */
@@ -1932,16 +1928,16 @@ typedef void (*z2_LoadFileFromArchive_proc)(u32 phys_file, u8 item, u8 *dest, u3
 typedef void (*z2_ReadFile_proc)(void *mem_addr, u32 vrom_addr, u32 size);
 
 /* Functions */
-#define z2_CanInteract                   ((z2_CanInteract_proc) z2_CanInteract_addr)
-#define z2_CanInteract2                  ((z2_CanInteract2_proc) z2_CanInteract2_addr)
-#define z2_DrawButtonAmounts             ((z2_DrawButtonAmounts_proc) z2_DrawButtonAmounts_addr)
-#define z2_DrawBButtonIcon               ((z2_DrawBButtonIcon_proc) z2_DrawBButtonIcon_addr)
-#define z2_DrawCButtonIcons              ((z2_DrawCButtonIcons_proc) z2_DrawCButtonIcons_addr)
-#define z2_GetFloorPhysicsType           ((z2_GetFloorPhysicsType_proc) z2_GetFloorPhysicsType_addr)
-#define z2_PlaySfx                       ((z2_PlaySfx_proc) z2_PlaySfx_addr)
-#define z2_SpawnActor                    ((z2_SpawnActor_proc) z2_SpawnActor_addr)
+#define z2_CanInteract                   ((z2_CanInteract_proc)           z2_CanInteract_addr)
+#define z2_CanInteract2                  ((z2_CanInteract2_proc)          z2_CanInteract2_addr)
+#define z2_DrawButtonAmounts             ((z2_DrawButtonAmounts_proc)     z2_DrawButtonAmounts_addr)
+#define z2_DrawBButtonIcon               ((z2_DrawBButtonIcon_proc)       z2_DrawBButtonIcon_addr)
+#define z2_DrawCButtonIcons              ((z2_DrawCButtonIcons_proc)      z2_DrawCButtonIcons_addr)
+#define z2_GetFloorPhysicsType           ((z2_GetFloorPhysicsType_proc)   z2_GetFloorPhysicsType_addr)
+#define z2_PlaySfx                       ((z2_PlaySfx_proc)               z2_PlaySfx_addr)
+#define z2_SpawnActor                    ((z2_SpawnActor_proc)            z2_SpawnActor_addr)
 #define z2_UpdateButtonUsability         ((z2_UpdateButtonUsability_proc) z2_UpdateButtonUsability_addr)
-#define z2_WriteHeartColors              ((z2_WriteHeartColors_proc) z2_WriteHeartColors_addr)
+#define z2_WriteHeartColors              ((z2_WriteHeartColors_proc)      z2_WriteHeartColors_addr)
 
 /* Functions (File Loading) */
 #define z2_GetFileNumber                 ((z2_GetFileNumber_proc)         z2_GetFileNumber_addr)
