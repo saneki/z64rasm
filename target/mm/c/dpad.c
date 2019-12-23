@@ -133,9 +133,9 @@ static bool check_action_state() {
 
 static void load_texture(int idx, u8 item)
 {
-    u32 phys = z2_GetPhysicalAddrOfFile(z2_item_texture_file);
+    u32 phys = z2_GetFilePhysAddr(z2_item_texture_file);
     u8 *dest = textures + (idx * ITEM_TEXTURE_LEN);
-    z2_LoadItemTexture(phys, item, dest, ITEM_TEXTURE_LEN);
+    z2_LoadFileFromArchive(phys, item, dest, ITEM_TEXTURE_LEN);
     texture_items[idx] = item;
 }
 
