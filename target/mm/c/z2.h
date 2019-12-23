@@ -1251,6 +1251,23 @@ typedef struct {
 } z2_room_ctxt_t;                                    /* 0x0080 */
 
 /// =============================================================
+/// Static Context
+/// =============================================================
+
+typedef struct {
+    u8               unk_0x00[0x32];                 /* 0x0000 */
+    s16              time_speed;                     /* 0x0032 */
+    u8               unk_0x34[0x06];                 /* 0x0034 */
+    s16              acceleration;                   /* 0x003A */
+    u8               unk_0x3C[0x0E];                 /* 0x003C */
+    s16              turn_speed;                     /* 0x004A */
+    u8               unk_0x4E[0x50];                 /* 0x004C */
+    s16              gravity;                        /* 0x009C */
+    u8               unk_0x9E[0x72];                 /* 0x009E */
+    u16              update_rate;                    /* 0x0110 */
+} z2_static_ctxt_t;                                  /* 0x0112 */
+
+/// =============================================================
 /// Game Structure
 /// =============================================================
 
@@ -1807,6 +1824,25 @@ typedef struct {
 /// =============================================================
 /// Misc & Unknown
 /// =============================================================
+
+typedef struct {
+    u32              direct_reference;               /* 0x0000 */
+    u32              nintendo_logo;                  /* 0x0004 */
+    u32              current_scene;                  /* 0x0008 */
+    u32              current_room;                   /* 0x000C */
+    u32              gameplay_keep;                  /* 0x0010 */
+    u32              gameplay_dungeon_field_keep;    /* 0x0014 */
+    u32              current_object;                 /* 0x0018 */
+    u32              link_animation;                 /* 0x001C */
+    u32              unk_0x20;                       /* 0x0020 */
+    u32              unk_0x24;                       /* 0x0024 */
+    u32              current_mask;                   /* 0x0028 */
+    u32              unk_0x2C;                       /* 0x002C */
+    u32              unk_0x30;                       /* 0x0030 */
+    u32              unk_0x34;                       /* 0x0034 */
+    u32              z_buffer;                       /* 0x0038 */
+    u32              frame_buffer;                   /* 0x003C */
+} z2_segment_t;                                      /* 0x0040 */
 
 typedef struct {
     union {
