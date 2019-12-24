@@ -1251,6 +1251,56 @@ typedef struct {
 } z2_room_ctxt_t;                                    /* 0x0080 */
 
 /// =============================================================
+/// Ocarina & Song
+/// =============================================================
+
+enum z2_stored_song {
+    // No stored song while using ocarina.
+    Z2_STORED_SONG_OCARINA_NONE = 0xFE,
+    // No stored song (while not using ocarina).
+    Z2_STORED_SONG_NONE = 0xFF,
+};
+
+typedef struct {
+    /* Might be part of a larger messagebox context. */
+    s8               notes[0x09];                    /* 0x0000, 8 notes + extra terminator (0xFF). */
+    u8               pad[0x03];                      /* 0x0009 */
+    s16              alphas[0x08];                   /* 0x000C, note alphas. */
+} z2_song_notes_t;                                   /* 0x001C */
+
+/**
+ * Structure with some song state.
+ *
+ * Usually located at: 0x801FD43A
+ **/
+typedef struct {
+    s8               recent_note;                    /* 0x0000 */
+    s8               stored_song;                    /* 0x0001 */
+    s8               note_index;                     /* 0x0002 */
+    u8               unk_0x03;                       /* 0x0003 */
+    s8               playback_recent_note;           /* 0x0004 */
+    u8               playback_state;                 /* 0x0005 */
+                                                     /* 1 while doing playback, is reset to 0 to show the "You Played X song" text. */
+    u8               playback_note_index;            /* 0x0006 */
+    u8               unk_0x07[0x03];                 /* 0x0007 */
+    s8               note_index_2;                   /* 0x000A */
+    u8               unk_0x0B[0x05];                 /* 0x000B */
+    u16              frame_count;                    /* 0x0010 */
+    z2_angle_t       analog_angle;                   /* 0x0012, angle of analog stick, modifies sound. */
+    u16              unk_0x14;                       /* 0x0014 */
+    u32              controller_0x16;                /* 0x0016 */
+    u32              unk_0x1A;                       /* 0x001A */
+    u32              controller_0x1E;                /* 0x001E */
+    u32              controller_0x22;                /* 0x0022 */
+    u16              unk_0x26;                       /* 0x0026 */
+    u8               has_played_note;                /* 0x0028, 1 if has played note since using ocarina. */
+    u8               unk_0x29[0x07];                 /* 0x0029 */
+    u16              flags;                          /* 0x0030, is 0x37DF if all songs. */
+    u8               note_index_3;                   /* 0x0032 */
+    u8               pad_0x33;                       /* 0x0033 */
+} z2_song_ctxt_t;                                    /* 0x0034 */
+
+/// =============================================================
 /// Static Context
 /// =============================================================
 
@@ -1289,7 +1339,9 @@ typedef struct {
     u8               unk_0x1F24[0x04];               /* 0x01F24 */
     void            *cutscene_ptr;                   /* 0x01F28 */
     s8               cutscene_state;                 /* 0x01F2C */
-    u8               unk_0x1F2D[0x148FD];            /* 0x01F2D */
+    u8               unk_0x1F2D[0x148DB];            /* 0x01F2D */
+    z2_song_ctxt_t  *song_ctxt;                      /* 0x16808 */
+    u8               unk_0x1680C[0x1E];              /* 0x1680C */
     u8               message_state_1;                /* 0x1682A */
     u8               unk_0x1682B[0xFD];              /* 0x1682B */
     u8               message_state_2;                /* 0x16928 */
@@ -1889,6 +1941,8 @@ typedef struct {
 #define z2_arena_addr                    0x8009CD20
 #define z2_file_table_addr               0x8009F8B0
 #define z2_gamestate_addr                0x801BD910
+#define z2_object_table_addr             0x801C2740
+#define z2_song_notes_addr               0x801CFC98
 #define z2_file_addr                     0x801EF670
 #define z2_game_arena_addr               0x801F5100
 #define z2_segment_addr                  0x801F8180
@@ -1904,7 +1958,9 @@ typedef struct {
 #define z2_game                          (*(z2_game_t*)              z2_game_addr)
 #define z2_gamestate                     (*(z2_gamestate_t*)         z2_gamestate_addr)
 #define z2_link                          (*(z2_link_t*)              z2_link_addr)
+#define z2_obj_table                     ((z2_obj_file_t*)           z2_object_table_addr)
 #define z2_segment                       (*(z2_segment_t*)           z2_segment_addr)
+#define z2_song_notes                    (*(z2_song_notes_t*)        z2_song_notes_addr)
 #define z2_static_ctxt                   (*(z2_static_ctxt_t*)       z2_static_ctxt_addr)
 
 /* Data (Unknown) */
@@ -1918,6 +1974,7 @@ typedef struct {
 #define z2_DrawBButtonIcon_addr          0x80118084
 #define z2_DrawCButtonIcons_addr         0x80118890
 #define z2_GetFloorPhysicsType_addr      0x800C99D4
+#define z2_GetMatrixStackTop_addr        0x80180234
 #define z2_PlaySfx_addr                  0x8019F0C8
 #define z2_SpawnActor_addr               0x800BAC60
 #define z2_UpdateButtonUsability_addr    0x80110038
@@ -1946,6 +2003,7 @@ typedef void (*z2_DrawButtonAmounts_proc)(z2_game_t *game, u32 arg1, u16 alpha);
 typedef void (*z2_DrawBButtonIcon_proc)(z2_game_t *game);
 typedef void (*z2_DrawCButtonIcons_proc)(z2_game_t *game);
 typedef u32 (*z2_GetFloorPhysicsType_proc)(void *arg0, void *arg1, u8 arg2);
+typedef f32* (*z2_GetMatrixStackTop_proc)();
 typedef void (*z2_LinkDamage_proc)(z2_game_t *game, z2_link_t *link, u32 type, u32 arg3);
 typedef void (*z2_LinkInvincibility_proc)(z2_link_t *link, u8 frames);
 typedef void (*z2_PlaySfx_proc)(u32 id);
@@ -1970,6 +2028,7 @@ typedef void (*z2_ReadFile_proc)(void *mem_addr, u32 vrom_addr, u32 size);
 #define z2_DrawBButtonIcon               ((z2_DrawBButtonIcon_proc)       z2_DrawBButtonIcon_addr)
 #define z2_DrawCButtonIcons              ((z2_DrawCButtonIcons_proc)      z2_DrawCButtonIcons_addr)
 #define z2_GetFloorPhysicsType           ((z2_GetFloorPhysicsType_proc)   z2_GetFloorPhysicsType_addr)
+#define z2_GetMatrixStackTop             ((z2_GetMatrixStackTop_proc)     z2_GetMatrixStackTop_addr)
 #define z2_PlaySfx                       ((z2_PlaySfx_proc)               z2_PlaySfx_addr)
 #define z2_SpawnActor                    ((z2_SpawnActor_proc)            z2_SpawnActor_addr)
 #define z2_UpdateButtonUsability         ((z2_UpdateButtonUsability_proc) z2_UpdateButtonUsability_addr)
