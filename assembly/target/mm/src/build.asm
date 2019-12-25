@@ -19,6 +19,7 @@
 .include "hooks/colors.asm"
 .include "hooks/dpad.asm"
 .include "hooks/general.asm"
+.include "hooks/pushblock.asm"
 
 ;==================================================================================================
 ; New code region
@@ -36,6 +37,7 @@ PAYLOAD_START:
 .include "damage.asm"
 .include "dpad.asm"
 .include "main_menu.asm"
+.include "pushblock.asm"
 .include "underwater_ocarina.asm"
 .importobj "../build/bundle.o"
 .align 8

@@ -1,0 +1,24 @@
+misc_get_push_block_speed_hook:
+    addiu   sp, sp, -0x10
+
+    sw      ra, 0x0000 (sp)
+    sw      at, 0x0004 (sp)
+    sw      a0, 0x0008 (sp)
+
+    jal     misc_get_push_block_speed
+    sw      a1, 0x000C (sp)
+
+    ; Place return value from F0 into F6
+    mfc1    v0, f0
+    mtc1    v0, f6
+
+    lw      ra, 0x0000 (sp)
+    lw      at, 0x0004 (sp)
+    lw      a0, 0x0008 (sp)
+    lw      a1, 0x000C (sp)
+
+    ; Displaced code
+    mtc1    r0, f4
+
+    jr      ra
+    addiu   sp, sp, 0x10
