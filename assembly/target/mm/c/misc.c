@@ -17,6 +17,11 @@ union faucet_speed {
     u32 all;
 };
 
+struct iceblock_speed {
+    f32 initial;
+    f32 additive;
+};
+
 bool misc_can_use_ocarina_underwater() {
     return MISC_CONFIG.ocarina_underwater != 0;
 }
@@ -30,6 +35,21 @@ f32 misc_get_push_block_speed(z2_actor_t *actor, z2_game_t *game) {
         case PUSHBLOCK_MODE_CUSTOM:
         default:
             return MISC_CONFIG.pushblock_speed;
+    }
+}
+
+void misc_get_iceblock_push_speed(z2_actor_t *actor, z2_game_t *game, struct iceblock_speed *dest) {
+    switch (MISC_CONFIG.pushblock_mode) {
+        case PUSHBLOCK_MODE_DEFAULT:
+            dest->initial = 1.2;
+            dest->additive = 2.8;
+            break;
+        case PUSHBLOCK_MODE_FAST:
+        case PUSHBLOCK_MODE_CUSTOM:
+        default:
+            dest->initial = 3.6;
+            dest->additive = 8.4;
+            break;
     }
 }
 
