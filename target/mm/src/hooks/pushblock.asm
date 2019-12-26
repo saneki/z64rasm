@@ -16,6 +16,44 @@
     lhu     t6, 0x0160 (a0)
 
 ;==================================================================================================
+; Iceblock Push Speed
+;==================================================================================================
+
+; Actor: 0x143 (Obj_Iceblock)
+; Actor File VRAM: 0x80A13090
+
+; Replaces:
+;   lui     at, 0x4060       ; Clamp constant
+;   mtc1    at, f12
+;   lui     at, 0x80A2
+;   lwc1    f18, 0x707C (at) ; Maximum velocity
+;   lui     at, 0x80A2
+;   lwc1    f6, 0x7080 (at)  ; Initial velocity
+.orga 0xDDF52C ; In VRAM: 0x80A15E9C
+    or      a0, s0, r0
+    jal     misc_get_iceblock_push_speed_hook
+    lw      a1, 0x004C (sp)
+    mfc1    at, f18
+    mtc1    at, f12
+    nop
+
+; Just always use our returned value (max velocity) for constant velocity.
+; This isn't implemented in the best way, maybe update later.
+; Replaces:
+;   mov.s   f0, f2
+.orga 0xDDF558 ; In VRAM: 0x80A15EC8
+    mov.s   f0, f12
+
+; Remove relocations for hook.
+.orga 0xDE0A54 ; In VRAM: 0x80A173C4
+.area 0x10, 0
+    .dw 0x46002DE4 ; Replaces: 0x45002E14
+    .dw 0x46002DE4 ; Replaces: 0x46002E18
+    .dw 0x46002DE4 ; Replaces: 0x45002E1C
+    .dw 0x46002DE4 ; Replaces: 0x46002E20
+.endarea
+
+;==================================================================================================
 ; Great Bay Temple Faucets
 ;==================================================================================================
 
