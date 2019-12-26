@@ -26,7 +26,7 @@
 ;   lui     at, 0x4060       ; Clamp constant
 ;   mtc1    at, f12
 ;   lui     at, 0x80A2
-;   lwc1    f18, 0x707C (at) ; Maximum velocity
+;   lwc1    f18, 0x707C (at) ; Additive velocity
 ;   lui     at, 0x80A2
 ;   lwc1    f6, 0x7080 (at)  ; Initial velocity
 .orga 0xDDF52C ; In VRAM: 0x80A15E9C
@@ -37,7 +37,7 @@
     mtc1    at, f12
     nop
 
-; Just always use our returned value (max velocity) for constant velocity.
+; Just always use our returned value (additive velocity) for constant velocity.
 ; This isn't implemented in the best way, maybe update later.
 ; Replaces:
 ;   mov.s   f0, f2
