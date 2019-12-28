@@ -33,8 +33,8 @@
     or      a0, s0, r0
     jal     misc_get_iceblock_push_speed_hook
     lw      a1, 0x004C (sp)
-    mfc1    at, f18
-    mtc1    at, f12
+    mov.s   f12, f18
+    nop
     nop
 
 ; Just always use our returned value (additive velocity) for constant velocity.
