@@ -6,6 +6,7 @@ struct misc_config MISC_CONFIG = {
     .version = 0,
     .ocarina_underwater = 0,
     .pushblock_mode = PUSHBLOCK_MODE_FAST,
+    .draw_hash = 1,
     .pushblock_speed = 2.0,
 };
 
