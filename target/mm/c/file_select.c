@@ -134,7 +134,7 @@ void file_select_before_draw(z2_game_t *game) {
 #endif
 }
 
-void file_select_draw_hash() {
+void file_select_draw_hash(z2_game_t *game) {
     int icon_size = 24;
     int padding = 8;
     int width = (g_icon_count * icon_size) + ((g_icon_count - 1) * padding);
@@ -143,7 +143,7 @@ void file_select_draw_hash() {
 
     struct misc_config *config = misc_get_config();
     if (config->draw_hash) {
-        z2_disp_buf_t *db = &(z2_game.common.gfx->poly_opa);
+        z2_disp_buf_t *db = &(game->common.gfx->poly_opa);
 
         // Call setup display list
         gSPDisplayList(db->p++, &setup_db);
