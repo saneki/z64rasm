@@ -22,6 +22,10 @@ struct iceblock_speed {
     f32 additive;
 };
 
+struct misc_config* misc_get_config() {
+    return &MISC_CONFIG;
+}
+
 bool misc_can_use_ocarina_underwater() {
     return MISC_CONFIG.ocarina_underwater != 0;
 }

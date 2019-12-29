@@ -51,16 +51,3 @@
 ;   jal     0x800C99D4
 .orga 0xC0DAA0 ; In memory: 0x80760FA0
     jal     override_get_floor_physics_type
-
-;==================================================================================================
-; Main Menu draw hook
-;==================================================================================================
-
-; Replaces:
-;   sw      s0, 0x0020 (sp)
-;   or      s0, a0, r0
-;   sw      ra, 0x0024 (sp)
-.orga 0xBDD26C ; In memory: 0x8077E3BC
-    sw      ra, 0x0024 (sp)
-    jal     before_main_menu_draw_hook
-    sw      s0, 0x0020 (sp)

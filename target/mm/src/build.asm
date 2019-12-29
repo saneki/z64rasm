@@ -18,6 +18,7 @@
 .include "hacks.asm"
 .include "hooks/colors.asm"
 .include "hooks/dpad.asm"
+.include "hooks/file_select.asm"
 .include "hooks/general.asm"
 .include "hooks/pushblock.asm"
 
@@ -36,7 +37,7 @@ PAYLOAD_START:
 .include "colors.asm"
 .include "damage.asm"
 .include "dpad.asm"
-.include "main_menu.asm"
+.include "file_select.asm"
 .include "pushblock.asm"
 .include "underwater_ocarina.asm"
 .importobj "../build/bundle.o"

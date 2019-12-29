@@ -27,7 +27,3 @@ void before_non_menu_update() {
 bool before_damage_process() {
     return give_icetrap();
 }
-
-void before_main_menu_draw() {
-    hud_colors_main_menu_init();
-}
