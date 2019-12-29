@@ -4,12 +4,6 @@
 #include <stdbool.h>
 #include "z2.h"
 
-enum pushblock_mode {
-    PUSHBLOCK_MODE_DEFAULT,
-    PUSHBLOCK_MODE_FAST,
-    PUSHBLOCK_MODE_CUSTOM,
-};
-
 union hash {
     union {
         u8 primary[0x04];
@@ -25,12 +19,16 @@ struct misc_config {
     u32 magic;              /* 0x0000 */
     u32 version;            /* 0x0004 */
     union hash hash;        /* 0x0008 */
-    u8 ocarina_underwater;  /* 0x0018 */
-    u8 pushblock_mode;      /* 0x0019 */
-    u8 draw_hash;           /* 0x001A */
-    u8 reserved;            /* 0x001B */
-    f32 pushblock_speed;    /* 0x001C */
-};                          /* 0x0020 */
+    union {
+        struct {
+            u32 draw_hash          : 1;
+            u32 fast_push          : 1;
+            u32 ocarina_underwater : 1;
+            u32                    : 29;
+        };
+        u32 flags;          /* 0x0018 */
+    };
+};                          /* 0x001C */
 
 bool misc_can_use_ocarina_underwater();
 struct misc_config* misc_get_config();
