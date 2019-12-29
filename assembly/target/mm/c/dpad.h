@@ -53,9 +53,7 @@ struct dpad_config {
     u8 reserved[2];                     /* 0x001A */
 };                                      /* 0x001C */
 
-void do_dpad_per_game_frame();
+void dpad_do_per_game_frame();
 void dpad_init();
-bool handle_dpad();
-void draw_dpad();
 
 #endif

@@ -6,16 +6,8 @@
 ;   sw      a0, 0x0068 (sp)
 ;   lw      t6, 0x0068 (sp)
 .orga 0xAFE8F8 ; In Memory: 0x80118898
-    jal     dpad_draw
+    jal     dpad_draw_hook
     sw      a0, 0x0068 (sp)
-
-; --- Other possible hook ---
-; Replaces:
-;   sw      s0, 0x0040 (sp)
-;   sw      a0, 0x0108 (sp)
-;.orga 0xAFD168 ; In Memory: 0x80117108
-;    jal     dpad_draw
-;    sw      s0, 0x0040 (sp)
 
 ;==================================================================================================
 ; DPAD Handle (Safer)
@@ -27,5 +19,5 @@
 ;   sw      ra, 0x0034 (sp)
 .orga 0xBF9DA0 ; In Memory: 0x8074D2A0
     sw      ra, 0x0034 (sp)
-    jal     dpad_handle
+    jal     dpad_handle_hook
     sw      s0, 0x0030 (sp)

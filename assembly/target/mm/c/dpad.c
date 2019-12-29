@@ -31,16 +31,13 @@ const static u8 g_dpad_default[4] = {
     Z2_ITEM_GORON_MASK,
 };
 
-// Textures buffer pointer.
-static u8 *textures;
-
-static sprite_t dpad_item_sprites = {
+static sprite_t g_dpad_item_sprites = {
     NULL, 32, 32, 4,
     G_IM_FMT_RGBA, G_IM_SIZ_32b, 4
 };
 
 // Indicates which item textures are currently loaded into our buffer.
-static u8 texture_items[4] = {
+static u8 g_texture_items[4] = {
     Z2_ITEM_NONE,
     Z2_ITEM_NONE,
     Z2_ITEM_NONE,
@@ -48,13 +45,13 @@ static u8 texture_items[4] = {
 };
 
 // Position of D-Pad texture.
-const static u16 position[2][2] = {
+const static u16 g_position[2][2] = {
     { 30,  60 },  // Left
     { 270, 75 },  // Right
 };
 
 // Positions of D-Pad item textures, relative to main texture.
-const static s16 positions[4][2] = {
+const static s16 g_positions[4][2] = {
     { 1, -15 },
     { 15, 0 },
     { 1, 13 },
@@ -62,12 +59,12 @@ const static s16 positions[4][2] = {
 };
 
 // Whether or not D-Pad items are usable, according to z2_UpdateButtonUsability.
-static bool usable[4];
+static bool g_usable[4];
 
 // Whether the previous frame was a "minigame" frame.
 static bool g_was_minigame = false;
 
-static bool get_slot(u8 item, u8 *slot, u8 *array, u8 length) {
+static bool get_slot(u8 item, u8 *slot, const u8 *array, u8 length) {
     for (u8 i = 0; i < length; i++) {
         if (item == array[i]) {
             *slot = i;
@@ -81,7 +78,7 @@ static bool get_slot(u8 item, u8 *slot, u8 *array, u8 length) {
 static bool get_inventory_slot(u8 item, u8 *slot) {
     if (item == Z2_ITEM_NONE)
         return false;
-    return get_slot(item, slot, (u8 *)&z2_file.inventory, sizeof(z2_file.inventory));
+    return get_slot(item, slot, z2_file.inventory, sizeof(z2_file.inventory));
 }
 
 static bool has_inventory_item(u8 item) {
@@ -122,6 +119,15 @@ static void get_dpad_item_usability(bool *dest) {
         dest[i] = check_c_item_usable(DPAD_CONFIG.primary.values[i]);
 }
 
+static bool is_any_item_usable(const u8 *dpad, const bool *usable) {
+    for (int i = 0; i < 4; i++) {
+        if (has_inventory_item(dpad[i]) && usable[i])
+            return true;
+    }
+
+    return false;
+}
+
 static bool check_action_state() {
     // Make sure certain action state flags are cleared before processing input
     if ((z2_link.action_state1 & DPAD_ACTION_STATE1) != 0)
@@ -130,11 +136,11 @@ static bool check_action_state() {
         return true;
 }
 
-static void load_texture(int idx, u8 item) {
+static void load_texture(u8 *buf, int idx, u8 item) {
     u32 phys = z2_GetFilePhysAddr(z2_item_texture_file);
-    u8 *dest = textures + (idx * ITEM_TEXTURE_LEN);
+    u8 *dest = buf + (idx * ITEM_TEXTURE_LEN);
     z2_LoadFileFromArchive(phys, item, dest, ITEM_TEXTURE_LEN);
-    texture_items[idx] = item;
+    g_texture_items[idx] = item;
 }
 
 static u16 update_y_position(u16 x, u16 y, u16 padding) {
@@ -171,7 +177,7 @@ static u16 update_y_position(u16 x, u16 y, u16 padding) {
     return y;
 }
 
-bool is_minigame_frame() {
+static bool is_minigame_frame() {
     bool result = false;
 
     if (g_was_minigame)
@@ -200,24 +206,23 @@ void dpad_init() {
     }
 
     // Allocate space for textures
-    textures = heap_alloc(ITEM_TEXTURE_LEN * 4);
-    dpad_item_sprites.buf = textures;
+    g_dpad_item_sprites.buf = heap_alloc(ITEM_TEXTURE_LEN * 4);
 
     // Load textures
     for (int i = 0; i < 4; i++)
-        load_texture(i, DPAD_CONFIG.primary.values[i]);
+        load_texture(g_dpad_item_sprites.buf, i, DPAD_CONFIG.primary.values[i]);
 }
 
-void do_dpad_per_game_frame() {
+void dpad_do_per_game_frame() {
     // If disabled, do nothing
     if (DPAD_CONFIG.state == DPAD_STATE_TYPE_DISABLED)
         return;
 
     // Update usability flags for later use in draw_dpad
-    get_dpad_item_usability(usable);
+    get_dpad_item_usability(g_usable);
 }
 
-bool handle_dpad() {
+bool dpad_handle() {
     z2_pad_t pad_pressed = z2_ctxt.input[0].pad_pressed;
 
     // If disabled, do nothing
@@ -235,29 +240,20 @@ bool handle_dpad() {
     if (!check_action_state())
         return false;
 
-    if (pad_pressed.du && usable[0]) {
+    if (pad_pressed.du && g_usable[0]) {
         return try_use_item(DPAD_CONFIG.primary.du);
-    } else if (pad_pressed.dr && usable[1]) {
+    } else if (pad_pressed.dr && g_usable[1]) {
         return try_use_item(DPAD_CONFIG.primary.dr);
-    } else if (pad_pressed.dd && usable[2]) {
+    } else if (pad_pressed.dd && g_usable[2]) {
         return try_use_item(DPAD_CONFIG.primary.dd);
-    } else if (pad_pressed.dl && usable[3]) {
+    } else if (pad_pressed.dl && g_usable[3]) {
         return try_use_item(DPAD_CONFIG.primary.dl);
     }
 
     return false;
 }
 
-static bool is_any_item_usable(u8 *dpad, bool *usable) {
-    for (int i = 0; i < 4; i++) {
-        if (has_inventory_item(dpad[i]) && usable[i])
-            return true;
-    }
-
-    return false;
-}
-
-void draw_dpad() {
+void dpad_draw() {
     // If disabled or hiding, don't draw
     if (DPAD_CONFIG.state == DPAD_STATE_TYPE_DISABLED || DPAD_CONFIG.display == DPAD_DISPLAY_NONE)
         return;
@@ -282,7 +278,7 @@ void draw_dpad() {
 
     // Check if any items shown on the D-Pad are usable
     // If none are, draw main D-Pad sprite faded
-    if (!is_any_item_usable(DPAD_CONFIG.primary.values, usable) && prim_alpha > 0x4A)
+    if (!is_any_item_usable(DPAD_CONFIG.primary.values, g_usable) && prim_alpha > 0x4A)
         prim_alpha = 0x4A;
 
     // Show faded while flying as a Deku
@@ -293,8 +289,8 @@ void draw_dpad() {
     u8 posidx = (DPAD_CONFIG.display == DPAD_DISPLAY_LEFT) ? 0 : 1;
 
     // Main sprite position
-    u16 x = position[posidx][0];
-    u16 y = position[posidx][1];
+    u16 x = g_position[posidx][0];
+    u16 y = g_position[posidx][1];
     y = update_y_position(x, y, 10);
 
     z2_disp_buf_t *db = &(z2_ctxt.gfx->overlay);
@@ -309,8 +305,8 @@ void draw_dpad() {
         u8 value = DPAD_CONFIG.primary.values[i];
 
         // Calculate x/y from relative positions
-        u16 ix = x + positions[i][0];
-        u16 iy = y + positions[i][1];
+        u16 ix = x + g_positions[i][0];
+        u16 iy = y + g_positions[i][1];
 
         // Show nothing if not in inventory
         if (!has_inventory_item(value))
@@ -318,17 +314,17 @@ void draw_dpad() {
 
         // Draw faded
         u8 alpha = prim_alpha;
-        if (!usable[i] && alpha > 0x4A)
+        if (!g_usable[i] && alpha > 0x4A)
             alpha = 0x4A;
         gDPSetPrimColor(db->p++, 0, 0, 0xFF, 0xFF, 0xFF, alpha);
 
         // If D-Pad item has changed, load new texture on the fly.
-        if (texture_items[i] != value) {
-            load_texture(i, value);
+        if (g_texture_items[i] != value) {
+            load_texture(g_dpad_item_sprites.buf, i, value);
         }
 
-        sprite_load(db, &dpad_item_sprites, i, 1);
-        sprite_draw(db, &dpad_item_sprites, 0, ix, iy, 16, 16);
+        sprite_load(db, &g_dpad_item_sprites, i, 1);
+        sprite_draw(db, &g_dpad_item_sprites, 0, ix, iy, 16, 16);
     }
 
     gDPPipeSync(db->p++);
