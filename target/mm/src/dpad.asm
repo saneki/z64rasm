@@ -13,20 +13,22 @@ dpad_draw_hook:
     lw      t6, 0x0068 (sp)
 
 dpad_handle_hook:
+    ; Displaced code
+    or      s0, a0, r0
+
     addiu   sp, sp, -0x10
     sw      ra, 0x0000 (sp)
+    sw      a0, 0x0004 (sp)
 
     jal     dpad_handle
-    ; Displaced code (preserve a0)
-    sw      a0, 0x0004 (sp)
+    sw      a1, 0x0008 (sp)
 
     bnez    v0, @@caller_return
     nop
 
     lw      ra, 0x0000 (sp)
-
-    ; Displaced code (restore to s0)
-    lw      s0, 0x0004 (sp)
+    lw      a0, 0x0004 (sp)
+    lw      a1, 0x0008 (sp)
 
     jr      ra
     addiu   sp, sp, 0x10
