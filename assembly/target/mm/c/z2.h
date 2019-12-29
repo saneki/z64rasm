@@ -1988,6 +1988,13 @@ typedef struct {
 #define z2_ReadFile_addr                 0x80080C90
 #define z2_LoadFileFromArchive_addr      0x80178DAC
 
+/* Function Addresses (Get Item) */
+#define z2_SetGetItem_addr               0x800B8A1C
+
+/* Function Addresses (RNG) */
+#define z2_RngInt_addr                   0x80086FA0
+#define z2_RngSetSeed_addr               0x80086FD0
+
 /* Relocatable Functions (VRAM) */
 #define z2_LinkDamage_vram               0x80833B18
 #define z2_LinkInvincibility_vram        0x80833998
@@ -2021,6 +2028,13 @@ typedef void (*z2_LoadFile_proc)(z2_loadfile_t *loadfile);
 typedef void (*z2_LoadFileFromArchive_proc)(u32 phys_file, u8 item, u8 *dest, u32 length);
 typedef void (*z2_ReadFile_proc)(void *mem_addr, u32 vrom_addr, u32 size);
 
+/* Function Prototypes (Get Item) */
+typedef void (*z2_SetGetItem_proc)(z2_actor_t *actor, z2_game_t *game, s32 unk2, u32 unk3);
+
+/* Function Prototypes (RNG) */
+typedef u32 (*z2_RngInt_proc)();
+typedef void (*z2_RngSetSeed_proc)(u32 seed);
+
 /* Functions */
 #define z2_CanInteract                   ((z2_CanInteract_proc)           z2_CanInteract_addr)
 #define z2_CanInteract2                  ((z2_CanInteract2_proc)          z2_CanInteract2_addr)
@@ -2041,5 +2055,12 @@ typedef void (*z2_ReadFile_proc)(void *mem_addr, u32 vrom_addr, u32 size);
 #define z2_LoadFile                      ((z2_LoadFile_proc)              z2_LoadFile_addr)
 #define z2_LoadFileFromArchive           ((z2_LoadFileFromArchive_proc)   z2_LoadFileFromArchive_addr)
 #define z2_ReadFile                      ((z2_ReadFile_proc)              z2_ReadFile_addr)
+
+/* Functions (Get Item) */
+#define z2_SetGetItem                    ((z2_SetGetItem_proc)            z2_SetGetItem_addr)
+
+/* Functions (RNG) */
+#define z2_RngInt                        ((z2_RngInt_proc)                z2_RngInt_addr)
+#define z2_RngSetSeed                    ((z2_RngSetSeed_proc)            z2_RngSetSeed_addr)
 
 #endif // Z2_H
