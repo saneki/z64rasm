@@ -119,6 +119,9 @@ void file_select_before_draw(z2_game_t *game) {
     hud_colors_main_menu_init();
 
 #ifdef FILE_HASH_DEBUG
+    // Generate next seed
+    z2_RngInt();
+
     // When pressing Z, update file hash to random new value
     sprite_t *sprite = gfx_get_item_textures_sprite();
     struct misc_config *config = misc_get_config();
@@ -137,9 +140,6 @@ void file_select_draw_hash() {
     int width = (g_icon_count * icon_size) + ((g_icon_count - 1) * padding);
     int left = (Z2_SCREEN_WIDTH - width) / 2;
     int top = 12;
-
-    // Generate next seed
-    z2_RngInt();
 
     struct misc_config *config = misc_get_config();
     if (config->draw_hash) {
