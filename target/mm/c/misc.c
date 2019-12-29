@@ -6,7 +6,7 @@ struct misc_config MISC_CONFIG = {
     .version = 0,
     .draw_hash = 1,
     .fast_push = 1,
-    .ocarina_underwater = 0,
+    .ocarina_underwater = 1,
 };
 
 union faucet_speed {
