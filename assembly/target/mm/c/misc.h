@@ -27,7 +27,8 @@ struct misc_config {
     union hash hash;        /* 0x0008 */
     u8 ocarina_underwater;  /* 0x0018 */
     u8 pushblock_mode;      /* 0x0019 */
-    u8 reserved[2];         /* 0x001A */
+    u8 draw_hash;           /* 0x001A */
+    u8 reserved;            /* 0x001B */
     f32 pushblock_speed;    /* 0x001C */
 };                          /* 0x0020 */
 

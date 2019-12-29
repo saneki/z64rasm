@@ -126,9 +126,9 @@ void file_select_before_draw(z2_game_t *game) {
 #ifdef FILE_HASH_DEBUG
     // When pressing Z, update file hash to random new value
     void *buf = g_file_hash_item_sprites.buf;
+    struct misc_config *config = misc_get_config();
     z2_pad_t pad_pressed = game->common.input[0].pad_pressed;
-    if (pad_pressed.z && buf != NULL) {
-        struct misc_config *config = misc_get_config();
+    if (pad_pressed.z && config->draw_hash && buf != NULL) {
         config->hash.value = z2_RngInt();
         update_textures(buf, g_icon_count, config->hash.value);
         z2_PlaySfx(0x483B);
@@ -146,18 +146,21 @@ void file_select_draw_hash() {
     // Generate next seed
     z2_RngInt();
 
-    z2_disp_buf_t *db = &(z2_game.common.gfx->poly_opa);
+    struct misc_config *config = misc_get_config();
+    if (config->draw_hash) {
+        z2_disp_buf_t *db = &(z2_game.common.gfx->poly_opa);
 
-    // Call setup display list
-    gSPDisplayList(db->p++, &setup_db);
+        // Call setup display list
+        gSPDisplayList(db->p++, &setup_db);
 
-    gDPPipeSync(db->p++);
-    gDPSetCombineMode(db->p++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-    gDPSetPrimColor(db->p++, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF);
+        gDPPipeSync(db->p++);
+        gDPSetCombineMode(db->p++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+        gDPSetPrimColor(db->p++, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF);
 
-    for (int i = 0; i < g_icon_count; i++) {
-        sprite_load(db, &g_file_hash_item_sprites, i, 1);
-        sprite_draw(db, &g_file_hash_item_sprites, 0, left, top, icon_size, icon_size);
-        left += icon_size + padding;
+        for (int i = 0; i < g_icon_count; i++) {
+            sprite_load(db, &g_file_hash_item_sprites, i, 1);
+            sprite_draw(db, &g_file_hash_item_sprites, 0, left, top, icon_size, icon_size);
+            left += icon_size + padding;
+        }
     }
 }
