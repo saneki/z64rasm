@@ -2,7 +2,7 @@
 #define DPAD_H
 
 #include <stdbool.h>
-#include "types.h"
+#include "z2.h"
 
 // Magic number for dpad_config: "DPAD"
 #define DPAD_CONFIG_MAGIC 0x44504144
@@ -53,7 +53,7 @@ struct dpad_config {
     u8 reserved[2];                     /* 0x001A */
 };                                      /* 0x001C */
 
-void dpad_do_per_game_frame();
-void dpad_init();
+void dpad_do_per_game_frame(z2_link_t *link, z2_game_t *game);
+void dpad_init(void);
 
 #endif

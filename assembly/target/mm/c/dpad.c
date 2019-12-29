@@ -95,28 +95,28 @@ static bool have_any(u8 *dpad) {
     return false;
 }
 
-static bool try_use_inventory_item(u8 item, u8 slot) {
+static bool try_use_inventory_item(z2_game_t *game, z2_link_t *link, u8 item, u8 slot) {
     if (z2_file.inventory[slot] == item) {
-        z2_UseItem(&z2_ctxt, &z2_link, item);
+        z2_UseItem(game, link, item);
         return true;
     }
 
     return false;
 }
 
-static bool try_use_item(u8 item) {
+static bool try_use_item(z2_game_t *game, z2_link_t *link, u8 item) {
     u8 slot;
 
     // Try to find slot in item or mask inventories
     if (!get_inventory_slot(item, &slot))
         return false;
 
-    return try_use_inventory_item(item, slot);
+    return try_use_inventory_item(game, link, item, slot);
 }
 
-static void get_dpad_item_usability(bool *dest) {
+static void get_dpad_item_usability(z2_game_t *game, bool *dest) {
     for (int i = 0; i < 4; i++)
-        dest[i] = check_c_item_usable(DPAD_CONFIG.primary.values[i]);
+        dest[i] = check_c_item_usable(game, DPAD_CONFIG.primary.values[i]);
 }
 
 static bool is_any_item_usable(const u8 *dpad, const bool *usable) {
@@ -128,9 +128,9 @@ static bool is_any_item_usable(const u8 *dpad, const bool *usable) {
     return false;
 }
 
-static bool check_action_state() {
+static bool check_action_state(z2_link_t *link) {
     // Make sure certain action state flags are cleared before processing input
-    if ((z2_link.action_state1 & DPAD_ACTION_STATE1) != 0)
+    if ((link->action_state1 & DPAD_ACTION_STATE1) != 0)
         return false;
     else
         return true;
@@ -213,17 +213,17 @@ void dpad_init() {
         load_texture(g_dpad_item_sprites.buf, i, DPAD_CONFIG.primary.values[i]);
 }
 
-void dpad_do_per_game_frame() {
+void dpad_do_per_game_frame(z2_link_t *link, z2_game_t *game) {
     // If disabled, do nothing
     if (DPAD_CONFIG.state == DPAD_STATE_TYPE_DISABLED)
         return;
 
     // Update usability flags for later use in draw_dpad
-    get_dpad_item_usability(g_usable);
+    get_dpad_item_usability(game, g_usable);
 }
 
-bool dpad_handle() {
-    z2_pad_t pad_pressed = z2_ctxt.input[0].pad_pressed;
+bool dpad_handle(z2_link_t *link, z2_game_t *game) {
+    z2_pad_t pad_pressed = game->common.input[0].pad_pressed;
 
     // If disabled, do nothing
     if (DPAD_CONFIG.state == DPAD_STATE_TYPE_DISABLED)
@@ -237,23 +237,23 @@ bool dpad_handle() {
         return false;
 
     // Check action state flags
-    if (!check_action_state())
+    if (!check_action_state(link))
         return false;
 
     if (pad_pressed.du && g_usable[0]) {
-        return try_use_item(DPAD_CONFIG.primary.du);
+        return try_use_item(game, link, DPAD_CONFIG.primary.du);
     } else if (pad_pressed.dr && g_usable[1]) {
-        return try_use_item(DPAD_CONFIG.primary.dr);
+        return try_use_item(game, link, DPAD_CONFIG.primary.dr);
     } else if (pad_pressed.dd && g_usable[2]) {
-        return try_use_item(DPAD_CONFIG.primary.dd);
+        return try_use_item(game, link, DPAD_CONFIG.primary.dd);
     } else if (pad_pressed.dl && g_usable[3]) {
-        return try_use_item(DPAD_CONFIG.primary.dl);
+        return try_use_item(game, link, DPAD_CONFIG.primary.dl);
     }
 
     return false;
 }
 
-void dpad_draw() {
+void dpad_draw(z2_game_t *game) {
     // If disabled or hiding, don't draw
     if (DPAD_CONFIG.state == DPAD_STATE_TYPE_DISABLED || DPAD_CONFIG.display == DPAD_DISPLAY_NONE)
         return;
@@ -268,13 +268,13 @@ void dpad_draw() {
         return;
 
     // Use minimap alpha by default for fading textures out
-    u8 prim_alpha = z2_game.hud_ctxt.minimap_alpha & 0xFF;
+    u8 prim_alpha = game->hud_ctxt.minimap_alpha & 0xFF;
     // If in minigame, the C buttons fade out and so should the D-Pad
     if (z2_file.game_state == Z2_GAME_STATE_MINIGAME ||
         z2_file.game_state == Z2_GAME_STATE_BOAT_ARCHERY ||
         z2_file.game_state == Z2_GAME_STATE_SWORDSMAN_GAME ||
         is_minigame_frame())
-        prim_alpha = z2_game.hud_ctxt.c_left_alpha & 0xFF;
+        prim_alpha = game->hud_ctxt.c_left_alpha & 0xFF;
 
     // Check if any items shown on the D-Pad are usable
     // If none are, draw main D-Pad sprite faded
@@ -293,7 +293,7 @@ void dpad_draw() {
     u16 y = g_position[posidx][1];
     y = update_y_position(x, y, 10);
 
-    z2_disp_buf_t *db = &(z2_ctxt.gfx->overlay);
+    z2_disp_buf_t *db = &(game->common.gfx->overlay);
     gSPDisplayList(db->p++, &setup_db);
     gDPPipeSync(db->p++);
     gDPSetPrimColor(db->p++, 0, 0, 0xFF, 0xFF, 0xFF, prim_alpha);
