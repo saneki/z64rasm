@@ -47,10 +47,10 @@
 ; Remove relocations for hook.
 .orga 0xDE0A54 ; In VRAM: 0x80A173C4
 .area 0x10, 0
-    .dw 0x46002DE4 ; Replaces: 0x45002E14
-    .dw 0x46002DE4 ; Replaces: 0x46002E18
-    .dw 0x46002DE4 ; Replaces: 0x45002E1C
-    .dw 0x46002DE4 ; Replaces: 0x46002E20
+    .dw 0x00000000 ; Replaces: 0x45002E14
+    .dw 0x00000000 ; Replaces: 0x46002E18
+    .dw 0x00000000 ; Replaces: 0x45002E1C
+    .dw 0x00000000 ; Replaces: 0x46002E20
 .endarea
 
 ;==================================================================================================
