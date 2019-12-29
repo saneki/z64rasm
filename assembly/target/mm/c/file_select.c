@@ -1,3 +1,4 @@
+#include "dpad.h"
 #include "gfx.h"
 #include "hud_colors.h"
 #include "misc.h"
@@ -6,14 +7,6 @@
 
 // Enables using Z to refresh file select hash icons.
 // #define FILE_HASH_DEBUG
-
-#define ITEM_TEXTURE_LEN 0x1000
-
-// Sprite buffer for hash icon textures.
-static sprite_t g_file_hash_item_sprites = {
-    NULL, 32, 32, 4,
-    G_IM_FMT_RGBA, G_IM_SIZ_32b, 4
-};
 
 // Number of icons to display using hash value.
 const static int g_icon_count = 5;
@@ -86,37 +79,39 @@ static const u8 g_hash_icons[0x40] = {
     0x61, // Bomber's Notebook
 };
 
-static void load_texture(u8 *buf, int idx, u8 item) {
+static void load_texture(u8 *buf, int idx, int length, u8 item) {
     u32 phys = z2_GetFilePhysAddr(z2_item_texture_file);
-    u8 *dest = buf + (idx * ITEM_TEXTURE_LEN);
-    z2_LoadFileFromArchive(phys, item, dest, ITEM_TEXTURE_LEN);
+    u8 *dest = buf + (idx * length);
+    z2_LoadFileFromArchive(phys, item, dest, length);
 }
 
-static void update_textures(void *buf, int count, u32 hash) {
+static void update_textures(void *buf, int count, int length, u32 hash) {
     for (int i = 0; i < count; i++, hash <<= 6) {
         u32 sym = (hash >> 26);
         u8 item = g_hash_icons[sym];
-        load_texture(buf, i, item);
+        load_texture(buf, i, length, item);
     }
 }
 
+static void update_textures_from_sprite(sprite_t *sprite, int count, u32 hash) {
+    int tilelen = sprite_bytes_per_tile(sprite);
+    update_textures(sprite->buf, count, tilelen, hash);
+}
+
 void file_select_hook_after_ctor(z2_game_t *game) {
-    // Allocate space for hash icon textures
-    if (g_file_hash_item_sprites.buf == NULL) {
-        g_file_hash_item_sprites.buf = heap_alloc(ITEM_TEXTURE_LEN * g_icon_count);
-    }
+    // Consider D-Pad item textures cleared so they are reloaded next time
+    dpad_clear_item_textures();
 
     // Write icon textures
-    void *buf = g_file_hash_item_sprites.buf;
-    if (buf != NULL) {
+    sprite_t *sprite = gfx_get_item_textures_sprite();
+    if (sprite->buf != NULL) {
         struct misc_config *config = misc_get_config();
         u32 hash = config->hash.value;
-        update_textures(buf, g_icon_count, hash);
+        update_textures_from_sprite(sprite, g_icon_count, hash);
     }
 }
 
 void file_select_hook_after_dtor(z2_game_t *game) {
-    // Todo: Properly unload textures when not needed?
 }
 
 void file_select_before_draw(z2_game_t *game) {
@@ -125,12 +120,12 @@ void file_select_before_draw(z2_game_t *game) {
 
 #ifdef FILE_HASH_DEBUG
     // When pressing Z, update file hash to random new value
-    void *buf = g_file_hash_item_sprites.buf;
+    sprite_t *sprite = gfx_get_item_textures_sprite();
     struct misc_config *config = misc_get_config();
     z2_pad_t pad_pressed = game->common.input[0].pad_pressed;
-    if (pad_pressed.z && config->draw_hash && buf != NULL) {
+    if (pad_pressed.z && config->draw_hash && sprite->buf != NULL) {
         config->hash.value = z2_RngInt();
-        update_textures(buf, g_icon_count, config->hash.value);
+        update_textures_from_sprite(sprite, g_icon_count, config->hash.value);
         z2_PlaySfx(0x483B);
     }
 #endif
@@ -157,9 +152,10 @@ void file_select_draw_hash() {
         gDPSetCombineMode(db->p++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
         gDPSetPrimColor(db->p++, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF);
 
+        sprite_t *sprite = gfx_get_item_textures_sprite();
         for (int i = 0; i < g_icon_count; i++) {
-            sprite_load(db, &g_file_hash_item_sprites, i, 1);
-            sprite_draw(db, &g_file_hash_item_sprites, 0, left, top, icon_size, icon_size);
+            sprite_load(db, sprite, i, 1);
+            sprite_draw(db, sprite, 0, left, top, icon_size, icon_size);
             left += icon_size + padding;
         }
     }
