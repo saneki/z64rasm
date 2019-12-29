@@ -20,7 +20,7 @@ void c_init() {
 //}
 
 void before_non_menu_update() {
-    do_dpad_per_game_frame();
+    dpad_do_per_game_frame();
     handle_external_effects();
 }
 
