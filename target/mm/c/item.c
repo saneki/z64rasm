@@ -1,7 +1,7 @@
 #include <stdbool.h>
 #include "z2.h"
 
-void check_item_usability(bool *dest, u8 b, u8 c1, u8 c2, u8 c3) {
+void check_item_usability(bool *dest, z2_game_t *game, u8 b, u8 c1, u8 c2, u8 c3) {
     u8 previous[4], prevstates[5];
 
     // Backup modified fields
@@ -23,7 +23,7 @@ void check_item_usability(bool *dest, u8 b, u8 c1, u8 c2, u8 c3) {
     z2_file.form_button_item[0].cdown  = c2;
     z2_file.form_button_item[0].cright = c3;
 
-    z2_UpdateButtonUsability(&z2_ctxt);
+    z2_UpdateButtonUsability(game);
 
     // Set dest to enabled-states (which are either 0x00 or 0xFF)
     for (int i = 0; i < 4; i++)
@@ -44,9 +44,9 @@ void check_item_usability(bool *dest, u8 b, u8 c1, u8 c2, u8 c3) {
     z2_file.sub_game_state = sub_game_state;
 }
 
-bool check_c_item_usable(u8 c) {
+bool check_c_item_usable(z2_game_t *game, u8 c) {
     bool dest[4];
 
-    check_item_usability(dest, 0xFF, c, 0xFF, 0xFF);
+    check_item_usability(dest, game, 0xFF, c, 0xFF, 0xFF);
     return dest[1];
 }
