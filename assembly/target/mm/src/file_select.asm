@@ -25,9 +25,10 @@ file_select_draw_hash_hook:
     sw      a2, 0x000C (sp)
     sw      a3, 0x0010 (sp)
     sw      v0, 0x0014 (sp)
+    sw      t4, 0x0018 (sp)
 
     jal     file_select_draw_hash
-    sw      t4, 0x0018 (sp)
+    or      a0, s0, r0
 
     lw      ra, 0x0000 (sp)
     lw      a0, 0x0004 (sp)
