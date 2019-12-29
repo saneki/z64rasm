@@ -19,7 +19,9 @@ typedef struct {
 sprite_t dpad_sprite;
 
 void gfx_init();
+sprite_t* gfx_get_item_textures_sprite(void);
 
+int sprite_bytes_per_tile(sprite_t *sprite);
 void sprite_load(z2_disp_buf_t *db, sprite_t *sprite,
         int start_tile, int tile_count);
 void sprite_draw(z2_disp_buf_t *db, sprite_t *sprite, int tile_index,

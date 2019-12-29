@@ -29,6 +29,13 @@ sprite_t dpad_sprite = {
     G_IM_FMT_RGBA, G_IM_SIZ_32b, 4
 };
 
+// Sprite containing 5 item textures.
+// Depending on the game state, this is used for either the file select hash icons, or the d-pad icons.
+static sprite_t g_item_textures_sprite = {
+    NULL, 32, 32, 5,
+    G_IM_FMT_RGBA, G_IM_SIZ_32b, 4
+};
+
 int sprite_bytes_per_tile(sprite_t *sprite) {
     return sprite->tile_w * sprite->tile_h * sprite->bytes_per_texel;
 }
@@ -66,6 +73,14 @@ void sprite_draw(z2_disp_buf_t *db, sprite_t *sprite, int tile_index,
             width_factor, height_factor);
 }
 
+sprite_t* gfx_get_item_textures_sprite(void) {
+    return &g_item_textures_sprite;
+}
+
 void gfx_init() {
     dpad_sprite.buf = dpad_texture_raw;
+
+    // Allocate space for item textures
+    int size = sprite_bytes(&g_item_textures_sprite);
+    g_item_textures_sprite.buf = heap_alloc(size);
 }

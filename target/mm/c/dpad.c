@@ -6,8 +6,6 @@
 #include "util.h"
 #include "z2.h"
 
-#define ITEM_TEXTURE_LEN 0x1000
-
 // D-Pad configuration structure that can be set by a randomizer.
 struct dpad_config DPAD_CONFIG = {
     .magic = DPAD_CONFIG_MAGIC,
@@ -29,11 +27,6 @@ const static u8 g_dpad_default[4] = {
     Z2_ITEM_ZORA_MASK,
     Z2_ITEM_OCARINA,
     Z2_ITEM_GORON_MASK,
-};
-
-static sprite_t g_dpad_item_sprites = {
-    NULL, 32, 32, 4,
-    G_IM_FMT_RGBA, G_IM_SIZ_32b, 4
 };
 
 // Indicates which item textures are currently loaded into our buffer.
@@ -136,11 +129,16 @@ static bool check_action_state(z2_link_t *link) {
         return true;
 }
 
-static void load_texture(u8 *buf, int idx, u8 item) {
+static void load_texture(u8 *buf, int idx, int length, u8 item) {
     u32 phys = z2_GetFilePhysAddr(z2_item_texture_file);
-    u8 *dest = buf + (idx * ITEM_TEXTURE_LEN);
-    z2_LoadFileFromArchive(phys, item, dest, ITEM_TEXTURE_LEN);
+    u8 *dest = buf + (idx * length);
+    z2_LoadFileFromArchive(phys, item, dest, length);
     g_texture_items[idx] = item;
+}
+
+static void load_texture_from_sprite(sprite_t *sprite, int idx, u8 item) {
+    int tilelen = sprite_bytes_per_tile(sprite);
+    load_texture(sprite->buf, idx, tilelen, item);
 }
 
 static u16 update_y_position(u16 x, u16 y, u16 padding) {
@@ -197,6 +195,12 @@ static bool is_minigame_frame() {
     return result || g_was_minigame;
 }
 
+void dpad_clear_item_textures(void) {
+    for (int i = 0; i < 4; i++) {
+        g_texture_items[i] = Z2_ITEM_NONE;
+    }
+}
+
 void dpad_init() {
     // If using default values, overwrite DPAD_CONFIG items with defaults
     if (DPAD_CONFIG.state == DPAD_STATE_TYPE_DEFAULTS) {
@@ -204,13 +208,6 @@ void dpad_init() {
             DPAD_CONFIG.primary.values[i] = g_dpad_default[i];
         }
     }
-
-    // Allocate space for textures
-    g_dpad_item_sprites.buf = heap_alloc(ITEM_TEXTURE_LEN * 4);
-
-    // Load textures
-    for (int i = 0; i < 4; i++)
-        load_texture(g_dpad_item_sprites.buf, i, DPAD_CONFIG.primary.values[i]);
 }
 
 void dpad_do_per_game_frame(z2_link_t *link, z2_game_t *game) {
@@ -301,6 +298,7 @@ void dpad_draw(z2_game_t *game) {
     sprite_load(db, &dpad_sprite, 0, 1);
     sprite_draw(db, &dpad_sprite, 0, x, y, 16, 16);
 
+    sprite_t *sprite = gfx_get_item_textures_sprite();
     for (int i = 0; i < 4; i++) {
         u8 value = DPAD_CONFIG.primary.values[i];
 
@@ -320,11 +318,11 @@ void dpad_draw(z2_game_t *game) {
 
         // If D-Pad item has changed, load new texture on the fly.
         if (g_texture_items[i] != value) {
-            load_texture(g_dpad_item_sprites.buf, i, value);
+            load_texture_from_sprite(sprite, i, value);
         }
 
-        sprite_load(db, &g_dpad_item_sprites, i, 1);
-        sprite_draw(db, &g_dpad_item_sprites, 0, ix, iy, 16, 16);
+        sprite_load(db, sprite, i, 1);
+        sprite_draw(db, sprite, 0, ix, iy, 16, 16);
     }
 
     gDPPipeSync(db->p++);
