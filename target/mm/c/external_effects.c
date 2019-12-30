@@ -140,20 +140,20 @@ static u32 g_fairy_cooldown = 0;
 // Most recent scene, tracked for fairy usage.
 static u16 g_fairy_scene = 0;
 
-static void handle_camera_overlook_effect() {
+static void handle_camera_overlook_effect(z2_game_t *game, z2_link_t *link) {
     // Handle "Camera Overlook" effect.
     if (g_external_effects.camera_overlook) {
-        s16 curstate = z2_game.cameras[0].state;
+        s16 curstate = game->cameras[0].state;
         if (g_freecam_modes[curstate] && curstate != Z2_CAMERA_STATE_FUKAN1) {
-            z2_game.cameras[0].state = Z2_CAMERA_STATE_FUKAN1;
+            game->cameras[0].state = Z2_CAMERA_STATE_FUKAN1;
 
             // Camera mode used while Z-targetting, it should trigger the camera to begin drifting over Link
-            z2_game.cameras[0].mode = Z2_CAMERA_MODE_PARALLEL;
+            game->cameras[0].mode = Z2_CAMERA_MODE_PARALLEL;
         }
     }
 }
 
-static void handle_chateau_effect() {
+static void handle_chateau_effect(z2_game_t *game, z2_link_t *link) {
     // Handle "Chateau" effect
     if (g_external_effects.chateau) {
         z2_file.week_event_inf.infinite_magic = 1;
@@ -183,11 +183,11 @@ static void handle_chateau_effect() {
     }
 }
 
-static void handle_fairy_effect() {
+static void handle_fairy_effect(z2_game_t *game, z2_link_t *link) {
     // Reset fairy instance usages when scene changes
-    if (z2_game.scene_index != g_fairy_scene) {
+    if (game->scene_index != g_fairy_scene) {
         reset_fairy_instance_usage();
-        g_fairy_scene = z2_game.scene_index;
+        g_fairy_scene = game->scene_index;
         g_fairy_cooldown = 0;
     }
 
@@ -197,12 +197,12 @@ static void handle_fairy_effect() {
     }
 
     // Check state type to see if we can receive a fairy during this frame
-    if (g_external_effects.fairy && g_fairy_cooldown == 0 && can_interact_with_fairy()) {
+    if (g_external_effects.fairy && g_fairy_cooldown == 0 && can_interact_with_fairy(game, link)) {
         // Spawn fairy on top of Link, and call the function to interact
-        z2_actor_t *fairy = spawn_next_fairy_actor(z2_link.common.pos_1);
+        z2_actor_t *fairy = spawn_next_fairy_actor(game, link->common.pos_1);
         if (fairy) {
             if (fairy->main_proc != NULL) {
-                fairy->main_proc(fairy, &z2_game);
+                fairy->main_proc(fairy, game);
             }
             g_fairy_cooldown = FAIRY_COOLDOWN;
             g_external_effects.fairy -= 1;
@@ -215,7 +215,7 @@ static void handle_fairy_effect() {
     }
 }
 
-static void handle_freeze_effect() {
+static void handle_freeze_effect(z2_game_t *game, z2_link_t *link) {
     // Handle "Freeze" effect.
     if (g_external_effects.freeze) {
         push_pending_icetrap();
@@ -223,7 +223,7 @@ static void handle_freeze_effect() {
     }
 }
 
-static void handle_ice_physics_effect() {
+static void handle_ice_physics_effect(z2_game_t *game, z2_link_t *link) {
     // Handle "Ice Physics" effect.
     if (g_external_effects.ice_physics) {
         override_floor_physics_type(true, Z2_FLOOR_PHYSICS_ICE);
@@ -232,7 +232,7 @@ static void handle_ice_physics_effect() {
     }
 }
 
-static void handle_jinx_effect() {
+static void handle_jinx_effect(z2_game_t *game, z2_link_t *link) {
     // Handle "Jinx" effect.
     if (g_external_effects.jinx) {
         // Add multiple of JINX_AMOUNT to jinx timer
@@ -267,33 +267,33 @@ static void handle_jinx_effect() {
     }
 }
 
-static void handle_no_z_effect() {
+static void handle_no_z_effect(z2_game_t *game, z2_link_t *link) {
     // Handle "No Z" effect.
     if (g_external_effects.no_z) {
-        z2_game.common.input[0].raw.pad.z = 0;
-        z2_game.common.input[0].pad_pressed.z = 0;
+        game->common.input[0].raw.pad.z = 0;
+        game->common.input[0].pad_pressed.z = 0;
     }
 }
 
-static void handle_reverse_controls_effect() {
+static void handle_reverse_controls_effect(z2_game_t *game, z2_link_t *link) {
     // Handle "Reverse Controls" effect.
     if (g_external_effects.reverse_controls) {
-        z2_game.common.input[0].raw.x = -z2_game.common.input[0].raw.x;
-        z2_game.common.input[0].raw.y = -z2_game.common.input[0].raw.y;
-        z2_game.common.input[0].x_diff = -z2_game.common.input[0].x_diff;
-        z2_game.common.input[0].y_diff = -z2_game.common.input[0].y_diff;
-        z2_game.common.input[0].adjusted_x = -z2_game.common.input[0].adjusted_x;
-        z2_game.common.input[0].adjusted_y = -z2_game.common.input[0].adjusted_y;
+        game->common.input[0].raw.x = -game->common.input[0].raw.x;
+        game->common.input[0].raw.y = -game->common.input[0].raw.y;
+        game->common.input[0].x_diff = -game->common.input[0].x_diff;
+        game->common.input[0].y_diff = -game->common.input[0].y_diff;
+        game->common.input[0].adjusted_x = -game->common.input[0].adjusted_x;
+        game->common.input[0].adjusted_y = -game->common.input[0].adjusted_y;
     }
 }
 
-void handle_external_effects() {
-    handle_camera_overlook_effect();
-    handle_chateau_effect();
-    handle_fairy_effect();
-    handle_freeze_effect();
-    handle_ice_physics_effect();
-    handle_jinx_effect();
-    handle_no_z_effect();
-    handle_reverse_controls_effect();
+void handle_external_effects(z2_link_t *link, z2_game_t *game) {
+    handle_camera_overlook_effect(game, link);
+    handle_chateau_effect(game, link);
+    handle_fairy_effect(game, link);
+    handle_freeze_effect(game, link);
+    handle_ice_physics_effect(game, link);
+    handle_jinx_effect(game, link);
+    handle_no_z_effect(game, link);
+    handle_reverse_controls_effect(game, link);
 }

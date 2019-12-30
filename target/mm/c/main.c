@@ -22,7 +22,7 @@ void c_init() {
 
 void before_non_menu_update(z2_link_t *link, z2_game_t *game) {
     dpad_do_per_game_frame(link, game);
-    handle_external_effects();
+    handle_external_effects(link, game);
 }
 
 bool before_damage_process() {

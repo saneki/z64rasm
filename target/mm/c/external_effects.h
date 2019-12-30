@@ -1,7 +1,7 @@
 #ifndef EXTERNAL_EFFECTS_H
 #define EXTERNAL_EFFECTS_H
 
-#include "types.h"
+#include "z2.h"
 
 // Magic number for external_effects: "EXFX"
 #define EXTERNAL_EFFECTS_MAGIC 0x45584658
@@ -21,6 +21,6 @@ typedef struct {
     u8 reverse_controls;
 } external_effects_t;
 
-void handle_external_effects();
+void handle_external_effects(z2_link_t *link, z2_game_t *game);
 
 #endif // EXTERNAL_EFFECTS_H
