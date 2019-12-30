@@ -1711,6 +1711,11 @@ struct z2_actor_s {
 /// =============================================================
 
 /**
+ * Macro for getting the z2_link_t pointer from the z2_game_t pointer.
+ **/
+#define Z2_LINK(GAME) ((z2_link_t*)((GAME->actor_ctxt.actor_list[2].first)))
+
+/**
  * Link actor.
  **/
 typedef struct {
