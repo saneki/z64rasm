@@ -218,7 +218,7 @@ static void handle_fairy_effect(z2_game_t *game, z2_link_t *link) {
 static void handle_freeze_effect(z2_game_t *game, z2_link_t *link) {
     // Handle "Freeze" effect.
     if (g_external_effects.freeze) {
-        push_pending_icetrap();
+        icetrap_push_pending();
         g_external_effects.freeze = 0;
     }
 }

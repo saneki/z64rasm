@@ -8,12 +8,12 @@ bool icetrap_is_pending() {
     return g_pending_freezes > 0;
 }
 
-void push_pending_icetrap() {
+void icetrap_push_pending() {
     if (g_pending_freezes < 0xFF)
         g_pending_freezes += 1;
 }
 
-bool give_icetrap(z2_link_t *link, z2_game_t *game) {
+bool icetrap_give(z2_link_t *link, z2_game_t *game) {
     if ((z2_file.game_state == Z2_GAME_STATE_TRANSITION) ||
         (z2_file.game_state == Z2_GAME_STATE_TRANSITION_2) ||
         (link->action_state1 & Z2_ACTION_STATE1_SPECIAL) != 0)
