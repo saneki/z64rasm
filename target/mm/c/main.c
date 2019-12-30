@@ -25,6 +25,6 @@ void before_non_menu_update(z2_link_t *link, z2_game_t *game) {
     handle_external_effects(link, game);
 }
 
-bool before_damage_process() {
-    return give_icetrap();
+bool before_damage_process(z2_link_t *link, z2_game_t *game) {
+    return give_icetrap(link, game);
 }
