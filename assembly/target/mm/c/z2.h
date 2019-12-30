@@ -838,8 +838,8 @@ typedef struct {
     char             unk_0x14C[0x10];                /* 0x014C */
     u16              perspnorm_scale;                /* 0x015C */
     u32              unk_0x160;                      /* 0x0160 */
-    u32              unk_0x164;                      /* 0x0168 */
-} z2_view_t;                                         /* 0x016C */
+    u32              unk_0x164;                      /* 0x0164 */
+} z2_view_t;                                         /* 0x0168 */
 
 typedef struct {
     union {
@@ -1142,7 +1142,7 @@ typedef struct {
 /// =============================================================
 
 typedef struct {
-    u8               unk_0x00[0x168];                /* 0x0000 */
+    z2_view_t        view;                           /* 0x0000 */
     void            *icon_item_static;               /* 0x0168 */
     void            *icon_item_24;                   /* 0x016C */
     void            *icon_item_map;                  /* 0x0170 */
