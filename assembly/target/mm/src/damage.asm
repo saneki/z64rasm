@@ -28,5 +28,5 @@ before_damage_process_hook:
     lw      ra, 0x002C (sp)
 
     ; Fix stack for caller and return
-    jr ra
+    jr      ra
     addiu   sp, sp, 0x78
