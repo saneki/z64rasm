@@ -2021,8 +2021,8 @@ typedef void (*z2_LinkInvincibility_proc)(z2_link_t *link, u8 frames);
 typedef void (*z2_PlaySfx_proc)(u32 id);
 typedef z2_actor_t* (*z2_SpawnActor_proc)(z2_actor_ctxt_t *actor_ctx, z2_game_t *game, u16 id,
                                           f32 x, f32 y, f32 z, u16 rx, u16 ry, u16 rz, u16 variable);
-typedef void (*z2_UpdateButtonUsability_proc)(z2_ctxt_t *ctxt);
-typedef void (*z2_UseItem_proc)(z2_ctxt_t *ctxt, z2_link_t *link, u8 item);
+typedef void (*z2_UpdateButtonUsability_proc)(z2_game_t *game);
+typedef void (*z2_UseItem_proc)(z2_game_t *game, z2_link_t *link, u8 item);
 typedef void (*z2_WriteHeartColors_proc)(z2_game_t *game);
 
 /* Function Prototypes (File Loading) */
