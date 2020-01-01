@@ -6,7 +6,7 @@
 ; Replaces:
 ;   andi    t4, t3, 0x00FF
 ;   or      t5, t4, at
-.orga 0xAFEE5C ; In memory: 0x80118DFC
+.org 0x80118DFC ; In rom: 0xAFEE5C
     jal     get_a_button_color_hook
     nop
 
@@ -16,7 +16,7 @@
 ;   ori     at, at, 0x69E8
 ;   addiu   t7, r0, 0x0064
 ;   addiu   t6, r0, 0x00FF
-.orga 0xAFD200 ; In memory: 0x801171A0
+.org 0x801171A0 ; In rom: 0xAFD200
     jal     get_b_button_color_hook
     ori     at, at, 0x69E8
     andi    t6, t6, 0x00FF
@@ -28,7 +28,7 @@
 ;   or      t9, t6, t7
 ;   andi    t6, t8, 0x00FF
 ;   or      t7, t9, t6
-.orga 0xAF346C ; In memory: 0x8010D40C
+.org 0x8010D40C ; rom: 0xAF346C
     sw      ra, -0x0004 (sp)
     jal     get_c_start_button_color_hook
     lh      t8, 0x002A (sp)
@@ -39,7 +39,7 @@
 ;   lh      t6, 0x026A (t4)
 ;   andi    t8, t6, 0x00FF
 ;   or      t9, t8, t2
-.orga 0xAFD954 ; In memory: 0x801178F4
+.org 0x801178F4 ; In rom: 0xAFD954
     nop
     jal     get_c_button_triangle_color_hook
     lh      t6, 0x026A (t4)
@@ -49,7 +49,7 @@
 ;   lh      t6, 0x026C (t4)
 ;   andi    t8, t6, 0x00FF
 ;   or      t9, t8, t2
-.orga 0xAFD988 ; In memory: 0x80117928
+.org 0x80117928 ; In rom: 0xAFD988
     nop
     jal     get_c_button_triangle_color_hook
     lh      t6, 0x026C (t4)
@@ -59,7 +59,7 @@
 ;   lh      t6, 0x026E (t4)
 ;   andi    t8, t6, 0x00FF
 ;   or      t9, t8, t2
-.orga 0xAFD9B0 ; In memory: 0x80117950
+.org 0x80117950 ; In rom: 0xAFD9B0
     nop
     jal     get_c_button_triangle_color_hook
     lh      t6, 0x026E (t4)
@@ -75,7 +75,7 @@
 ;   addiu   t9, v0, 0x0008
 ;   sw      t9, 0x02A0 (s0)
 ;   or      t8, ra, at
-.orga 0xB00170 ; In memory: 0x8011A110
+.org 0x8011A110 ; In rom: 0xB00170
     addiu   t9, v0, 0x0008
     sw      ra, -0x0004 (sp)
     jal     get_clock_emblem_color_hook
@@ -88,7 +88,7 @@
 ;   lh      a0, 0xFBCC (a0)
 ;   lh      t0, 0xFBEC (t0)
 ;   lui     t5, 0x801C
-.orga 0xAFFB98 ; In memory: 0x80119B38
+.org 0x80119B38 ; In rom: 0xAFFB98
     sw      ra, -0x0004 (sp)
     jal     get_inverted_clock_emblem_color_r_hook
     nop
@@ -100,7 +100,7 @@
 ;   lh      a2, 0xFBF0 (a2)
 ;   lui     a3, 0x801C
 ;   lui     t3, 0x801C
-.orga 0xAFFC64 ; In memory: 0x80119C04
+.org 0x80119C04 ; In rom: 0xAFFC64
     sw      ra, -0x0004 (sp)
     jal     get_inverted_clock_emblem_color_g_hook
     lh      t5, 0xFBD0 (t5)
@@ -112,7 +112,7 @@
 ;   addu    a0, a0, t2
 ;   lh      a3, 0xFBD4 (a3)
 ;   lh      a0, 0xFBF4 (a0)
-.orga 0xAFFD28 ; In memory: 0x80119CC8
+.org 0x80119CC8 ; In rom: 0xAFFD28
     sw      ra, -0x0004 (sp)
     jal     get_inverted_clock_emblem_color_b_hook
     lh      a3, 0xFBD4 (a3)
@@ -124,7 +124,7 @@
 ;   ori     at, at, 0x6E00
 ;   andi    t9, t7, 0x00FF
 ;   or      t6, t9, at
-.orga 0xB003FC ; In memory: 0x8011A39C
+.org 0x8011A39C ; In rom: 0xB003FC
     or      a3, t7, r0
     jal     get_clock_emblem_sun_color_hook
     swc1    f2, 0x01D0 (sp)
@@ -140,7 +140,7 @@
 ;   ori     at, at, 0x6E00
 ;   andi    t6, t9, 0x00FF
 ;   or      t8, t6, at
-.orga 0xB00420 ; In memory: 0x8011A3C0
+.org 0x8011A3C0 ; In rom: 0xB00420
     addiu   t8, v0, 0x0008
     sw      t8, 0x02A0 (s0)
     sw      t7, 0x0000 (v0)
@@ -156,7 +156,7 @@
 ;   ori     at, at, 0x6E00
 ;   andi    t8, t6, 0x00FF
 ;   or      t7, t8, at
-.orga 0xB0079C ; In memory: 0x8011A73C
+.org 0x8011A73C ; In rom: 0xB0079C
     jal     get_clock_sun_color_hook
     sh      t0, 0x01C6 (sp)
     lh      t0, 0x01C6 (sp)
@@ -166,7 +166,7 @@
 ;   ori     at, at, 0x3700
 ;   andi    t9, t7, 0x00FF
 ;   or      t6, t9, at
-.orga 0xB008EC ; In memory: 0x8011A88C
+.org 0x8011A88C ; In rom: 0xB008EC
     jal     get_clock_moon_color_hook
     sh      t0, 0x01C6 (sp)
     lh      t0, 0x01C6 (sp)
@@ -178,7 +178,7 @@
 ; Custom colors for hearts.
 ; Replaces:
 ;   jal     0x8010069C
-.orga 0xB07594 ; In memory: 0x80121534
+.org 0x80121534 ; In rom: 0xB07594
     jal     update_heart_colors
 
 ;==================================================================================================
@@ -190,7 +190,7 @@
 ;   lh      t8, 0x0272 (t1)
 ;   andi    t9, t8, 0x00FF
 ;   ori     t6, t9, 0xC800
-.orga 0xAFCEA4 ; In memory: 0x80116E44
+.org 0x80116E44 ; In rom: 0xAFCEA4
     jal     get_magic_meter_color_hook
     ori     a0, r0, 1
     ; Restore RA from previous stack value
@@ -201,7 +201,7 @@
 ;   lh      t8, 0x0272 (t1)
 ;   andi    t9, t8, 0x00FF
 ;   or      t6, t9, at
-.orga 0xAFCED4 ; In memory: 0x80116E74
+.org 0x80116E74 ; In rom: 0xAFCED4
     jal     get_magic_meter_color_hook
     ori     a0, r0, 0
     ; Restore RA from previous stack value
@@ -215,7 +215,7 @@
 ; Replaces:
 ;   andi    t6, t9, 0x00FF
 ;   or      t5, t8, t6
-.orga 0xAE9354 ; In memory: 0x801032F4
+.org 0x801032F4 ; In rom: 0xAE9354
     jal     get_map_color_hook
     nop
 
@@ -223,7 +223,7 @@
 ; Replaces:
 ;   andi    t9, t5, 0x00FF
 ;   or      t7, t9, at
-.orga 0xAE9EEC ; In memory: 0x80103E8C
+.org 0x80103E8C ; In rom: 0xAE9EEC
     jal     get_map_player_cursor_color_hook
     nop
 
@@ -231,6 +231,6 @@
 ; Replaces:
 ;   andi    t4, t3, 0x00FF
 ;   or      t5, t4, at
-.orga 0xAEC430 ; In memory: 0x801063D0
+.org 0x801063D0 ; In rom: 0xAEC430
     jal     get_map_entrance_cursor_color_hook
     nop

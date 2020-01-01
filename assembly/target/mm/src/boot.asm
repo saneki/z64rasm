@@ -10,7 +10,8 @@
 ; Add dmatable entries for new code
 ; Remove the unused files at the bottom the DMA Table
 ;   - this isn't strictly necessary, but adds flexibility for the future
-.orga 0x20580
+;.orga 0x20580
+.orga (G_DMA_TABLE + (0x10 * 1544))
 .area 0x70, 0
     .word G_PAYLOAD_VROM, G_PAYLOAD_VROM + G_PAYLOAD_SIZE, G_PAYLOAD_VROM, 0
 .endarea
@@ -31,7 +32,7 @@
 ;   sw      a0, 0x0340 (sp)
 ;   lui     a0, 0x0004
 ;   or      s2, s0, r0
-.orga 0xB5A904 ; In memory: 0x801748A4
+.org 0x801748A4 ; In rom: 0xB5A904
 .area 0x2C, 0
     sw      ra, 0x002C (sp)
     sw      a0, 0x0340 (sp)
@@ -56,11 +57,11 @@
 ; Replaces:
 ;   lui     t8, 0x8078
 ;   addiu   v1, v1, 0x1528
-.orga 0xB5ACAC ; In memory: 0x80174C4C
+.org 0x80174C4C ; In rom: 0xB5ACAC
     lui     t8, hi(G_PAYLOAD_ADDR)
     ori     t8, lo(G_PAYLOAD_ADDR)
 
 ; Replaces:
 ;   sw      a1, 0x0000 (v1)
-.orga 0xB5ACBC ; In memory: 0x80174C5C
+.org 0x80174C5C ; In rom: 0xB5ACBC
     sw      a1, 0x1528 (v1)
