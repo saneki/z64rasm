@@ -1,3 +1,9 @@
+; DMA Table constants
+.definelabel G_DMA_TABLE,     0x1A500
+.definelabel G_CODE_FILE,     readu16("../roms/base.z64", (G_DMA_TABLE + (0x10 * 31) + 8))
+.definelabel G_CODE_RAM,      0x800A5AC0
+
+
 ; Payload configuration constants
 .definelabel G_PAYLOAD_VROM,  0x03800000
 .definelabel G_PAYLOAD_SIZE,  0x30000
