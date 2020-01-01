@@ -5,7 +5,7 @@
 ; Replaces:
 ;   sw      a0, 0x0068 (sp)
 ;   lw      t6, 0x0068 (sp)
-.orga 0xAFE8F8 ; In Memory: 0x80118898
+.org 0x80118898 ; In rom: 0xAFE8F8
     jal     dpad_draw_hook
     sw      a0, 0x0068 (sp)
 
@@ -17,7 +17,7 @@
 ;   sw      s0, 0x0030 (sp)
 ;   or      s0, a0, r0
 ;   sw      ra, 0x0034 (sp)
-.orga 0xBF9DA0 ; In Memory: 0x8074D2A0
+.orga G_PLAYER_FILE + 0x2380 ; In Memory: 0x8074D2A0
     sw      ra, 0x0034 (sp)
     jal     dpad_handle_hook
     sw      s0, 0x0030 (sp)

@@ -1,7 +1,8 @@
 /inject
-/roms/*
-/c/*.o
+**/roms/*
+**/c/*.o
 armips*
+**/__pycache__/*
 !.gitkeep
 
 # Ignore private vagrant directory
