@@ -30,13 +30,13 @@
 ; Fix for B button icon.
 ; Replaces:
 ;   jal     0x80118084
-.orga 0xB06274 ; In memory: 0x80120214
+.org 0x80120214 ; In rom: 0xB06274
     jal     draw_b_button_icon_color_fix
 
 ; Fix for C button icons.
 ; Replaces:
 ;   jal     0x80118890
-.orga 0xB0627C ; In memory: 0x8012021C
+.org 0x8012021C ; In rom: 0xB0627C
     jal     draw_c_button_icons_color_fix
 
 ;==================================================================================================
@@ -46,6 +46,6 @@
 ; Replaces:
 ;   andi    t7, a2, 0x00FF
 ;   slti    at, t7, 0x0012
-.orga 0xAF6974 ; In memory: 0x80110914
+.org 0x80110914 ; In rom: 0xAF6974
     jal     underwater_ocarina_check
     andi    t7, a2, 0x00FF
