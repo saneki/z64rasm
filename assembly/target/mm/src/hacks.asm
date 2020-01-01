@@ -5,21 +5,22 @@
 ; Remove C button check for equipped mask, fixes using B button item (usually sword).
 ; Replaces:
 ;   jal     0x8074D19C
-.orga 0xBF9E14 ; In memory: 0x8074D314 (file offset: 0x23F4)
+;.orga 0xBF9E14 ; In memory: 0x8074D314 (file offset: 0x23F4)
+.orga G_PLAYER_FILE + 0x23F4
     addiu   v0, r0, 1
 
 ; For some items, if UseItem is called without said item being on the C-buttons,
 ; it will be automatically called again to unequip. Prevents this.
 ; Replaces:
 ;   jal     0x8074EE20
-.orga 0xBF9EAC ; In memory: 0x8074D3AC (file offset: 0x248C)
+.orga G_PLAYER_FILE + 0x248C ; In memory: 0x8074D3AC
     nop
 
 ; Remove relocations.
-.orga 0xC28898 ; In memory: 0x8077BD98 (file offset: 0x30E78)
-.dw 0x00000000 ; Replaces: 0x440023F4
-.orga 0xC288A0 ; In memory: 0x8077BDA0 (file offset: 0x30E80)
-.dw 0x00000000 ; Replaces: 0x4400248C
+.orga G_PLAYER_FILE + 0x30E78 ; In memory: 0x8077BD98
+    .dw 0x00000000 ; Replaces: 0x440023F4
+.orga G_PLAYER_FILE + 0x30E80 ; In memory: 0x8077BDA0
+    .dw 0x00000000 ; Replaces: 0x4400248C
 
 ;==================================================================================================
 ; Draw C Button Amounts Fix
