@@ -20,6 +20,7 @@
 .include "hooks/dpad.asm"
 .include "hooks/file_select.asm"
 .include "hooks/general.asm"
+.include "hooks/pause.asm"
 .include "hooks/pushblock.asm"
 
 ;==================================================================================================
@@ -38,6 +39,7 @@ PAYLOAD_START:
 .include "damage.asm"
 .include "dpad.asm"
 .include "file_select.asm"
+.include "pause.asm"
 .include "pushblock.asm"
 .include "underwater_ocarina.asm"
 .importobj "../build/bundle.o"

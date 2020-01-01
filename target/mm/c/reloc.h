@@ -15,6 +15,9 @@
 #define z2_LinkInvincibility GET_RELOC_PLAYER_FUNC(z2_LinkInvincibility)
 #define z2_UseItem           GET_RELOC_PLAYER_FUNC(z2_UseItem)
 
+/* Relocatable pause menu functions */
+#define z2_PauseDrawItemIcon GET_RELOC_PAUSE_FUNC(z2_PauseDrawItemIcon)
+
 /* Relocatable file select data */
 #define z2_file_select_ctxt  GET_GS_RELOC_TYPE(z2_file_select_ctxt, z2_gamestate.file_select)
 

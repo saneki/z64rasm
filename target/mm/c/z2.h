@@ -606,8 +606,9 @@ typedef enum {
     Z2_TIMER_INDEX_HONEY_DARLING = 0x14,
 } z2_timer_index_t;
 
-/* Actor structure type alias. */
+/* Structure type aliases. */
 typedef struct z2_actor_s z2_actor_t;
+typedef struct z2_game_s  z2_game_t;
 
 /**
  * Floating point matrix (copied from krimtonz' gu.h)
@@ -761,7 +762,7 @@ typedef struct {
     Gfx             *poly_xlu_d_start;               /* 0x0004 */
     u8               unk_0x08[0x08];                 /* 0x0008 */
     Gfx             *overlay_d_start;                /* 0x0010 */
-    u8               unk_0x18[0x24];                 /* 0x0014 */
+    u8               unk_0x14[0x24];                 /* 0x0014 */
     OSMesg           task_mesg[8];                   /* 0x0038 */
     u8               unk_0x58[0x04];                 /* 0x0058 */
     OSMesgQueue      task_queue;                     /* 0x005C */
@@ -778,9 +779,11 @@ typedef struct {
     z2_disp_buf_t    poly_xlu;                       /* 0x02B8 */
     u32              frame_cnt_1;                    /* 0x02C8 */
     void            *frame_buffer;                   /* 0x02CC */
-    u8               unk_0x2E0[0x0B];                /* 0x02D0 */
+    u8               unk_0x2D0[0x0B];                /* 0x02D0 */
     u8               frame_cnt_2;                    /* 0x02DB */
-} z2_gfx_t;                                          /* 0x02DC */
+    void            *func_0x2DC;                     /* 0x02DC */
+    z2_game_t       *game;                           /* 0x02E0 */
+} z2_gfx_t;                                          /* 0x02E4 */
 
 /// =============================================================
 /// Context Structure
@@ -1149,14 +1152,18 @@ typedef struct {
     void            *icon_text;                      /* 0x0174 */
     void            *unk_text_0x178;                 /* 0x0178 */
     Gfx             *bg_dlist;                       /* 0x017C */
-    u8               unk_0x180[0x6C];                /* 0x0180 */
+    u8               unk_0x180[0x10];                /* 0x0180 */
+    Vtx             *vtx_buf;                        /* 0x0190 */
+    u8               unk_0x194[0x58];                /* 0x0194 */
     u16              state;                          /* 0x01EC */
     u16              debug_menu;                     /* 0x01EE */
     u8               unk_0x1F0[0x10];                /* 0x01F0 */
     u16              switching_screen;               /* 0x0200 */
     u16              unk_0x202;                      /* 0x0202 */
     u16              screen_idx;                     /* 0x0204 */
-    u8               unk_0x206[0x3C];                /* 0x0206 */
+    u8               unk_0x206[0x1E];                /* 0x0206 */
+    u16              item_alpha;                     /* 0x0224 */
+    u8               unk_0x226[0x1C];                /* 0x0226 */
     u16              item_x;                         /* 0x0242 */
     u8               unk_0x244[0x04];                /* 0x0244 */
     u16              mask_x;                         /* 0x0248 */
@@ -1321,7 +1328,7 @@ typedef struct {
 /// Game Structure
 /// =============================================================
 
-typedef struct {
+struct z2_game_s {
     z2_ctxt_t        common;                         /* 0x00000 */
     u16              scene_index;                    /* 0x000A4 */
     u8               scene_draw_id;                  /* 0x000A6 */
@@ -1361,7 +1368,7 @@ typedef struct {
     u16              entrance_index;                 /* 0x1887A, double check this offset. */
     u8               unk_0x1887C[0x2CE];             /* 0x1887C */
     u8               flag_0x18B4A;                   /* 0x18B4A */
-} z2_game_t;                                         /* 0x18B4B */
+};                                                   /* 0x18B4B */
 
 /// =============================================================
 /// Savefile Structure
@@ -1946,6 +1953,7 @@ typedef struct {
 #define z2_arena_addr                    0x8009CD20
 #define z2_file_table_addr               0x8009F8B0
 #define z2_gamestate_addr                0x801BD910
+#define z2_item_segaddr_table_addr       0x801C1E6C /* Segment address table used for item textures. */
 #define z2_object_table_addr             0x801C2740
 #define z2_song_notes_addr               0x801CFC98
 #define z2_file_addr                     0x801EF670
@@ -1967,6 +1975,9 @@ typedef struct {
 #define z2_segment                       (*(z2_segment_t*)           z2_segment_addr)
 #define z2_song_notes                    (*(z2_song_notes_t*)        z2_song_notes_addr)
 #define z2_static_ctxt                   (*(z2_static_ctxt_t*)       z2_static_ctxt_addr)
+
+/* Data (non-struct) */
+#define z2_item_segaddr_table            ((u32*)                     z2_item_segaddr_table_addr)
 
 /* Data (Unknown) */
 #define z2_0x801BD8B0                    (*(z2_0x801BD8B0_t*)        0x801BD8B0)
@@ -2000,7 +2011,10 @@ typedef struct {
 #define z2_RngInt_addr                   0x80086FA0
 #define z2_RngSetSeed_addr               0x80086FD0
 
-/* Relocatable Functions (VRAM) */
+/* Relocatable Functions (Pause Menu) */
+#define z2_PauseDrawItemIcon_vram        0x80821AD4
+
+/* Relocatable Functions (Player Actor) */
 #define z2_LinkDamage_vram               0x80833B18
 #define z2_LinkInvincibility_vram        0x80833998
 #define z2_UseItem_vram                  0x80831990
@@ -2035,6 +2049,9 @@ typedef void (*z2_ReadFile_proc)(void *mem_addr, u32 vrom_addr, u32 size);
 
 /* Function Prototypes (Get Item) */
 typedef void (*z2_SetGetItem_proc)(z2_actor_t *actor, z2_game_t *game, s32 unk2, u32 unk3);
+
+/* Function Prototypes (Pause Menu) */
+typedef void (*z2_PauseDrawItemIcon_proc)(z2_gfx_t *gfx, u32 seg_addr, u16 width, u16 height, u16 quad_vtx_idx);
 
 /* Function Prototypes (RNG) */
 typedef u32 (*z2_RngInt_proc)();
