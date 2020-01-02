@@ -1,16 +1,7 @@
-; Majora's Mask notes:
-;  We can't abuse the extra memory that OoT doesn't use (+4MiB of expansion pack space), since Majora does.
-;  However, may be able to use the following region: [0x80780000, 0x807DA800).
-;  Everything after 0x807DA800 seems to be used by something until the RAM end (0x80800000).
-;
-; Console / EverDrive notes:
-;  Despite never being used on emulator, apparently [0x80780000, 0x807A9E00) is written to,
-;  or unstable or something. [0x807A9E00, 0x807DA800) does seem to be unused/stable.
-;
-; Add dmatable entries for new code
-; Remove the unused files at the bottom the DMA Table
-;   - this isn't strictly necessary, but adds flexibility for the future
-;.orga 0x20580
+;==================================================================================================
+; Add dmadata File Entry
+;==================================================================================================
+
 .orga (G_DMA_TABLE + (0x10 * 1544))
 .area 0x70, 0
     .word G_PAYLOAD_VROM, G_PAYLOAD_VROM + G_PAYLOAD_SIZE, G_PAYLOAD_VROM, 0
