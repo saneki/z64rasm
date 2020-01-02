@@ -2011,6 +2011,10 @@ typedef struct {
 #define z2_RngInt_addr                   0x80086FA0
 #define z2_RngSetSeed_addr               0x80086FD0
 
+/* Function Addresses (Rooms) */
+#define z2_LoadRoom_addr                 0x8012E96C
+#define z2_UnloadRoom_addr               0x8012EBF8
+
 /* Relocatable Functions (Pause Menu) */
 #define z2_PauseDrawItemIcon_vram        0x80821AD4
 
@@ -2057,6 +2061,10 @@ typedef void (*z2_PauseDrawItemIcon_proc)(z2_gfx_t *gfx, u32 seg_addr, u16 width
 typedef u32 (*z2_RngInt_proc)();
 typedef void (*z2_RngSetSeed_proc)(u32 seed);
 
+/* Function Prototypes (Rooms) */
+typedef void (*z2_LoadRoom_proc)(z2_game_t *game, z2_room_ctxt_t *room_ctxt, uint8_t room_id);
+typedef void (*z2_UnloadRoom_proc)(z2_game_t *game, z2_room_ctxt_t *room_ctxt);
+
 /* Functions */
 #define z2_CanInteract                   ((z2_CanInteract_proc)           z2_CanInteract_addr)
 #define z2_CanInteract2                  ((z2_CanInteract2_proc)          z2_CanInteract2_addr)
@@ -2084,5 +2092,9 @@ typedef void (*z2_RngSetSeed_proc)(u32 seed);
 /* Functions (RNG) */
 #define z2_RngInt                        ((z2_RngInt_proc)                z2_RngInt_addr)
 #define z2_RngSetSeed                    ((z2_RngSetSeed_proc)            z2_RngSetSeed_addr)
+
+/* Functions (Rooms) */
+#define z2_LoadRoom                      ((z2_LoadRoom_proc)              z2_LoadRoom_addr)
+#define z2_UnloadRoom                    ((z2_UnloadRoom_proc)            z2_UnloadRoom_addr)
 
 #endif // Z2_H
