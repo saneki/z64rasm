@@ -29,6 +29,7 @@
 .include "hooks/general.asm"
 .include "hooks/pause.asm"
 .include "hooks/pushblock.asm"
+.include "hooks/rooms.asm"
 
 ;==================================================================================================
 ; New code region
@@ -48,6 +49,7 @@ PAYLOAD_START:
 .include "file_select.asm"
 .include "pause.asm"
 .include "pushblock.asm"
+.include "rooms.asm"
 .include "underwater_ocarina.asm"
 .importobj "../build/bundle.o"
 .align 8
