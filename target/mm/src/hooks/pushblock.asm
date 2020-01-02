@@ -2,14 +2,15 @@
 ; Pushblock Speed
 ;==================================================================================================
 
+.headersize(G_PUSHBLOCK_VRAM - G_PUSHBLOCK_FILE)
+
 ; Replaces:
 ;   sw      a1, 0x0004 (sp)
 ;   lhu     t6, 0x0160 (a0)
 ;   lui     at, 0x4000
 ;   mtc1    r0, f4
 ;   mtc1    at, f6
-;.orga 0xCDAF14 ; VROM: 0xD8B3F4
-.orga G_PUSHBLOCK_FILE + 0x1084
+.org 0x80918314
     or      at, ra, r0
     jal     misc_get_push_block_speed_hook
     sw      a1, 0x0004 (sp)
@@ -19,6 +20,8 @@
 ;==================================================================================================
 ; Iceblock Push Speed
 ;==================================================================================================
+
+.headersize(G_ICEBLOCK_VRAM - G_ICEBLOCK_FILE)
 
 ; Actor: 0x143 (Obj_Iceblock)
 ; Actor File VRAM: 0x80A13090
@@ -30,8 +33,7 @@
 ;   lwc1    f18, 0x707C (at) ; Additive velocity
 ;   lui     at, 0x80A2
 ;   lwc1    f6, 0x7080 (at)  ; Initial velocity
-;.orga 0xDDF52C ; In VRAM: 0x80A15E9C
-.orga G_ICEBLOCK_FILE + 0x2E0C
+.org 0x80A15E9C
     or      a0, s0, r0
     jal     misc_get_iceblock_push_speed_hook
     lw      a1, 0x004C (sp)
@@ -43,13 +45,11 @@
 ; This isn't implemented in the best way, maybe update later.
 ; Replaces:
 ;   mov.s   f0, f2
-;.orga 0xDDF558 ; In VRAM: 0x80A15EC8
-.orga G_ICEBLOCK_FILE + 0x2E38
+.org 0x80A15EC8
     mov.s   f0, f12
 
 ; Remove relocations for hook.
-;.orga 0xDE0A54 ; In VRAM: 0x80A173C4
-.orga G_ICEBLOCK_FILE + 0x4334
+.org 0x80A173C4
 .area 0x10, 0
     .dw 0x00000000 ; Replaces: 0x45002E14
     .dw 0x00000000 ; Replaces: 0x46002E18
@@ -60,6 +60,8 @@
 ;==================================================================================================
 ; Great Bay Temple Faucets
 ;==================================================================================================
+
+.headersize(G_FAUCET_VRAM - G_FAUCET_FILE)
 
 ; Actor: 0x174 (Bg_Dblue_Movebg)
 
@@ -80,8 +82,7 @@
 ;   addiu   a0, s0, 0x018A
 ;   addiu   a1, r0, 0x0384
 ;   slti    at, v0, 0x0006
-;.orga 0xDE3AD4
-.orga G_FAUCET_FILE + 0x9C4
+.org 0x80A2A444
 .area 0x3C, 0
     addiu   sp, sp, -0x28
     sw      s0, 0x0018 (sp)
@@ -118,8 +119,7 @@
 ;   addiu   a0, s0, 0x018A
 ;   addiu   a1, r0, 0x0384
 ;   slti    at, v0, 0x0006
-;.orga 0xDE3E88
-.orga G_FAUCET_FILE + 0xD78
+.org 0x80A2A7F8
 .area 0x3C, 0
     addiu   sp, sp, -0x30
     sw      s0, 0x0018 (sp)
