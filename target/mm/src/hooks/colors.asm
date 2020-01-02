@@ -2,6 +2,8 @@
 ; A, B, C buttons color hooks
 ;==================================================================================================
 
+.headersize (G_CODE_RAM - G_CODE_FILE)
+
 ; Custom color for A button.
 ; Replaces:
 ;   andi    t4, t3, 0x00FF
