@@ -33,3 +33,7 @@ DefineDmaFile G_ICEBLOCK_DMA, G_ICEBLOCK_FILE, 288
 ; ovl_Bg_Dblue_Movebg
 DefineDmaFile G_FAUCET_DMA, G_FAUCET_FILE, 290
 .definelabel  G_FAUCET_VRAM, 0x80A29A80
+
+; ovl_En_Time_Tag
+DefineDmaFile G_EN_TIME_TAG_DMA, G_EN_TIME_TAG_FILE, 392
+.definelabel  G_EN_TIME_TAG_VRAM, 0x80AC9EA0

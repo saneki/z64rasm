@@ -19,3 +19,18 @@ quest_items_door_check_hook:
 
     jr      ra
     addiu   sp, sp, 0x10
+
+quest_items_time_tag_check_hook:
+    addiu   sp, sp, -0x10
+    sw      ra, 0x0000 (sp)
+    sw      a0, 0x0004 (sp)
+
+    jal     quest_items_time_tag_check
+    sw      a1, 0x0008 (sp)
+
+    lw      ra, 0x0000 (sp)
+    lw      a0, 0x0004 (sp)
+    lw      a1, 0x0008 (sp)
+
+    jr      ra
+    addiu   sp, sp, 0x10
