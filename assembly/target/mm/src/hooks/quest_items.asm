@@ -31,3 +31,25 @@
     jal     quest_items_door_check_hook
     or      a2, t8, r0
     bnez    t0, 0x801329F8
+
+;==================================================================================================
+; Quest Item Inventory Checks (En_Time_Tag)
+;==================================================================================================
+
+.headersize (G_EN_TIME_TAG_VRAM - G_EN_TIME_TAG_FILE)
+
+; Prevent from being kicked out of Inn if Room Key is in storage.
+; Replaces:
+;   lui     a1, 0x801F
+;   addiu   a1, a1, 0xF670
+;   addu    t8, a1, t7
+;   lbu     t9, 0x0070 (t8)
+;   addiu   at, r0, 0x002D
+;   beq     t9, at, 0x80ACA998
+.org 0x80ACA86C
+    or      a1, a2, r0
+    addiu   a2, r0, 0x002D
+    jal     quest_items_time_tag_check_hook
+    or      a3, t7, r0
+    or      a2, a1, r0
+    bnez    v0, 0x80ACA998

@@ -3,7 +3,7 @@
 #include "save_file.h"
 #include "z2.h"
 
-bool quest_items_door_check(z2_game_t *game, u8 item, u8 slot) {
+static bool check_inventory_slot(u8 item, u8 slot) {
     if (z2_file.inventory[slot] == item) {
         return true;
     } else if (z2_file.inventory[slot] != Z2_ITEM_NONE) {
@@ -12,4 +12,12 @@ bool quest_items_door_check(z2_game_t *game, u8 item, u8 slot) {
     } else {
         return false;
     }
+}
+
+bool quest_items_door_check(z2_game_t *game, u8 item, u8 slot) {
+    return check_inventory_slot(item, slot);
+}
+
+bool quest_items_time_tag_check(z2_actor_t *actor, z2_game_t *game, u8 item, u8 slot) {
+    return check_inventory_slot(item, slot);
 }
