@@ -29,6 +29,7 @@
 .include "hooks/general.asm"
 .include "hooks/pause.asm"
 .include "hooks/pushblock.asm"
+.include "hooks/quest_items.asm"
 .include "hooks/rooms.asm"
 
 ;==================================================================================================
@@ -49,6 +50,7 @@ PAYLOAD_START:
 .include "file_select.asm"
 .include "pause.asm"
 .include "pushblock.asm"
+.include "quest_items.asm"
 .include "rooms.asm"
 .include "underwater_ocarina.asm"
 .importobj "../build/bundle.o"

@@ -12,5 +12,6 @@ struct save_file_config {
 };                                                   /* 0x001A */
 
 struct save_file_config* save_file_get_config(void);
+struct quest_item_storage* save_file_get_quest_item_storage(void);
 
 #endif // SAVE_FILE_H
