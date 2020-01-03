@@ -27,6 +27,16 @@ bool quest_item_storage_get_slot(int *slot, int *idx, u8 item) {
     }
 }
 
+bool quest_item_storage_get_cell(int *cell, int *idx, u8 item) {
+    int slot;
+    if (quest_item_storage_get_slot(&slot, idx, item)) {
+        *cell = ((slot + 1) * 6) - 1;
+        return true;
+    } else {
+        return false;
+    }
+}
+
 bool quest_item_storage_has(const struct quest_item_storage *storage, u8 item) {
     int idx, slot;
     if (quest_item_storage_get_slot(&slot, &idx, item)) {
