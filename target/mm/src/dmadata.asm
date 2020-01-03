@@ -28,7 +28,7 @@ DefineDmaFile G_PUSHBLOCK_DMA, G_PUSHBLOCK_FILE, 115
 
 ; ovl_Obj_Iceblock
 DefineDmaFile G_ICEBLOCK_DMA, G_ICEBLOCK_FILE, 288
-.definelabel  G_ICEBLOCK_VRAM, 0x80A13090
+.definelabel  G_ICEBLOCK_VRAM, 0x80A23090
 
 ; ovl_Bg_Dblue_Movebg
 DefineDmaFile G_FAUCET_DMA, G_FAUCET_FILE, 290
