@@ -54,3 +54,21 @@ dpad_handle_hook:
     ; Fix stack for caller and return
     jr      ra
     addiu   sp, sp, 0x50
+
+dpad_skip_transformation_check_hook:
+    addiu   sp, sp, -0x20
+    sw      ra, 0x0014 (sp)
+    sw      a0, 0x0018 (sp)
+    sw      a1, 0x001C (sp)
+
+    or      a0, s0, r0
+    lw      a1, 0x0074 (sp)
+    jal     dpad_skip_transformation_check
+    or      a2, v0, r0
+
+    lw      ra, 0x0014 (sp)
+    lw      a0, 0x0018 (sp)
+    lw      a1, 0x001C (sp)
+
+    jr      ra
+    addiu   sp, sp, 0x20

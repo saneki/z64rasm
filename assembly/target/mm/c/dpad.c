@@ -210,6 +210,11 @@ void dpad_init() {
     }
 }
 
+bool dpad_is_enabled() {
+    return (DPAD_CONFIG.state == DPAD_STATE_TYPE_ENABLED)
+        || (DPAD_CONFIG.state == DPAD_STATE_TYPE_DEFAULTS);
+}
+
 void dpad_do_per_game_frame(z2_link_t *link, z2_game_t *game) {
     // If disabled, do nothing
     if (DPAD_CONFIG.state == DPAD_STATE_TYPE_DISABLED)
@@ -327,4 +332,24 @@ void dpad_draw(z2_game_t *game) {
     }
 
     gDPPipeSync(db->p++);
+}
+
+/**
+ * Hook function used to determine whether or not to skip the transformation cutscene based on input.
+ *
+ * Allows D-Pad input to also skip the cutscene if the D-Pad is enabled.
+ **/
+u16 dpad_skip_transformation_check(z2_link_t *link, z2_game_t *game, u16 cur) {
+    z2_pad_t pad;
+    pad.pad = 0;
+
+    // Set flags for original buttons: A, B, C buttons (0xC00F)
+    pad.a = pad.b = pad.cd = pad.cl = pad.cr = pad.cu = 1;
+
+    if (dpad_is_enabled()) {
+        // Set flags for D-Pad (0xCF0F)
+        pad.dd = pad.dl = pad.dr = pad.du = 1;
+    }
+
+    return cur & pad.pad;
 }
