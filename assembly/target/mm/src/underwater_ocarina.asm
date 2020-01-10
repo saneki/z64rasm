@@ -4,30 +4,30 @@ underwater_ocarina_check:
     beqz    at, @@return
     nop
 @@check_ocarina:
-    addiu   sp, sp, -0x20
-    sw      ra, 0x0000 (sp)
-    sw      a1, 0x0004 (sp)
-    sw      a2, 0x0008 (sp)
-    sw      a3, 0x000C (sp)
-    sw      t0, 0x0010 (sp)
-    sw      t2, 0x0014 (sp)
-    sw      t5, 0x0018 (sp)
+    addiu   sp, sp, -0x30
+    sw      ra, 0x0010 (sp)
+    sw      a1, 0x0014 (sp)
+    sw      a2, 0x0018 (sp)
+    sw      a3, 0x001C (sp)
+    sw      t0, 0x0020 (sp)
+    sw      t2, 0x0024 (sp)
+    sw      t5, 0x0028 (sp)
 
     jal     misc_can_use_ocarina_underwater
-    sw      t7, 0x001C (sp)
+    sw      t7, 0x002C (sp)
 
-    lw      ra, 0x0000 (sp)
-    lw      a1, 0x0004 (sp)
-    lw      a2, 0x0008 (sp)
-    lw      a3, 0x000C (sp)
-    lw      t0, 0x0010 (sp)
-    lw      t2, 0x0014 (sp)
-    lw      t5, 0x0018 (sp)
-    lw      t7, 0x001C (sp)
+    lw      ra, 0x0010 (sp)
+    lw      a1, 0x0014 (sp)
+    lw      a2, 0x0018 (sp)
+    lw      a3, 0x001C (sp)
+    lw      t0, 0x0020 (sp)
+    lw      t2, 0x0024 (sp)
+    lw      t5, 0x0028 (sp)
+    lw      t7, 0x002C (sp)
 
     ; If underwater ocarina disabled, return early.
     beqz    v0, @@return
-    addiu   sp, sp, 0x20
+    addiu   sp, sp, 0x30
 
     ; If not ocarina (0x00) won't branch and thus will skip instruction which sets AT.
     beqzl   t7, @@return

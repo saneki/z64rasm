@@ -23,10 +23,10 @@ pause_menu_select_item_subscreen_after_process_hook:
     lw      a0, 0x0000 (sp)
 
 pause_menu_select_item_process_a_button_hook:
-    addiu   sp, sp, -0x10
-    sw      ra, 0x0000 (sp)
-    sw      t1, 0x0004 (sp)
-    sw      t2, 0x0008 (sp)
+    addiu   sp, sp, -0x20
+    sw      ra, 0x0010 (sp)
+    sw      t1, 0x0014 (sp)
+    sw      t2, 0x0018 (sp)
 
     ; Move AT (none_val) and S1 (cur_val) into arguments
     or      a1, s1, r0
@@ -34,24 +34,24 @@ pause_menu_select_item_process_a_button_hook:
 
     jal     pause_menu_select_item_process_a_button
     ; Load A0 from caller stack
-    lw      a0, 0x0050 (sp)
+    lw      a0, 0x0060 (sp)
 
-    lw      ra, 0x0000 (sp)
-    lw      t1, 0x0004 (sp)
-    lw      t2, 0x0008 (sp)
+    lw      ra, 0x0010 (sp)
+    lw      t1, 0x0014 (sp)
+    lw      t2, 0x0018 (sp)
 
     jr      ra
-    addiu   sp, sp, 0x10
+    addiu   sp, sp, 0x20
 
 pause_menu_select_item_show_a_button_enabled_hook:
-    addiu   sp, sp, -0x10
-    sw      ra, 0x0000 (sp)
+    addiu   sp, sp, -0x18
+    sw      ra, 0x0010 (sp)
 
     jal     pause_menu_select_item_show_a_button_enabled
-    sw      t1, 0x0004 (sp)
+    sw      t1, 0x0014 (sp)
 
-    lw      ra, 0x0000 (sp)
-    lw      t1, 0x0004 (sp)
+    lw      ra, 0x0010 (sp)
+    lw      t1, 0x0014 (sp)
 
     jr      ra
-    addiu   sp, sp, 0x10
+    addiu   sp, sp, 0x18
