@@ -15,7 +15,7 @@
 ; DPAD Handle (Safer)
 ;==================================================================================================
 
-.headersize (G_PLAYER_VRAM - G_PLAYER_FILE)
+.headersize (G_PLAYER_ACTOR_VRAM - G_PLAYER_ACTOR_FILE)
 
 ; Replaces:
 ;   sw      s0, 0x0030 (sp)

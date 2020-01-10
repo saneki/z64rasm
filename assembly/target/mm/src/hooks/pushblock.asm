@@ -2,7 +2,7 @@
 ; Pushblock Speed
 ;==================================================================================================
 
-.headersize(G_PUSHBLOCK_VRAM - G_PUSHBLOCK_FILE)
+.headersize(G_OBJ_OSHIHIKI_VRAM - G_OBJ_OSHIHIKI_FILE)
 
 ; Replaces:
 ;   sw      a1, 0x0004 (sp)
@@ -21,7 +21,7 @@
 ; Iceblock Push Speed
 ;==================================================================================================
 
-.headersize(G_ICEBLOCK_VRAM - G_ICEBLOCK_FILE)
+.headersize(G_OBJ_ICEBLOCK_VRAM - G_OBJ_ICEBLOCK_FILE)
 
 ; Actor: 0x143 (Obj_Iceblock)
 ; Actor File VRAM: 0x80A23090
@@ -61,7 +61,7 @@
 ; Great Bay Temple Faucets
 ;==================================================================================================
 
-.headersize(G_FAUCET_VRAM - G_FAUCET_FILE)
+.headersize(G_BG_DBLUE_MOVEBG_VRAM - G_BG_DBLUE_MOVEBG_FILE)
 
 ; Actor: 0x174 (Bg_Dblue_Movebg)
 

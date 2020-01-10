@@ -24,7 +24,7 @@
 ; Non-menu processing hooks
 ;==================================================================================================
 
-.headersize (G_PLAYER_VRAM - G_PLAYER_FILE)
+.headersize (G_PLAYER_ACTOR_VRAM - G_PLAYER_ACTOR_FILE)
 
 ; Runs when in the "main game" (and not using the menu)
 ; Replaces:
