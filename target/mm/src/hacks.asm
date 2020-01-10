@@ -2,7 +2,7 @@
 ; DPad Not-on-C-Buttons Fixes
 ;==================================================================================================
 
-.headersize (G_PLAYER_VRAM - G_PLAYER_FILE)
+.headersize (G_PLAYER_ACTOR_VRAM - G_PLAYER_ACTOR_FILE)
 
 ; Remove C button check for equipped mask, fixes using B button item (usually sword).
 ; Replaces:

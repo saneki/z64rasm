@@ -2,7 +2,7 @@
 ; Induce a Crash on Pause Menu
 ;==================================================================================================
 
-.headersize(G_KALEIDO_VRAM - G_KALEIDO_FILE)
+.headersize(G_KALEIDO_SCOPE_VRAM - G_KALEIDO_SCOPE_FILE)
 
 ; This is used to induce a crash when using the pause menu. It is primarily intended for debugging
 ; on console to get a (working) crash debugger.

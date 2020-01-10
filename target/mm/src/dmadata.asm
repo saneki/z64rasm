@@ -11,28 +11,28 @@ DefineDmaFile G_CODE_DMA, G_CODE_FILE, 31
 .definelabel  G_CODE_RAM, 0x800A5AC0
 
 ; ovl_file_choose
-DefineDmaFile G_FILESELECT_DMA, G_FILESELECT_FILE, 35
-.definelabel  G_FILESELECT_VRAM, 0x80804010
+DefineDmaFile G_FILE_CHOOSE_DMA, G_FILE_CHOOSE_FILE, 35
+.definelabel  G_FILE_CHOOSE_VRAM, 0x80804010
 
-; ovl_kaleido_scope
-DefineDmaFile G_KALEIDO_DMA, G_KALEIDO_FILE, 37
-.definelabel  G_KALEIDO_VRAM, 0x808160A0
+; ovl_kaleido_scope (Pause menu)
+DefineDmaFile G_KALEIDO_SCOPE_DMA, G_KALEIDO_SCOPE_FILE, 37
+.definelabel  G_KALEIDO_SCOPE_VRAM, 0x808160A0
 
 ; ovl_player_actor
-DefineDmaFile G_PLAYER_DMA, G_PLAYER_FILE, 38
-.definelabel  G_PLAYER_VRAM, 0x8082DA90
+DefineDmaFile G_PLAYER_ACTOR_DMA, G_PLAYER_ACTOR_FILE, 38
+.definelabel  G_PLAYER_ACTOR_VRAM, 0x8082DA90
 
-; ovl_Obj_Oshihiki
-DefineDmaFile G_PUSHBLOCK_DMA, G_PUSHBLOCK_FILE, 115
-.definelabel  G_PUSHBLOCK_VRAM, 0x80917290
+; ovl_Obj_Oshihiki (Pushblock)
+DefineDmaFile G_OBJ_OSHIHIKI_DMA, G_OBJ_OSHIHIKI_FILE, 115
+.definelabel  G_OBJ_OSHIHIKI_VRAM, 0x80917290
 
 ; ovl_Obj_Iceblock
-DefineDmaFile G_ICEBLOCK_DMA, G_ICEBLOCK_FILE, 288
-.definelabel  G_ICEBLOCK_VRAM, 0x80A23090
+DefineDmaFile G_OBJ_ICEBLOCK_DMA, G_OBJ_ICEBLOCK_FILE, 288
+.definelabel  G_OBJ_ICEBLOCK_VRAM, 0x80A23090
 
-; ovl_Bg_Dblue_Movebg
-DefineDmaFile G_FAUCET_DMA, G_FAUCET_FILE, 290
-.definelabel  G_FAUCET_VRAM, 0x80A29A80
+; ovl_Bg_Dblue_Movebg (Great Bay Temple faucets)
+DefineDmaFile G_BG_DBLUE_MOVEBG_DMA, G_BG_DBLUE_MOVEBG_FILE, 290
+.definelabel  G_BG_DBLUE_MOVEBG_VRAM, 0x80A29A80
 
 ; ovl_En_Time_Tag
 DefineDmaFile G_EN_TIME_TAG_DMA, G_EN_TIME_TAG_FILE, 392

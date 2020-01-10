@@ -2,7 +2,7 @@
 ; Pause Menu Icon Draw
 ;==================================================================================================
 
-.headersize(G_KALEIDO_VRAM - G_KALEIDO_FILE)
+.headersize(G_KALEIDO_SCOPE_VRAM - G_KALEIDO_SCOPE_FILE)
 
 ; Hook draw for item textures on "Select Item" screen.
 ; Replaces:
