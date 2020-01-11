@@ -21,7 +21,7 @@ void c_init() {
 //}
 
 void before_player_actor_update(z2_link_t *link, z2_game_t *game) {
-    dpad_do_per_game_frame(link, game);
+    dpad_before_player_actor_update(link, game);
     handle_external_effects(link, game);
 }
 
