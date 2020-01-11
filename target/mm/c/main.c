@@ -14,12 +14,6 @@ void c_init() {
     hud_colors_init();
 }
 
-//void before_game_state_update() {
-//}
-
-//void after_game_state_update() {
-//}
-
 void before_player_actor_update(z2_link_t *link, z2_game_t *game) {
     dpad_before_player_actor_update(link, game);
     handle_external_effects(link, game);
