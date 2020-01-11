@@ -31,7 +31,7 @@
 ;   lw      t6, 0x0A74 (s0)
 ;   addiu   at, r0, 0xFFEF
 .org 0x808460D0 ; In RDRAM: 0x80763560
-    jal     before_non_menu_update_hook
+    jal     before_player_actor_update_hook
     nop
 
 ;==================================================================================================

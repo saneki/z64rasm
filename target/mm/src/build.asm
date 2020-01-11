@@ -44,13 +44,13 @@
 PAYLOAD_START:
 
 .include "init.asm"
-.include "every_frame.asm"
 .include "colors.asm"
 .include "damage.asm"
 .include "dpad.asm"
 .include "file_select.asm"
 .include "items.asm"
 .include "pause.asm"
+.include "player_actor.asm"
 .include "pushblock.asm"
 .include "quest_items.asm"
 .include "rooms.asm"
