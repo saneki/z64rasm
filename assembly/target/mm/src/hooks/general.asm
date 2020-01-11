@@ -1,27 +1,5 @@
 ;==================================================================================================
-; Every frame hooks
-;==================================================================================================
-
-.headersize (G_CODE_RAM - G_CODE_FILE)
-
-; Runs before the game state update function
-; Replaces:
-;   sb      r0, 0x00A3 (a1)
-;   sw      a1, 0x001C (sp)
-;.org 0x80174874 ; In rom: 0xB5A8D4
-;    jal     before_game_state_update_hook
-;    nop
-
-; Runs after the game state update function
-; Replaces:
-;   jr      ra
-;   nop
-;.org 0x80174898 ; In rom: 0xB5A8F8
-;    j       after_game_state_update
-;    nop
-
-;==================================================================================================
-; Non-menu processing hooks
+; Player actor update hooks
 ;==================================================================================================
 
 .headersize (G_PLAYER_ACTOR_VRAM - G_PLAYER_ACTOR_FILE)
