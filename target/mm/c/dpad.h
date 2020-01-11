@@ -53,8 +53,8 @@ struct dpad_config {
     u8 reserved[2];                     /* 0x001A */
 };                                      /* 0x001C */
 
+void dpad_before_player_actor_update(z2_link_t *link, z2_game_t *game);
 void dpad_clear_item_textures(void);
-void dpad_do_per_game_frame(z2_link_t *link, z2_game_t *game);
 void dpad_init(void);
 
 #endif

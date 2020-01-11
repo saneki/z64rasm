@@ -195,6 +195,15 @@ static bool is_minigame_frame() {
     return result || g_was_minigame;
 }
 
+void dpad_before_player_actor_update(z2_link_t *link, z2_game_t *game) {
+    // If disabled, do nothing
+    if (DPAD_CONFIG.state == DPAD_STATE_TYPE_DISABLED)
+        return;
+
+    // Update usability flags for later use in draw_dpad
+    get_dpad_item_usability(game, g_usable);
+}
+
 void dpad_clear_item_textures(void) {
     for (int i = 0; i < 4; i++) {
         g_texture_items[i] = Z2_ITEM_NONE;
@@ -213,15 +222,6 @@ void dpad_init() {
 bool dpad_is_enabled() {
     return (DPAD_CONFIG.state == DPAD_STATE_TYPE_ENABLED)
         || (DPAD_CONFIG.state == DPAD_STATE_TYPE_DEFAULTS);
-}
-
-void dpad_do_per_game_frame(z2_link_t *link, z2_game_t *game) {
-    // If disabled, do nothing
-    if (DPAD_CONFIG.state == DPAD_STATE_TYPE_DISABLED)
-        return;
-
-    // Update usability flags for later use in draw_dpad
-    get_dpad_item_usability(game, g_usable);
 }
 
 bool dpad_handle(z2_link_t *link, z2_game_t *game) {
