@@ -56,7 +56,6 @@ PAYLOAD_START:
 .include "pushblock.asm"
 .include "quest_items.asm"
 .include "rooms.asm"
-.include "underwater_ocarina.asm"
 .importobj "../build/bundle.o"
 .align 8
 DPAD_TEXTURE:
