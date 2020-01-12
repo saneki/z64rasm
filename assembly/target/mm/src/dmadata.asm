@@ -34,6 +34,14 @@ DefineDmaFile G_OBJ_ICEBLOCK_DMA, G_OBJ_ICEBLOCK_FILE, 288
 DefineDmaFile G_BG_DBLUE_MOVEBG_DMA, G_BG_DBLUE_MOVEBG_FILE, 290
 .definelabel  G_BG_DBLUE_MOVEBG_VRAM, 0x80A29A80
 
+; ovl_En_Si (Skulltula Token)
+DefineDmaFile G_EN_SI_DMA, G_EN_SI_FILE, 315
+.definelabel  G_EN_SI_VRAM, 0x80A45360
+
 ; ovl_En_Time_Tag
 DefineDmaFile G_EN_TIME_TAG_DMA, G_EN_TIME_TAG_FILE, 392
 .definelabel  G_EN_TIME_TAG_VRAM, 0x80AC9EA0
+
+; ovl_En_Elforg (Stray Fairy)
+DefineDmaFile G_EN_ELFORG_DMA, G_EN_ELFORG_FILE, 397
+.definelabel  G_EN_ELFORG_VRAM, 0x80ACC470

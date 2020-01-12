@@ -379,9 +379,15 @@ typedef enum {
 
 typedef enum {
     // Item "pickup", such as a rupee, arrows, magic, deku stick, etc.
-    Z2_ACTOR_ID_PICKUP = 0xE,
+    Z2_ACTOR_EN_ITEM00 = 0xE,
     // Fairy.
-    Z2_ACTOR_ID_FAIRY = 0x10,
+    Z2_ACTOR_EN_ELF = 0x10,
+    // Gold skulltula token.
+    Z2_ACTOR_EN_SI = 0xE3,
+    // Stray fairy.
+    Z2_ACTOR_EN_ELFORG = 0x1B0,
+    // Stray fairy in bubble.
+    Z2_ACTOR_EN_ELFBUB = 0x1B1,
 } z2_actor_id_t;
 
 typedef enum {
