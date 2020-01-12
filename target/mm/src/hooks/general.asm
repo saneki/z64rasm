@@ -33,3 +33,18 @@
 ;   jal     0x800C99D4
 .org 0x80843B10 ; In RDRAM: 0x80760FA0
     jal     override_get_floor_physics_type
+
+;==================================================================================================
+; Song of Time hooks
+;==================================================================================================
+
+.headersize (G_CODE_RAM - G_CODE_FILE)
+
+; Replaces:
+;   lw      s5, 0x0028 (sp)
+;   jr      ra
+;   addiu   sp, sp, 0x30
+.org 0x80144568
+    or      a0, s5, r0
+    j       after_song_of_time_clear_hook
+    lw      s5, 0x0028 (sp)

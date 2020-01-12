@@ -8,5 +8,6 @@
 
 void quest_items_after_receive(u8 item);
 void quest_items_after_removal(u8 item, u8 slot);
+void quest_items_after_song_of_time_clear(void);
 
 #endif // QUEST_ITEMS_H
