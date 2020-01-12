@@ -21,6 +21,7 @@ union faucet_speed {
 struct iceblock_speed {
     f32 initial;
     f32 additive;
+    f32 clamp;
 };
 
 struct misc_config* misc_get_config() {
@@ -43,9 +44,11 @@ void misc_get_iceblock_push_speed(z2_actor_t *actor, z2_game_t *game, struct ice
     if (!MISC_CONFIG.fast_push) {
         dest->initial = 1.2;
         dest->additive = 2.8;
+        dest->clamp = 3.5;
     } else {
         dest->initial = 3.6;
         dest->additive = 8.4;
+        dest->clamp = 10.5;
     }
 }
 
