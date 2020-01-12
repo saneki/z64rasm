@@ -2,6 +2,14 @@
 #include "quest_item_storage.h"
 #include "z2.h"
 
+void quest_item_storage_clear(struct quest_item_storage *storage) {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 6; j++) {
+            storage->slots[i][j] = 0;
+        }
+    }
+}
+
 bool quest_item_storage_get_slot(int *slot, int *idx, u8 item) {
     switch (item) {
         case Z2_ITEM_MOON_TEAR:

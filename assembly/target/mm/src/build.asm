@@ -56,6 +56,7 @@ PAYLOAD_START:
 .include "pushblock.asm"
 .include "quest_items.asm"
 .include "rooms.asm"
+.include "song_of_time.asm"
 .importobj "../build/bundle.o"
 .align 8
 DPAD_TEXTURE:

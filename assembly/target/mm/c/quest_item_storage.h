@@ -8,6 +8,7 @@ struct quest_item_storage {
     u8 slots[3][0x06];
 };
 
+void quest_item_storage_clear(struct quest_item_storage *storage);
 bool quest_item_storage_get_cell(int *cell, int *idx, u8 item);
 bool quest_item_storage_get_slot(int *slot, int *idx, u8 item);
 bool quest_item_storage_has(const struct quest_item_storage *storage, u8 item);

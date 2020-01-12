@@ -33,6 +33,12 @@ void quest_items_after_removal(u8 item, u8 slot) {
     }
 }
 
+void quest_items_after_song_of_time_clear(void) {
+    // After Song of Time, clear quest items in storage.
+    struct quest_item_storage *storage = save_file_get_quest_item_storage();
+    quest_item_storage_clear(storage);
+}
+
 bool quest_items_door_check(z2_game_t *game, u8 item, u8 slot) {
     return check_inventory_slot(item, slot);
 }
