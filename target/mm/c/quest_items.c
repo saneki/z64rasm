@@ -39,6 +39,16 @@ void quest_items_after_song_of_time_clear(void) {
     quest_item_storage_clear(&SAVE_FILE_CONFIG.quest_storage);
 }
 
+bool quest_items_get_slot(int *slot, u8 item) {
+    int sslot, idx;
+    if (quest_item_storage_get_slot(&sslot, &idx, item)) {
+        *slot = ((sslot + 1) * 6) - 1;
+        return true;
+    } else {
+        return false;
+    }
+}
+
 bool quest_items_door_check(z2_game_t *game, u8 item, u8 slot) {
     return check_inventory_slot(item, slot);
 }

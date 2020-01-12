@@ -9,7 +9,6 @@ struct quest_item_storage {
 };
 
 void quest_item_storage_clear(struct quest_item_storage *storage);
-bool quest_item_storage_get_cell(int *cell, int *idx, u8 item);
 bool quest_item_storage_get_slot(int *slot, int *idx, u8 item);
 bool quest_item_storage_has(const struct quest_item_storage *storage, u8 item);
 u8 quest_item_storage_next(const struct quest_item_storage *storage, u8 item);
