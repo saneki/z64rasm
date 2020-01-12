@@ -15,8 +15,6 @@ struct save_file_config {
 #define SAVE_FILE_RAM    (z2_file_addr + 0x1E00)
 #define SAVE_FILE_CONFIG (*(struct save_file_config*) SAVE_FILE_RAM)
 
-struct save_file_config* save_file_get_config(void);
-struct quest_item_storage* save_file_get_quest_item_storage(void);
 void save_file_init(void);
 
 #endif // SAVE_FILE_H

@@ -9,8 +9,7 @@ static bool check_inventory_slot(u8 item, u8 slot) {
     if (z2_file.inventory[slot] == item) {
         return true;
     } else if (MISC_CONFIG.quest_item_storage && z2_file.inventory[slot] != Z2_ITEM_NONE) {
-        struct quest_item_storage *storage = save_file_get_quest_item_storage();
-        return quest_item_storage_has(storage, item);
+        return quest_item_storage_has(&SAVE_FILE_CONFIG.quest_storage, item);
     } else {
         return false;
     }
@@ -18,12 +17,11 @@ static bool check_inventory_slot(u8 item, u8 slot) {
 
 void quest_items_after_receive(u8 item) {
     // Try to add quest item to storage.
-    struct quest_item_storage *storage = save_file_get_quest_item_storage();
-    quest_item_storage_put(storage, item);
+    quest_item_storage_put(&SAVE_FILE_CONFIG.quest_storage, item);
 }
 
 void quest_items_after_removal(u8 item, u8 slot) {
-    struct quest_item_storage *storage = save_file_get_quest_item_storage();
+    struct quest_item_storage *storage = &SAVE_FILE_CONFIG.quest_storage;
     // Remove quest item from storage.
     if (quest_item_storage_remove(storage, item)) {
         // Set next item into inventory if any.
@@ -38,8 +36,7 @@ void quest_items_after_removal(u8 item, u8 slot) {
 
 void quest_items_after_song_of_time_clear(void) {
     // After Song of Time, clear quest items in storage.
-    struct quest_item_storage *storage = save_file_get_quest_item_storage();
-    quest_item_storage_clear(storage);
+    quest_item_storage_clear(&SAVE_FILE_CONFIG.quest_storage);
 }
 
 bool quest_items_door_check(z2_game_t *game, u8 item, u8 slot) {
