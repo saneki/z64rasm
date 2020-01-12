@@ -5,6 +5,7 @@
 #include "hud_colors.h"
 #include "icetrap.h"
 #include "quest_items.h"
+#include "save_file.h"
 #include "util.h"
 #include "z2.h"
 
@@ -25,6 +26,7 @@ void after_song_of_time_clear(z2_game_t *game) {
 void before_player_actor_update(z2_link_t *link, z2_game_t *game) {
     dpad_before_player_actor_update(link, game);
     handle_external_effects(link, game);
+    save_file_init();
 }
 
 bool before_damage_process(z2_link_t *link, z2_game_t *game) {
