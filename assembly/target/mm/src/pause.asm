@@ -1,4 +1,4 @@
-pause_menu_item_select_draw_icon_hook:
+pause_menu_select_item_draw_icon_hook:
     addiu   sp, sp, -0x20
     sw      ra, 0x0018 (sp)
 
@@ -9,7 +9,7 @@ pause_menu_item_select_draw_icon_hook:
     ; Parameter 6 (Vertex buffer index)
     sw      s2, 0x0014 (sp)
 
-    jal     pause_menu_item_select_draw_icon
+    jal     pause_menu_select_item_draw_icon
     ; Overwrite A1 with item Id in V0 (we can calculate A1 with it later)
     or      a1, v0, r0
 

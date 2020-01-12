@@ -1,4 +1,5 @@
 #include "quest_item_storage.h"
+#include "quest_items.h"
 #include "reloc.h"
 #include "save_file.h"
 #include "z2.h"
@@ -77,7 +78,7 @@ static bool is_quest_item_with_storage_selected(z2_game_t *game) {
     u8 item = z2_file.items[cell];
 
     // Check if on a quest item slot.
-    bool quest = (cell == Z2_SLOT_QUEST1 || cell == Z2_SLOT_QUEST2 || cell == Z2_SLOT_QUEST3);
+    bool quest = IS_QUEST_SLOT(cell);
 
     // Check if there's a next item.
     struct quest_item_storage *storage = save_file_get_quest_item_storage();
@@ -89,7 +90,12 @@ static bool is_quest_item_with_storage_selected(z2_game_t *game) {
     return (quest && !side && item != Z2_ITEM_NONE && next != Z2_ITEM_NONE);
 }
 
-void pause_menu_item_select_draw_icon(z2_gfx_t *gfx, u8 item, u16 width, u16 height, u16 quad_idx, u32 vert_idx) {
+/**
+ * Hook function called during the draw loop for item icons on the "Select Item" subscreen.
+ *
+ * Used to draw the next quest item in storage for quest item slots.
+ **/
+void pause_menu_select_item_draw_icon(z2_gfx_t *gfx, u8 item, u16 width, u16 height, u16 quad_idx, u32 vert_idx) {
     // Call original function to draw underlying item texture
     u32 orig_seg_addr = z2_item_segaddr_table[item];
     z2_PauseDrawItemIcon(gfx, orig_seg_addr, width, height, quad_idx);
