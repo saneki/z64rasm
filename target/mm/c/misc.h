@@ -31,11 +31,14 @@ struct misc_config {
             u32 draw_hash          : 1;
             u32 fast_push          : 1;
             u32 ocarina_underwater : 1;
-            u32                    : 27;
+            u32 quest_item_storage : 1;
+            u32                    : 26;
         };
         u32 flags;          /* 0x0018 */
     };
 };                          /* 0x001C */
+
+extern struct misc_config MISC_CONFIG;
 
 bool misc_can_use_ocarina_underwater();
 struct misc_config* misc_get_config();
