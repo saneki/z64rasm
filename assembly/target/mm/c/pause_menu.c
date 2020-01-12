@@ -73,6 +73,11 @@ static void cycle_quest_item(z2_game_t *game, u8 item, u8 slot) {
     z2_PlaySfx(0x4808);
 }
 
+static bool is_quest_item_in_correct_slot(u8 item, int slot) {
+    int cell;
+    return quest_items_get_slot(&cell, item) && cell == slot;
+}
+
 static bool is_quest_item_with_storage_selected(z2_game_t *game) {
     // Get cell and selected item.
     s16 cell = game->pause_ctxt.cells_1.item;
@@ -81,13 +86,16 @@ static bool is_quest_item_with_storage_selected(z2_game_t *game) {
     // Check if on a quest item slot.
     bool quest = IS_QUEST_SLOT(cell);
 
+    // Verify we are in the right cell for this item.
+    bool correct_slot = is_quest_item_in_correct_slot(item, cell);
+
     // Check if there's a next item.
     u8 next = quest_item_storage_next(&SAVE_FILE_CONFIG.quest_storage, item);
 
     // Check if on "Z" or "R" side buttons.
     bool side = game->pause_ctxt.side_button != 0;
 
-    return (quest && !side && item != Z2_ITEM_NONE && next != Z2_ITEM_NONE);
+    return (quest && correct_slot && !side && item != Z2_ITEM_NONE && next != Z2_ITEM_NONE);
 }
 
 /**
@@ -95,20 +103,20 @@ static bool is_quest_item_with_storage_selected(z2_game_t *game) {
  *
  * Used to draw the next quest item in storage for quest item slots.
  **/
-void pause_menu_select_item_draw_icon(z2_gfx_t *gfx, u8 item, u16 width, u16 height, u16 quad_idx, u32 vert_idx) {
+void pause_menu_select_item_draw_icon(z2_gfx_t *gfx, u8 item, u16 width, u16 height, int slot, u16 quad_idx, u32 vert_idx) {
     // Call original function to draw underlying item texture
     u32 orig_seg_addr = z2_item_segaddr_table[item];
     z2_PauseDrawItemIcon(gfx, orig_seg_addr, width, height, quad_idx);
 
     // If quest item storage, draw next quest item texture on bottom-right of current texture
-    if (MISC_CONFIG.quest_item_storage) {
+    if (MISC_CONFIG.quest_item_storage && is_quest_item_in_correct_slot(item, slot)) {
         struct quest_item_storage *storage = &SAVE_FILE_CONFIG.quest_storage;
         if (quest_item_storage_has(storage, item)) {
-            int slot, unused;
+            int sslot, unused;
             u8 next = quest_item_storage_next(storage, item);
-            if (next != Z2_ITEM_NONE && quest_item_storage_get_slot(&slot, &unused, next)) {
+            if (next != Z2_ITEM_NONE && quest_item_storage_get_slot(&sslot, &unused, next)) {
                 u32 seg_addr = z2_item_segaddr_table[next];
-                Vtx *vtx = get_vtx_buffer(gfx->game, vert_idx, slot);
+                Vtx *vtx = get_vtx_buffer(gfx->game, vert_idx, sslot);
                 draw_icon(gfx, vtx, seg_addr, width, height, quad_idx);
             }
         }
@@ -143,22 +151,16 @@ void pause_menu_select_item_subscreen_after_process(z2_game_t *game) {
  * Checks if A button would be used to cycle quest items.
  **/
 bool pause_menu_select_item_process_a_button(z2_game_t *game, u32 cur_val, u32 none_val) {
-    if (MISC_CONFIG.quest_item_storage) {
+    if (MISC_CONFIG.quest_item_storage && is_quest_item_with_storage_selected(game)) {
         s16 cell = game->pause_ctxt.cells_1.item;
-        if (IS_QUEST_SLOT(cell)) {
-            if (cur_val != none_val) {
-                u8 item = (u8)cur_val;
-                // Verify we are in the right cell for this item.
-                int qcell;
-                if (quest_items_get_slot(&qcell, item) && cell == qcell) {
-                    // Check input for A button, and swap to next quest item.
-                    z2_pad_t pad = game->common.input->pad_pressed;
-                    u8 next = quest_item_storage_next(&SAVE_FILE_CONFIG.quest_storage, item);
-                    if (pad.a && next != Z2_ITEM_NONE) {
-                        game->common.input->pad_pressed.a = 0;
-                        cycle_quest_item(game, next, (u8)cell);
-                    }
-                }
+        if (cur_val != none_val) {
+            u8 item = (u8)cur_val;
+            // Check input for A button, and swap to next quest item.
+            z2_pad_t pad = game->common.input->pad_pressed;
+            u8 next = quest_item_storage_next(&SAVE_FILE_CONFIG.quest_storage, item);
+            if (pad.a && next != Z2_ITEM_NONE) {
+                game->common.input->pad_pressed.a = 0;
+                cycle_quest_item(game, next, (u8)cell);
             }
         }
     }
