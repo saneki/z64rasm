@@ -1,5 +1,5 @@
 ;==================================================================================================
-; Pause Menu Icon Draw
+; Pause Menu (Select Item subscreen) - Icon Draw
 ;==================================================================================================
 
 .headersize(G_KALEIDO_SCOPE_VRAM - G_KALEIDO_SCOPE_FILE)
@@ -8,7 +8,7 @@
 ; Replaces:
 ;   jal     0x80821AD4
 .org 0x8081BB70 ; In RDRAM: 0x807509F0
-    jal     pause_menu_item_select_draw_icon_hook
+    jal     pause_menu_select_item_draw_icon_hook
 
 ; Remove relocations.
 .org 0x8082C944
