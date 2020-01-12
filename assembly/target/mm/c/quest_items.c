@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include "misc.h"
 #include "quest_items.h"
 #include "quest_item_storage.h"
 #include "save_file.h"
@@ -7,7 +8,7 @@
 static bool check_inventory_slot(u8 item, u8 slot) {
     if (z2_file.inventory[slot] == item) {
         return true;
-    } else if (z2_file.inventory[slot] != Z2_ITEM_NONE) {
+    } else if (MISC_CONFIG.quest_item_storage && z2_file.inventory[slot] != Z2_ITEM_NONE) {
         struct quest_item_storage *storage = save_file_get_quest_item_storage();
         return quest_item_storage_has(storage, item);
     } else {
@@ -26,9 +27,11 @@ void quest_items_after_removal(u8 item, u8 slot) {
     // Remove quest item from storage.
     if (quest_item_storage_remove(storage, item)) {
         // Set next item into inventory if any.
-        u8 next = quest_item_storage_next(storage, item);
-        if (next != Z2_ITEM_NONE && IS_QUEST_SLOT(slot)) {
-            z2_file.items[slot] = next;
+        if (MISC_CONFIG.quest_item_storage) {
+            u8 next = quest_item_storage_next(storage, item);
+            if (next != Z2_ITEM_NONE && IS_QUEST_SLOT(slot)) {
+                z2_file.items[slot] = next;
+            }
         }
     }
 }

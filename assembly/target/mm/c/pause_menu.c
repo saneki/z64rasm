@@ -1,3 +1,4 @@
+#include "misc.h"
 #include "quest_item_storage.h"
 #include "quest_items.h"
 #include "reloc.h"
@@ -101,15 +102,17 @@ void pause_menu_select_item_draw_icon(z2_gfx_t *gfx, u8 item, u16 width, u16 hei
     z2_PauseDrawItemIcon(gfx, orig_seg_addr, width, height, quad_idx);
 
     // If quest item storage, draw next quest item texture on bottom-right of current texture
-    struct save_file_config *config = save_file_get_config();
-    struct quest_item_storage *storage = &(config->quest_storage);
-    if (quest_item_storage_has(storage, item)) {
-        int slot, unused;
-        u8 next = quest_item_storage_next(storage, item);
-        if (next != Z2_ITEM_NONE && quest_item_storage_get_slot(&slot, &unused, next)) {
-            u32 seg_addr = z2_item_segaddr_table[next];
-            Vtx *vtx = get_vtx_buffer(gfx->game, vert_idx, slot);
-            draw_icon(gfx, vtx, seg_addr, width, height, quad_idx);
+    if (MISC_CONFIG.quest_item_storage) {
+        struct save_file_config *config = save_file_get_config();
+        struct quest_item_storage *storage = &(config->quest_storage);
+        if (quest_item_storage_has(storage, item)) {
+            int slot, unused;
+            u8 next = quest_item_storage_next(storage, item);
+            if (next != Z2_ITEM_NONE && quest_item_storage_get_slot(&slot, &unused, next)) {
+                u32 seg_addr = z2_item_segaddr_table[next];
+                Vtx *vtx = get_vtx_buffer(gfx->game, vert_idx, slot);
+                draw_icon(gfx, vtx, seg_addr, width, height, quad_idx);
+            }
         }
     }
 }
@@ -120,16 +123,18 @@ void pause_menu_select_item_draw_icon(z2_gfx_t *gfx, u8 item, u16 width, u16 hei
  * Used to set the text on the A button to "Decide" for selecting quest items.
  **/
 void pause_menu_select_item_subscreen_after_process(z2_game_t *game) {
-    u16 text = game->hud_ctxt.a_text_current;
-    if (is_quest_item_with_storage_selected(game)) {
-        // Set A button text to "Decide" (only if on "Info")
-        if (text == Z2_BUTTON_TEXT_INFO) {
-            z2_HudSetAButtonText(game, Z2_BUTTON_TEXT_DECIDE);
-        }
-    } else {
-        if (text == Z2_BUTTON_TEXT_DECIDE) {
-            // Set A button text to "Info" (only if on "Decide")
-            z2_HudSetAButtonText(game, Z2_BUTTON_TEXT_INFO);
+    if (MISC_CONFIG.quest_item_storage) {
+        u16 text = game->hud_ctxt.a_text_current;
+        if (is_quest_item_with_storage_selected(game)) {
+            // Set A button text to "Decide" (only if on "Info")
+            if (text == Z2_BUTTON_TEXT_INFO) {
+                z2_HudSetAButtonText(game, Z2_BUTTON_TEXT_DECIDE);
+            }
+        } else {
+            if (text == Z2_BUTTON_TEXT_DECIDE) {
+                // Set A button text to "Info" (only if on "Decide")
+                z2_HudSetAButtonText(game, Z2_BUTTON_TEXT_INFO);
+            }
         }
     }
 }
@@ -140,20 +145,22 @@ void pause_menu_select_item_subscreen_after_process(z2_game_t *game) {
  * Checks if A button would be used to cycle quest items.
  **/
 bool pause_menu_select_item_process_a_button(z2_game_t *game, u32 cur_val, u32 none_val) {
-    s16 cell = game->pause_ctxt.cells_1.item;
-    if (cell == Z2_SLOT_QUEST1 || cell == Z2_SLOT_QUEST2 || cell == Z2_SLOT_QUEST3) {
-        if (cur_val != none_val) {
-            u8 item = (u8)cur_val;
-            // Verify we are in the right cell for this item.
-            int idx, qcell;
-            struct quest_item_storage *storage = save_file_get_quest_item_storage();
-            if (quest_item_storage_get_cell(&qcell, &idx, item) && cell == qcell) {
-                // Check input for A button, and swap to next quest item.
-                z2_pad_t pad = game->common.input->pad_pressed;
-                u8 next = quest_item_storage_next(storage, item);
-                if (pad.a && next != Z2_ITEM_NONE) {
-                    game->common.input->pad_pressed.a = 0;
-                    cycle_quest_item(game, next, (u8)cell);
+    if (MISC_CONFIG.quest_item_storage) {
+        s16 cell = game->pause_ctxt.cells_1.item;
+        if (cell == Z2_SLOT_QUEST1 || cell == Z2_SLOT_QUEST2 || cell == Z2_SLOT_QUEST3) {
+            if (cur_val != none_val) {
+                u8 item = (u8)cur_val;
+                // Verify we are in the right cell for this item.
+                int idx, qcell;
+                struct quest_item_storage *storage = save_file_get_quest_item_storage();
+                if (quest_item_storage_get_cell(&qcell, &idx, item) && cell == qcell) {
+                    // Check input for A button, and swap to next quest item.
+                    z2_pad_t pad = game->common.input->pad_pressed;
+                    u8 next = quest_item_storage_next(storage, item);
+                    if (pad.a && next != Z2_ITEM_NONE) {
+                        game->common.input->pad_pressed.a = 0;
+                        cycle_quest_item(game, next, (u8)cell);
+                    }
                 }
             }
         }
@@ -169,7 +176,7 @@ bool pause_menu_select_item_process_a_button(z2_game_t *game, u32 cur_val, u32 n
  * Checks if a quest item with storage is selected. If so, always show the A button as enabled.
  **/
 bool pause_menu_select_item_show_a_button_enabled(z2_game_t *game) {
-    if (is_quest_item_with_storage_selected(game)) {
+    if (MISC_CONFIG.quest_item_storage && is_quest_item_with_storage_selected(game)) {
         // If on a quest item with storage, show A button as enabled even during "Item Prompt."
         return true;
     } else {
