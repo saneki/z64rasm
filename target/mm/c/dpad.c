@@ -1,7 +1,7 @@
 #include <stdbool.h>
+#include "buttons.h"
 #include "dpad.h"
 #include "gfx.h"
-#include "item.h"
 #include "reloc.h"
 #include "util.h"
 #include "z2.h"
@@ -109,7 +109,7 @@ static bool try_use_item(z2_game_t *game, z2_link_t *link, u8 item) {
 
 static void get_dpad_item_usability(z2_game_t *game, bool *dest) {
     for (int i = 0; i < 4; i++)
-        dest[i] = check_c_item_usable(game, DPAD_CONFIG.primary.values[i]);
+        dest[i] = buttons_check_c_item_usable(game, DPAD_CONFIG.primary.values[i]);
 }
 
 static bool is_any_item_usable(const u8 *dpad, const bool *usable) {
