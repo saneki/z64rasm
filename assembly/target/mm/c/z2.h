@@ -229,27 +229,27 @@ typedef enum {
     Z2_SLOT_FIERCE_DEITY_MASK,
 } z2_mask_slot_t;
 
-typedef enum {
-    Z2_GAME_STATE_BLACK_SCREEN,
-    Z2_GAME_STATE_TRANSITION,
+enum z2_button_states {
+    Z2_BUTTONS_STATE_BLACK_SCREEN,
+    Z2_BUTTONS_STATE_TRANSITION,
     // Postman's timing game.
-    Z2_GAME_STATE_TRANSITION_2,
-    Z2_GAME_STATE_DIALOGUE = 5,
+    Z2_BUTTONS_STATE_TRANSITION_2,
+    Z2_BUTTONS_STATE_DIALOGUE = 5,
     // Used when on Epona sometimes, for example holding B (bow) while pressing A ("Return").
-    Z2_GAME_STATE_6 = 6,
-    Z2_GAME_STATE_PAUSE = 7,
-    Z2_GAME_STATE_ARCHERY_GAME = 8,
-    Z2_GAME_STATE_MINIGAME = 0xC,
-    Z2_GAME_STATE_SHOP = 0xF,
-    Z2_GAME_STATE_ITEM_PROMPT = 0x10,
+    Z2_BUTTONS_STATE_6 = 6,
+    Z2_BUTTONS_STATE_PAUSE = 7,
+    Z2_BUTTONS_STATE_ARCHERY_GAME = 8,
+    Z2_BUTTONS_STATE_MINIGAME = 0xC,
+    Z2_BUTTONS_STATE_SHOP = 0xF,
+    Z2_BUTTONS_STATE_ITEM_PROMPT = 0x10,
     // Boat cruise archery game.
-    Z2_GAME_STATE_BOAT_ARCHERY = 0x11,
+    Z2_BUTTONS_STATE_BOAT_ARCHERY = 0x11,
     // Honey & Darling minigame.
-    Z2_GAME_STATE_HONEY_DARLING = 0x14,
-    Z2_GAME_STATE_PICTOBOX = 0x15,
-    Z2_GAME_STATE_SWORDSMAN_GAME = 0x16,
-    Z2_GAME_STATE_NORMAL = 0x32,
-} z2_game_state_t;
+    Z2_BUTTONS_STATE_HONEY_DARLING = 0x14,
+    Z2_BUTTONS_STATE_PICTOBOX = 0x15,
+    Z2_BUTTONS_STATE_SWORDSMAN_GAME = 0x16,
+    Z2_BUTTONS_STATE_NORMAL = 0x32,
+};
 
 typedef enum {
     // NPC dialogue, get item, area transition, cutscene, form transition, using ocarina, etc.
@@ -1402,6 +1402,13 @@ struct z2_game_s {
 /// Savefile Structure
 /// =============================================================
 
+typedef struct {
+    u16              transition_state;               /* 0x0000 */
+    u16              state;                          /* 0x0002 */
+    u16              alpha_transition;               /* 0x0004 */
+    u16              previous_state;                 /* 0x0006 */
+} z2_buttons_state_t;                                /* 0x0008 */
+
 /**
  * Scene flags, stored in z2_file_t.
  */
@@ -1618,10 +1625,7 @@ typedef struct {
     u8               unk_0x3E10[0x108];              /* 0x3E10‬ */
     u8               buttons_usable[0x05];           /* 0x3F18, B, C-left, C-down, C-right, A buttons. */
     u8               unk_0x3F1D[0x03];               /* 0x3F1D */
-    u16              pre_game_state;                 /* 0x3F20, game state in relation to alpha transition? */
-    u16              game_state;                     /* 0x3F22 */
-    u16              alpha_transition;               /* 0x3F24 */
-    u16              sub_game_state;                 /* 0x3F26, might be "previous" game state but not sure. */
+    z2_buttons_state_t buttons_state;                /* 0x3F20 */
     u8               unk_0x3F28[0x06];               /* 0x3F28 */
     u16              magic_meter_size;               /* 0x3F2E */
     u8               unk_0x3F30[0x38];               /* 0x3F30 */

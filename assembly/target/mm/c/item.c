@@ -5,10 +5,7 @@ void check_item_usability(bool *dest, z2_game_t *game, u8 b, u8 c1, u8 c2, u8 c3
     u8 previous[4], prevstates[5];
 
     // Backup modified fields
-    u8 game_state = z2_file.game_state;
-    u8 pre_game_state = z2_file.pre_game_state;
-    u8 alpha_transition = z2_file.alpha_transition;
-    u8 sub_game_state = z2_file.sub_game_state;
+    z2_buttons_state_t buttons_state = z2_file.buttons_state;
 
     // Backup button items
     for (int i = 0; i < 4; i++)
@@ -38,10 +35,7 @@ void check_item_usability(bool *dest, z2_game_t *game, u8 b, u8 c1, u8 c2, u8 c3
         z2_file.buttons_usable[i] = prevstates[i];
 
     // Restore modified fields
-    z2_file.game_state = game_state;
-    z2_file.pre_game_state = pre_game_state;
-    z2_file.alpha_transition = alpha_transition;
-    z2_file.sub_game_state = sub_game_state;
+    z2_file.buttons_state = buttons_state;
 }
 
 bool check_c_item_usable(z2_game_t *game, u8 c) {
