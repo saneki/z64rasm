@@ -14,8 +14,8 @@ void icetrap_push_pending() {
 }
 
 bool icetrap_give(z2_link_t *link, z2_game_t *game) {
-    if ((z2_file.game_state == Z2_GAME_STATE_TRANSITION) ||
-        (z2_file.game_state == Z2_GAME_STATE_TRANSITION_2) ||
+    if ((z2_file.buttons_state.state == Z2_BUTTONS_STATE_TRANSITION) ||
+        (z2_file.buttons_state.state == Z2_BUTTONS_STATE_TRANSITION_2) ||
         (link->action_state1 & Z2_ACTION_STATE1_SPECIAL) != 0)
         return false;
 

@@ -189,9 +189,9 @@ static bool is_minigame_frame() {
     // Note on state 1 (transition):
     // In the Deku playground, can go from 0xC to 0x1 when cutscene-transitioning to the business scrub.
     // Thus, if the minigame state goes directly to the transition state, consider that a minigame frame.
-    g_was_minigame = (z2_file.game_state == Z2_GAME_STATE_MINIGAME ||
-                      (g_was_minigame && z2_file.game_state == Z2_GAME_STATE_TRANSITION) ||
-                      z2_file.game_state == 6);
+    g_was_minigame = (z2_file.buttons_state.state == Z2_BUTTONS_STATE_MINIGAME ||
+                      (g_was_minigame && z2_file.buttons_state.state == Z2_BUTTONS_STATE_TRANSITION) ||
+                      z2_file.buttons_state.state == 6);
     return result || g_was_minigame;
 }
 
@@ -231,11 +231,11 @@ bool dpad_handle(z2_link_t *link, z2_game_t *game) {
     if (DPAD_CONFIG.state == DPAD_STATE_TYPE_DISABLED)
         return false;
 
-    // Check general game state to know if we can use C buttons at all
+    // Check general buttons state to know if we can use C buttons at all
     // Note: After collecting a stray fairy (and possibly in other cases) the state flags are set
     // to 0 despite the game running normally.
-    if (z2_file.game_state != Z2_GAME_STATE_NORMAL &&
-        z2_file.game_state != Z2_GAME_STATE_BLACK_SCREEN)
+    if (z2_file.buttons_state.state != Z2_BUTTONS_STATE_NORMAL &&
+        z2_file.buttons_state.state != Z2_BUTTONS_STATE_BLACK_SCREEN)
         return false;
 
     // Check action state flags
@@ -266,15 +266,15 @@ void dpad_draw(z2_game_t *game) {
 
     // Check for minigame frame, and do nothing unless transitioning into minigame
     // In which case the C-buttons alpha will be used instead for fade-in
-    if (is_minigame_frame() && z2_file.pre_game_state != Z2_GAME_STATE_MINIGAME)
+    if (is_minigame_frame() && z2_file.buttons_state.previous_state != Z2_BUTTONS_STATE_MINIGAME)
         return;
 
     // Use minimap alpha by default for fading textures out
     u8 prim_alpha = game->hud_ctxt.minimap_alpha & 0xFF;
     // If in minigame, the C buttons fade out and so should the D-Pad
-    if (z2_file.game_state == Z2_GAME_STATE_MINIGAME ||
-        z2_file.game_state == Z2_GAME_STATE_BOAT_ARCHERY ||
-        z2_file.game_state == Z2_GAME_STATE_SWORDSMAN_GAME ||
+    if (z2_file.buttons_state.state == Z2_BUTTONS_STATE_MINIGAME ||
+        z2_file.buttons_state.state == Z2_BUTTONS_STATE_BOAT_ARCHERY ||
+        z2_file.buttons_state.state == Z2_BUTTONS_STATE_SWORDSMAN_GAME ||
         is_minigame_frame())
         prim_alpha = game->hud_ctxt.c_left_alpha & 0xFF;
 
