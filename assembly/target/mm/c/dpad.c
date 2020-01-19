@@ -224,6 +224,12 @@ bool dpad_is_enabled() {
         || (DPAD_CONFIG.state == DPAD_STATE_TYPE_DEFAULTS);
 }
 
+/**
+ * Hook function used to check whether or not to call z2_UseItem.
+ *
+ * Checks D-Pad input for whether or not to use an item, and if so returns true to exit the caller
+ * function early.
+ **/
 bool dpad_handle(z2_link_t *link, z2_game_t *game) {
     z2_pad_t pad_pressed = game->common.input[0].pad_pressed;
 
@@ -255,6 +261,11 @@ bool dpad_handle(z2_link_t *link, z2_game_t *game) {
     return false;
 }
 
+/**
+ * Hook function called directly before drawing triangles and item textures on C buttons.
+ *
+ * Draws D-Pad textures to the overlay display list.
+ **/
 void dpad_draw(z2_game_t *game) {
     // If disabled or hiding, don't draw
     if (DPAD_CONFIG.state == DPAD_STATE_TYPE_DISABLED || DPAD_CONFIG.display == DPAD_DISPLAY_NONE)
