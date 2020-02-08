@@ -126,19 +126,19 @@ void pause_menu_select_item_draw_icon(z2_gfx_t *gfx, u8 item, u16 width, u16 hei
 /**
  * Hook function called after the main processing for the "Select Item" subscreen.
  *
- * Used to set the text on the A button to "Decide" for selecting quest items.
+ * Used to set the text on the A button to "Next" for selecting quest items.
  **/
 void pause_menu_select_item_subscreen_after_process(z2_game_t *game) {
     if (MISC_CONFIG.quest_item_storage) {
         u16 text = game->hud_ctxt.a_text_current;
         if (is_quest_item_with_storage_selected(game)) {
-            // Set A button text to "Decide" (only if on "Info")
+            // Set A button text to "Next" (only if on "Info")
             if (text == Z2_BUTTON_TEXT_INFO) {
-                z2_HudSetAButtonText(game, Z2_BUTTON_TEXT_DECIDE);
+                z2_HudSetAButtonText(game, Z2_BUTTON_TEXT_NEXT);
             }
         } else {
-            if (text == Z2_BUTTON_TEXT_DECIDE) {
-                // Set A button text to "Info" (only if on "Decide")
+            if (text == Z2_BUTTON_TEXT_NEXT) {
+                // Set A button text to "Info" (only if on "Next")
                 z2_HudSetAButtonText(game, Z2_BUTTON_TEXT_INFO);
             }
         }
