@@ -25,7 +25,7 @@ struct hud_color_config HUD_COLOR_CONFIG = {
     .heart_dd                = { 0xC8, 0x00, 0x00 },
     .magic_normal            = { 0x00, 0xC8, 0x00 },
     .magic_inf               = { 0x00, 0x00, 0xC8 },
-    .map                     = { 0x00, 0xFF, 0xFF, 0xA0 },
+    .map                     = { 0x00, 0xFF, 0xFF },
     .map_entrance_cursor     = { 0xC8, 0x00, 0x00 },
     .map_player_cursor       = { 0xC8, 0xFF, 0x00 },
     .rupee                   = {
@@ -39,10 +39,6 @@ static u32 color_rgb8_to_int(z2_color_rgb8_t color, u8 alpha) {
     return (color.r << 24) | (color.g << 16) | (color.b << 8) | alpha;
 }
 
-static u32 color_rgba8_to_int(z2_color_rgba8_t color) {
-    return (color.r << 24) | (color.g << 16) | (color.b << 8) | color.a;
-}
-
 u32 get_magic_meter_color(bool inf) {
     u8 alpha = z2_game.hud_ctxt.rupees_alpha & 0xFF;
     if (inf) {
@@ -53,7 +49,7 @@ u32 get_magic_meter_color(bool inf) {
 }
 
 u32 get_map_color() {
-    return color_rgba8_to_int(HUD_COLOR_CONFIG.map);
+    return color_rgb8_to_int(HUD_COLOR_CONFIG.map, 0xA0);
 }
 
 u32 get_map_player_cursor_color() {
