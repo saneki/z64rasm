@@ -25,7 +25,7 @@ struct hud_color_config {
     z2_color_rgb8_t heart_dd;
     z2_color_rgb8_t magic_normal;
     z2_color_rgb8_t magic_inf;
-    z2_color_rgba8_t map;
+    z2_color_rgb8_t map;
     z2_color_rgb8_t map_entrance_cursor;
     z2_color_rgb8_t map_player_cursor;
     z2_color_rgb8_t rupee[3];
