@@ -34,16 +34,18 @@ get_map_color_hook:
     addiu   sp, sp, -0x20
     sw      ra, 0x0010 (sp)
     sw      a1, 0x0014 (sp)
+    sw      a2, 0x0018 (sp)
 
     jal     get_map_color
-    sw      v1, 0x0018 (sp)
+    sw      v1, 0x001C (sp)
 
     ; Put return value in T5
     or      t5, v0, r0
 
     lw      ra, 0x0010 (sp)
     lw      a1, 0x0014 (sp)
-    lw      v1, 0x0018 (sp)
+    lw      a2, 0x0018 (sp)
+    lw      v1, 0x001C (sp)
 
     jr      ra
     addiu   sp, sp, 0x20
