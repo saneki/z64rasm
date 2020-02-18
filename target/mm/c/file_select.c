@@ -13,6 +13,7 @@
 const static int g_icon_count = 5;
 
 struct hash_icons HASH_ICONS = {
+    .version = 0,
     .count = HASH_SYMBOL_COUNT,
     // Texture indexes to use for hash icons.
     .symbols = {
