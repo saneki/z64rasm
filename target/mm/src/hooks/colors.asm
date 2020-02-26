@@ -93,7 +93,7 @@
 .org 0x80119B38 ; In rom: 0xAFFB98
     sw      ra, -0x0004 (sp)
     jal     get_inverted_clock_emblem_color_r_hook
-    nop
+    lh      a0, 0xFBCC (a0)
     lw      ra, -0x0004 (sp)
 
 ; Custom color for inverted clock (green).

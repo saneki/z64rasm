@@ -109,9 +109,6 @@ get_clock_emblem_color_hook:
 
 ; Note: Final 4 bytes of stack frame reserved for caller stub.
 get_inverted_clock_emblem_color_r_hook:
-    ; Displaced code
-    lh      a0, 0xFBCC (a0)
-
     addiu   sp, sp, -0x20
     sw      ra, 0x0010 (sp)
     sw      a0, 0x0014 (sp)
