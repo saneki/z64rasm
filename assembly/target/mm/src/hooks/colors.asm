@@ -120,6 +120,18 @@
     lh      a3, 0xFBD4 (a3)
     lw      ra, -0x0004 (sp)
 
+; Fix calculated color for inverted clock emblem.
+; Replaces:
+;   sll     t6, t8, 16
+;   sll     t7, t9, 24
+;   or      t9, t7, t6
+;   ori     t8, t9, 0xFF00
+.org 0x8011A078
+    sw      ra, -0x0004 (sp)
+    jal     fix_inverted_clock_emblem_color_calc_hook
+    sll     t6, t8, 16
+    lw      ra, -0x0004 (sp)
+
 ; Custom color for clock emblem sun icon.
 ; Replaces:
 ;   lui     at, 0xFFFF
