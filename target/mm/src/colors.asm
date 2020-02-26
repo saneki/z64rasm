@@ -180,6 +180,21 @@ get_inverted_clock_emblem_color_b_hook:
     jr      ra
     addiu   sp, sp, 0x28
 
+; Note: Final 4 bytes of stack frame reserved for caller stub.
+fix_inverted_clock_emblem_color_calc_hook:
+    ; Displaced code
+    sll     t7, t9, 24
+    or      t9, t7, t6
+
+    ; Properly OR blue value
+    lui     t6, 0x801C
+    lh      t6, 0xFBD4 (t6)
+    sll     t6, t6, 8
+
+    jr      ra
+    ; Put return value in T8
+    or      t8, t9, t6
+
 get_clock_emblem_sun_color_hook:
     addiu   sp, sp, -0x28
     sw      ra, 0x0010 (sp)
