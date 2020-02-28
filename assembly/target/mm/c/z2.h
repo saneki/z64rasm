@@ -1647,11 +1647,11 @@ typedef struct {
         u8           week_event_inf_bytes[0x64];     /* 0x0EF8 */
     }                week_event_inf;
     u32              locations_visited;              /* 0x0F5C */
-    u8               unk_0xF60[0x7C];                /* 0x0F60 */
-    u8               lotteries[0x09];                /* 0x0FDC */
-    u8               unk_0xFE5[0x06];                /* 0x0FE5 */
-    u8               bomber_code[0x05];              /* 0x0FEB */
-    u8               unk_0xFF0[0x1C];                /* 0x0FF0 */
+    u8               unk_0xF60[0x8C];                /* 0x0F60 */
+    u8               lotteries[0x09];                /* 0x0FEC */
+    u8               spider_masks[0x06];             /* 0x0FF5 */
+    u8               bomber_code[0x05];              /* 0x0FFB */
+    u8               unk_0xFF0[0x0C];                /* 0x1000 */
     u8               event_inf[0x08];                /* 0x100C */
     u8               unk_0x1014[0x02];               /* 0x1014 */
     u16              jinx_timer;                     /* 0x1016 */
