@@ -144,7 +144,7 @@
 ;   lwc1    f16, 0x1C54 (at)
 ;   lui     at, 0x8041
 ;   lwc1    f4, 0x1C58 (at)
-.org 0x80B70290 ; 0x80411750, offset: 0x760
+.org 0x80B70290
     or      a0, s0, r0
     lw      a1, 0x004C (sp)
     jal     misc_get_spider_house_shelves_speed_hook
@@ -156,7 +156,7 @@
 ;   lwc1    f18, 0x1C5C (at)
 ;   lui     at, 0x8041
 ;   lwc1    f6, 0x1C60 (at)
-.org 0x80B702D4 ; 0x80411794, offset: 0x7A4
+.org 0x80B702D4
     or      a0, s0, r0
     lw      a1, 0x004C (sp)
     jal     misc_get_spider_house_shelves_speed_hook
@@ -166,12 +166,12 @@
 ; Replaces:
 ;   lui     at, 0x3F80
 ;   mtc1    at, f12
-.org 0x80B702F0 ; 0x804117B0, offset: 0x7C0
+.org 0x80B702F0
     nop
     nop
 
 ; Remove relocations for hooks.
-.org 0x80B70848 ; 0x80411D08, offset: 0xD18
+.org 0x80B70848
 .area 0x20, 0
     .dw 0x00000000 ; Replaces: 0x45000760
     .dw 0x00000000 ; Replaces: 0x45000764
