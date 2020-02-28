@@ -12,7 +12,7 @@ struct save_file_config {
     struct quest_item_storage quest_storage;         /* 0x0008 */
 };                                                   /* 0x001A */
 
-#define SAVE_FILE_RAM    (z2_file_addr + 0x1E00)
+#define SAVE_FILE_RAM    (z2_file_addr + 0x1020)
 #define SAVE_FILE_CONFIG (*(struct save_file_config*) SAVE_FILE_RAM)
 
 void save_file_init(void);
