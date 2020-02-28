@@ -1656,7 +1656,8 @@ typedef struct {
     u8               unk_0x1014[0x02];               /* 0x1014 */
     u16              jinx_timer;                     /* 0x1016 */
     s16              rupee_timer;                    /* 0x1018 */
-    u8               unk_0x101A[0x2C86];             /* 0x101A */
+    u8               unk_0x101A[0xC6];               /* 0x101A */
+    u8               pictobox_photo[0x2BC0];         /* 0x10E0 */
     s32              file_index;                     /* 0x3CA0 */
     u8               unk_0x3CA4[0x0C];               /* 0x3CA4 */
     s32              void_flag;                      /* 0x3CB0 */
