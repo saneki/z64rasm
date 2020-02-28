@@ -33,6 +33,7 @@
 .include "hooks/pushblock.asm"
 .include "hooks/quest_items.asm"
 .include "hooks/rooms.asm"
+.include "hooks/savedata.asm"
 
 ;==================================================================================================
 ; New code region
@@ -56,6 +57,7 @@ PAYLOAD_START:
 .include "pushblock.asm"
 .include "quest_items.asm"
 .include "rooms.asm"
+.include "savedata.asm"
 .include "song_of_time.asm"
 .importobj "../build/bundle.o"
 .align 8
