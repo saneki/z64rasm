@@ -64,3 +64,37 @@ misc_get_great_bay_temple_faucet_speed_hook:
 
     jr      ra
     addiu   sp, sp, 0x20
+
+misc_get_spider_house_shelves_speed_hook:
+    addiu   sp, sp, -0x28
+
+    sw      ra, 0x0024 (sp)
+    swc1    f0, 0x0010 (sp)
+    sw      a2, 0x0014 (sp)
+
+    or      a3, a2, r0
+    jal     misc_get_spider_house_shelves_speed
+    addiu   a2, sp, 0x18
+
+    lw      at, 0x0014 (sp)
+    bnez    at, @@large_shelf
+    nop
+
+@@small_shelf:
+    ; Move return values to F16 and F4 from stack
+    lwc1    f16, 0x0018 (sp)
+    b       @@tail
+    lwc1    f4, 0x001C (sp)
+@@large_shelf:
+    ; Move return values to F18 and F6 from stack
+    lwc1    f18, 0x0018 (sp)
+    lwc1    f6, 0x001C (sp)
+@@tail:
+    ; Move return value (clamp) to F12 from stack
+    lwc1    f12, 0x0020 (sp)
+
+    lw      ra, 0x0024 (sp)
+    lwc1    f0, 0x0010 (sp)
+
+    jr      ra
+    addiu   sp, sp, 0x28

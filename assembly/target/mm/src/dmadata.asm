@@ -45,3 +45,7 @@ DefineDmaFile G_EN_TIME_TAG_DMA, G_EN_TIME_TAG_FILE, 392
 ; ovl_En_Elforg (Stray Fairy)
 DefineDmaFile G_EN_ELFORG_DMA, G_EN_ELFORG_FILE, 397
 .definelabel  G_EN_ELFORG_VRAM, 0x80ACC470
+
+; ovl_Bg_Kin2_Shelf (Oceanside Skulltula House shelves)
+DefineDmaFile G_BG_KIN2_SHELF_DMA, G_BG_KIN2_SHELF_FILE, 488
+.definelabel  G_BG_KIN2_SHELF_VRAM, 0x80B6FB30
