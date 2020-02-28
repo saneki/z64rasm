@@ -58,7 +58,6 @@ PAYLOAD_START:
 .include "quest_items.asm"
 .include "rooms.asm"
 .include "savedata.asm"
-.include "song_of_time.asm"
 .importobj "../build/bundle.o"
 .align 8
 DPAD_TEXTURE:
