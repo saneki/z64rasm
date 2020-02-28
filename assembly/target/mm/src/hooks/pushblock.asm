@@ -140,10 +140,10 @@
 
 ; Adjust speed of smaller shelves.
 ; Replaces:
-;   lui     at, 0x8041
-;   lwc1    f16, 0x1C54 (at)
-;   lui     at, 0x8041
-;   lwc1    f4, 0x1C58 (at)
+;   lui     at, 0x80B7
+;   lwc1    f16, 0x0794 (at)
+;   lui     at, 0x80B7
+;   lwc1    f4, 0x0798 (at)
 .org 0x80B70290
     or      a0, s0, r0
     lw      a1, 0x004C (sp)
@@ -152,10 +152,10 @@
 
 ; Adjust speed of larger shelves.
 ; Replaces:
-;   lui     at, 0x8041
-;   lwc1    f18, 0x1C5C (at)
-;   lui     at, 0x8041
-;   lwc1    f6, 0x1C60 (at)
+;   lui     at, 0x80B7
+;   lwc1    f18, 0x079C (at)
+;   lui     at, 0x80B7
+;   lwc1    f6, 0x07A0 (at)
 .org 0x80B702D4
     or      a0, s0, r0
     lw      a1, 0x004C (sp)
