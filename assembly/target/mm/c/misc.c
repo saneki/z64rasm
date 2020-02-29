@@ -30,6 +30,11 @@ struct shelf_speed {
     f32 additive;
 };
 
+struct ikana_speed {
+    f32 max_velocity;
+    f32 initial;
+};
+
 struct misc_config* misc_get_config() {
     return &MISC_CONFIG;
 }
@@ -92,6 +97,16 @@ void misc_get_spider_house_shelves_speed(z2_actor_t *actor, z2_game_t *game, str
             dest->multiplier = 0.009;
             dest->additive = 0.027;
         }
+    }
+}
+
+void misc_get_ikana_pushblock_speed(z2_actor_t *actor, z2_game_t *game, struct ikana_speed *dest) {
+    if (!MISC_CONFIG.fast_push) {
+        dest->max_velocity = 2.0;
+        dest->initial = 0.4;
+    } else {
+        dest->max_velocity = 8.0;
+        dest->initial = 1.6;
     }
 }
 
