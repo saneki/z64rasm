@@ -25,6 +25,11 @@ struct iceblock_speed {
     f32 clamp;
 };
 
+struct shelf_speed {
+    f32 multiplier;
+    f32 additive;
+};
+
 struct misc_config* misc_get_config() {
     return &MISC_CONFIG;
 }
@@ -68,28 +73,24 @@ u32 misc_get_great_bay_temple_faucet_speed(z2_actor_t *actor, z2_game_t *game) {
 /**
  * Hook function to get speed of Oceanside Spider House shelves.
  **/
-void misc_get_spider_house_shelves_speed(z2_actor_t *actor, z2_game_t *game, struct iceblock_speed *dest, int shelf_type) {
+void misc_get_spider_house_shelves_speed(z2_actor_t *actor, z2_game_t *game, struct shelf_speed *dest, int shelf_type) {
     if (shelf_type == 0) {
         // Small shelves
         if (!MISC_CONFIG.fast_push) {
-            dest->initial = 0.012;
+            dest->multiplier = 0.012;
             dest->additive = 0.014;
-            dest->clamp = 1.0;
         } else {
-            dest->initial = 0.036;
+            dest->multiplier = 0.036;
             dest->additive = 0.042;
-            dest->clamp = 1.0;
         }
     } else {
         // Large shelves
         if (!MISC_CONFIG.fast_push) {
-            dest->initial = 0.003;
+            dest->multiplier = 0.003;
             dest->additive = 0.009;
-            dest->clamp = 1.0;
         } else {
-            dest->initial = 0.009;
+            dest->multiplier = 0.009;
             dest->additive = 0.027;
-            dest->clamp = 1.0;
         }
     }
 }
