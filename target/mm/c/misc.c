@@ -110,6 +110,14 @@ void misc_get_ikana_pushblock_speed(z2_actor_t *actor, z2_game_t *game, struct i
     }
 }
 
+f32 misc_get_pzlblock_speed(z2_actor_t *actor, z2_game_t *game) {
+    if (!MISC_CONFIG.fast_push) {
+        return 2.3;
+    } else {
+        return 4.6;
+    }
+}
+
 /**
  * Hook function to check whether or not to perform crit wiggle.
  **/

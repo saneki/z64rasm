@@ -193,3 +193,16 @@
     nop
     jal     0x800FF03C
     addiu   a0, s0, 0x016C
+
+;==================================================================================================
+; Pzlblock Speed
+;==================================================================================================
+
+.headersize(G_OBJ_PZLBLOCK_VRAM - G_OBJ_PZLBLOCK_FILE)
+
+; Replaces:
+;   lui     a2, 0x4013
+;   ori     a2, a2, 0x3333
+.org 0x809A3BD4
+    jal     misc_get_pzlblock_speed_hook
+    nop
