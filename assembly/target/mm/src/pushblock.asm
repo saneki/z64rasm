@@ -111,3 +111,18 @@ misc_get_ikana_pushblock_speed_hook:
 
     jr      ra
     addiu   sp, sp, 0x20
+
+misc_get_pzlblock_speed_hook:
+    addiu   sp, sp, -0x18
+    sw      ra, 0x0010 (sp)
+
+    jal     misc_get_pzlblock_speed
+    nop
+
+    ; Place return value from F0 into A2
+    mfc1    a2, f0
+
+    lw      ra, 0x0010 (sp)
+
+    jr      ra
+    addiu   sp, sp, 0x18
