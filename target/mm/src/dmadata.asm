@@ -49,3 +49,7 @@ DefineDmaFile G_EN_ELFORG_DMA, G_EN_ELFORG_FILE, 397
 ; ovl_Bg_Kin2_Shelf (Oceanside Skulltula House shelves)
 DefineDmaFile G_BG_KIN2_SHELF_DMA, G_BG_KIN2_SHELF_FILE, 488
 .definelabel  G_BG_KIN2_SHELF_VRAM, 0x80B6FB30
+
+; ovl_Bg_Ikana_Block (Ikana pushblock)
+DefineDmaFile G_BG_IKANA_BLOCK_DMA, G_BG_IKANA_BLOCK_FILE, 495
+.definelabel  G_BG_IKANA_BLOCK_VRAM, 0x80B7EA60

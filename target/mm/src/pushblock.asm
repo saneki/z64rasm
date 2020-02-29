@@ -95,3 +95,19 @@ misc_get_spider_house_shelves_speed_hook:
 
     jr      ra
     addiu   sp, sp, 0x28
+
+misc_get_ikana_pushblock_speed_hook:
+    addiu   sp, sp, -0x20
+    sw      ra, 0x0018 (sp)
+
+    jal     misc_get_ikana_pushblock_speed
+    addiu   a2, sp, 0x10
+
+    ; Move results from stack into A1 and A2
+    lw      a1, 0x0010 (sp)
+    lw      a2, 0x0014 (sp)
+
+    lw      ra, 0x0018 (sp)
+
+    jr      ra
+    addiu   sp, sp, 0x20

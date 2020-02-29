@@ -174,3 +174,22 @@
     .dw 0x00000000 ; Replaces: 0x450007AC
     .dw 0x00000000 ; Replaces: 0x450007B0
 .endarea
+
+;==================================================================================================
+; Ikana Pushblock Speed
+;==================================================================================================
+
+.headersize(G_BG_IKANA_BLOCK_VRAM - G_BG_IKANA_BLOCK_FILE)
+
+; Replaces:
+;   lui     a2, 0x3ECC
+;   ori     a2, a2, 0xCCCD
+;   addiu   a0, s0, 0x016C
+;   jal     0x800FF03C
+;   lui     a1, 0x4000
+.org 0x80B7F2A4
+    jal     misc_get_ikana_pushblock_speed_hook
+    nop
+    nop
+    jal     0x800FF03C
+    addiu   a0, s0, 0x016C
