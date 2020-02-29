@@ -68,7 +68,7 @@ misc_get_great_bay_temple_faucet_speed_hook:
 misc_get_spider_house_shelves_speed_hook:
     addiu   sp, sp, -0x28
 
-    sw      ra, 0x0024 (sp)
+    sw      ra, 0x0020 (sp)
     swc1    f0, 0x0010 (sp)
     sw      a2, 0x0014 (sp)
 
@@ -90,10 +90,7 @@ misc_get_spider_house_shelves_speed_hook:
     lwc1    f18, 0x0018 (sp)
     lwc1    f6, 0x001C (sp)
 @@tail:
-    ; Move return value (clamp) to F12 from stack
-    lwc1    f12, 0x0020 (sp)
-
-    lw      ra, 0x0024 (sp)
+    lw      ra, 0x0020 (sp)
     lwc1    f0, 0x0010 (sp)
 
     jr      ra

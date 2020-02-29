@@ -162,14 +162,6 @@
     jal     misc_get_spider_house_shelves_speed_hook
     ori     a2, r0, 1
 
-; NOP out loading clamp from constant.
-; Replaces:
-;   lui     at, 0x3F80
-;   mtc1    at, f12
-.org 0x80B702F0
-    nop
-    nop
-
 ; Remove relocations for hooks.
 .org 0x80B70848
 .area 0x20, 0
