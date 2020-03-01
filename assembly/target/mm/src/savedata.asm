@@ -9,9 +9,12 @@ savedata_after_load_hook:
     sw      t1, 0x0018 (sp)
     sw      a0, 0x001C (sp)
     sw      a1, 0x0020 (sp)
+
+    ; Original memcpy call
     jal     0x800FEC90
     sw      a2, 0x0010 (sp)
 
+    ; Call hook function
     lw      a0, 0x0014 (sp)
     lw      a1, 0x0018 (sp)
     lw      a2, 0x001C (sp)
