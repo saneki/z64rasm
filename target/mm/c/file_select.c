@@ -3,6 +3,7 @@
 #include "gfx.h"
 #include "hud_colors.h"
 #include "misc.h"
+#include "save_file.h"
 #include "util.h"
 #include "z2.h"
 
@@ -106,6 +107,9 @@ static void update_textures_from_sprite(sprite_t *sprite, int count, u32 hash) {
 void file_select_hook_after_ctor(z2_game_t *game) {
     // Consider D-Pad item textures cleared so they are reloaded next time
     dpad_clear_item_textures();
+
+    // Clear data relevant to save file (including quest item storage).
+    save_file_clear();
 
     // Write icon textures
     sprite_t *sprite = gfx_get_item_textures_sprite();

@@ -1651,7 +1651,8 @@ typedef struct {
     u8               lotteries[0x09];                /* 0x0FEC */
     u8               spider_masks[0x06];             /* 0x0FF5 */
     u8               bomber_code[0x05];              /* 0x0FFB */
-    u8               unk_0xFF0[0x0C];                /* 0x1000 */
+    u8               unk_0xFF0[0x0A];                /* 0x1000 */
+    u16              checksum;                       /* 0x100A */
     u8               event_inf[0x08];                /* 0x100C */
     u8               unk_0x1014[0x02];               /* 0x1014 */
     u16              jinx_timer;                     /* 0x1016 */
@@ -2086,6 +2087,9 @@ typedef struct {
 #define z2_ReloadButtonTexture_addr      0x80112B40
 #define z2_HudSetAButtonText_addr        0x8011552C
 
+/* Function Addresses (OS) */
+#define z2_memcpy_addr                   0x800FEC90
+
 /* Function Addresses (RNG) */
 #define z2_RngInt_addr                   0x80086FA0
 #define z2_RngSetSeed_addr               0x80086FD0
@@ -2139,6 +2143,9 @@ typedef void (*z2_HudSetAButtonText_proc)(z2_game_t *game, u16 text_id);
 typedef void (*z2_ReloadButtonTexture_proc)(z2_game_t *game, u8 idx);
 typedef void (*z2_UpdateButtonsState_proc)(u32 state);
 
+/* Function Prototypes (OS) */
+typedef void (*z2_memcpy_proc)(void *dest, const void *src, size_t size);
+
 /* Function Prototypes (Pause Menu) */
 typedef void (*z2_PauseDrawItemIcon_proc)(z2_gfx_t *gfx, u32 seg_addr, u16 width, u16 height, u16 quad_vtx_idx);
 
@@ -2179,6 +2186,9 @@ typedef void (*z2_UnloadRoom_proc)(z2_game_t *game, z2_room_ctxt_t *room_ctxt);
 #define z2_HudSetAButtonText             ((z2_HudSetAButtonText_proc)     z2_HudSetAButtonText_addr)
 #define z2_ReloadButtonTexture           ((z2_ReloadButtonTexture_proc)   z2_ReloadButtonTexture_addr)
 #define z2_UpdateButtonsState            ((z2_UpdateButtonsState_proc)    z2_UpdateButtonsState_addr)
+
+/* Functions (OS) */
+#define z2_memcpy                        ((z2_memcpy_proc)                z2_memcpy_addr)
 
 /* Functions (RNG) */
 #define z2_RngInt                        ((z2_RngInt_proc)                z2_RngInt_addr)
