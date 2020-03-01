@@ -206,3 +206,28 @@
 .org 0x809A3BD4
     jal     misc_get_pzlblock_speed_hook
     nop
+
+;==================================================================================================
+; Darmani's Gravestone Speed
+;==================================================================================================
+
+.headersize(G_OBJ_GHAKA_VRAM - G_OBJ_GHAKA_FILE)
+
+; Replaces:
+;   or      a3, a0, r0
+;   lw      t6, 0x0024 (sp)
+;   addiu   a0, a3, 0x0168
+;   addiu   a1, r0, 0x0064
+;   lw      v1, 0x1CCC (t6)
+;   sw      a3, 0x0020 (sp)
+;   addiu   a2, r0, 0x0001
+.org 0x80B3C630
+.area 0x1C
+    jal     misc_get_gravestone_speed_hook
+    sw      a0, 0x0020 (sp)
+    lw      a3, 0x0020 (sp)
+    lw      t6, 0x0024 (sp)
+    addiu   a0, a3, 0x0168
+    addiu   a1, r0, 0x0064
+    lw      v1, 0x1CCC (t6)
+.endarea

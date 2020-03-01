@@ -119,6 +119,17 @@ f32 misc_get_pzlblock_speed(z2_actor_t *actor, z2_game_t *game) {
 }
 
 /**
+ * Hook function to get speed of Darmani's Gravestone.
+ **/
+u32 misc_get_gravestone_speed(z2_actor_t *actor, z2_game_t *game) {
+    if (!MISC_CONFIG.fast_push) {
+        return 1;
+    } else {
+        return 3;
+    }
+}
+
+/**
  * Hook function to check whether or not to perform crit wiggle.
  **/
 bool misc_crit_wiggle_check(z2_camera_t *camera, s16 health) {

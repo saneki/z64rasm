@@ -126,3 +126,18 @@ misc_get_pzlblock_speed_hook:
 
     jr      ra
     addiu   sp, sp, 0x18
+
+misc_get_gravestone_speed_hook:
+    addiu   sp, sp, -0x18
+    sw      ra, 0x0010 (sp)
+
+    jal     misc_get_gravestone_speed
+    nop
+
+    ; Place return value in A2
+    or      a2, v0, r0
+
+    lw      ra, 0x0010 (sp)
+
+    jr      ra
+    addiu   sp, sp, 0x18
