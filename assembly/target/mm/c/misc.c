@@ -43,6 +43,9 @@ bool misc_can_use_ocarina_underwater() {
     return MISC_CONFIG.ocarina_underwater != 0;
 }
 
+/**
+ * Hook function to get speed of pushblock.
+ **/
 f32 misc_get_push_block_speed(z2_actor_t *actor, z2_game_t *game) {
     if (!MISC_CONFIG.fast_push) {
         return 2.0;
@@ -51,6 +54,9 @@ f32 misc_get_push_block_speed(z2_actor_t *actor, z2_game_t *game) {
     }
 }
 
+/**
+ * Hook function to get speed of iceblock.
+ **/
 void misc_get_iceblock_push_speed(z2_actor_t *actor, z2_game_t *game, struct iceblock_speed *dest) {
     if (!MISC_CONFIG.fast_push) {
         dest->initial = 1.2;
@@ -63,6 +69,9 @@ void misc_get_iceblock_push_speed(z2_actor_t *actor, z2_game_t *game, struct ice
     }
 }
 
+/**
+ * Hook function to get speed of Great Bay Temple faucets.
+ **/
 u32 misc_get_great_bay_temple_faucet_speed(z2_actor_t *actor, z2_game_t *game) {
     union faucet_speed result;
     if (!MISC_CONFIG.fast_push) {
@@ -100,6 +109,9 @@ void misc_get_spider_house_shelves_speed(z2_actor_t *actor, z2_game_t *game, str
     }
 }
 
+/**
+ * Hook function to get speed of Ikana pushblock.
+ **/
 void misc_get_ikana_pushblock_speed(z2_actor_t *actor, z2_game_t *game, struct ikana_speed *dest) {
     if (!MISC_CONFIG.fast_push) {
         dest->max_velocity = 2.0;
@@ -110,6 +122,9 @@ void misc_get_ikana_pushblock_speed(z2_actor_t *actor, z2_game_t *game, struct i
     }
 }
 
+/**
+ * Hook function to get speed of Pzlblock actor (Woodfall Temple pushblock, Sakon's Hideout pushblocks).
+ **/
 f32 misc_get_pzlblock_speed(z2_actor_t *actor, z2_game_t *game) {
     if (!MISC_CONFIG.fast_push) {
         return 2.3;
