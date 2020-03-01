@@ -7,7 +7,7 @@
 
 #define SAVE_FILE_CONFIG_MAGIC 0x53415645
 
-#define SAVE_FILE_OFFSET_NEW   0x1020
+#define SAVE_FILE_OFFSET_NEW   0x100C
 #define SAVE_FILE_OFFSET_OWL   0x3CA0
 
 struct save_file_config {
