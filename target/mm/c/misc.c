@@ -79,7 +79,7 @@ u32 misc_get_great_bay_temple_faucet_speed(z2_actor_t *actor, z2_game_t *game) {
         result.max_velocity = 5;
     } else {
         result.acceleration = 2;
-        result.max_velocity = 0x31;
+        result.max_velocity = 30;
     }
     return result.all;
 }
