@@ -1708,13 +1708,13 @@ struct z2_actor_s {
     u8               alloc_index;                    /* 0x001E */
     u8               unk_0x1F;                       /* 0x001F */
     u16              sound_effect;                   /* 0x0020 */
-    char             unk_0x22[0x02];                 /* 0x0022 */
+    u8               unk_0x22[0x02];                 /* 0x0022 */
     z2_xyzf_t        pos_2;                          /* 0x0024 */
     z2_rot_t         rot_dir;                        /* 0x0030 */
     u8               unk_0x36[0x02];                 /* 0x0036 */
     s8               unk_0x38;                       /* 0x0038 */
     u8               unk_0x39;                       /* 0x0039 */
-    char             unk_0x3A[0x02];                 /* 0x003A, padding? */
+    u8               unk_0x3A[0x02];                 /* 0x003A, padding? */
     z2_xyzf_t        pos_3;                          /* 0x003C */
     z2_rot_t         rot_1;                          /* 0x0048 */
     u8               unk_0x4E[0x02];                 /* 0x004E */

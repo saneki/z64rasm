@@ -61,3 +61,7 @@ DefineDmaFile G_BG_KIN2_SHELF_DMA, G_BG_KIN2_SHELF_FILE, 488
 ; ovl_Bg_Ikana_Block (Ikana pushblock)
 DefineDmaFile G_BG_IKANA_BLOCK_DMA, G_BG_IKANA_BLOCK_FILE, 495
 .definelabel  G_BG_IKANA_BLOCK_VRAM, 0x80B7EA60
+
+; ovl_En_Bb (Blue Bubble)
+DefineDmaFile G_EN_BB_DMA, G_EN_BB_FILE, 84
+.definelabel  G_EN_BB_VRAM, 0x808C1D40

@@ -23,6 +23,7 @@
 
 .include "boot.asm"
 .include "hacks.asm"
+.include "hooks/actor.asm"
 .include "hooks/colors.asm"
 .include "hooks/dpad.asm"
 .include "hooks/file_select.asm"
@@ -34,6 +35,8 @@
 .include "hooks/quest_items.asm"
 .include "hooks/rooms.asm"
 .include "hooks/savedata.asm"
+.include "hooks/scene.asm"
+.include "hooks/world_colors.asm"
 
 ;==================================================================================================
 ; New code region
@@ -46,6 +49,7 @@
 PAYLOAD_START:
 
 .include "init.asm"
+.include "actor.asm"
 .include "colors.asm"
 .include "damage.asm"
 .include "dpad.asm"
@@ -58,6 +62,7 @@ PAYLOAD_START:
 .include "quest_items.asm"
 .include "rooms.asm"
 .include "savedata.asm"
+.include "world_colors.asm"
 .importobj "../build/bundle.o"
 .align 8
 DPAD_TEXTURE:
