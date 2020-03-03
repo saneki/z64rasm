@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include "actor_ext.h"
 #include "dpad.h"
 #include "external_effects.h"
 #include "gfx.h"
@@ -12,6 +13,7 @@ void c_init() {
     gfx_init();
     dpad_init();
     hud_colors_init();
+    actor_ext_init();
 }
 
 void before_player_actor_update(z2_link_t *link, z2_game_t *game) {
