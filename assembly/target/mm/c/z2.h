@@ -252,8 +252,9 @@ enum z2_button_states {
 };
 
 typedef enum {
-    // NPC dialogue, get item, area transition, cutscene, form transition, using ocarina, etc.
-    Z2_ACTION_STATE1_SPECIAL      = 0x20000000,
+    // Time is stopped but Link & NPC animations continue.
+    // Used for: NPC dialogue, get item, area transition, cutscene, form transition, using ocarina, etc.
+    Z2_ACTION_STATE1_TIME_STOP    = 0x20000000,
     // Form transition, using ocarina.
     Z2_ACTION_STATE1_SPECIAL_2    = 0x10000000,
     // Swimming.
@@ -288,8 +289,9 @@ typedef enum {
     Z2_ACTION_STATE1_HOLD         = 0x00000800,
     // Hold new item over head.
     Z2_ACTION_STATE1_GET_ITEM     = 0x00000400,
-    // Transition to day/night, Pictobox prompt.
-    Z2_ACTION_STATE1_DAY_TRANS    = 0x00000200,
+    // Time is stopped (does not affect Tatl, HUD animations).
+    // Used for: transition to day/night, Pictograph Box prompt.
+    Z2_ACTION_STATE1_TIME_STOP_2  = 0x00000200,
     // Dead.
     Z2_ACTION_STATE1_DEAD         = 0x00000080,
     // When walking in a cutscene? Unsure.
