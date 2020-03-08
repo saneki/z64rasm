@@ -27,12 +27,16 @@ struct misc_config {
     union hash hash;        /* 0x0008 */
     union {
         struct {
+            // Version 0 flags
             u32 crit_wiggle        : 2;
             u32 draw_hash          : 1;
             u32 fast_push          : 1;
             u32 ocarina_underwater : 1;
             u32 quest_item_storage : 1;
-            u32                    : 26;
+
+            // Version 1 flags
+            u32 close_cows         : 1;
+            u32                    : 25;
         };
         u32 flags;          /* 0x0018 */
     };

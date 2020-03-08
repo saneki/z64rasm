@@ -26,6 +26,10 @@ DefineDmaFile G_PLAYER_ACTOR_DMA, G_PLAYER_ACTOR_FILE, 38
 DefineDmaFile G_OBJ_OSHIHIKI_DMA, G_OBJ_OSHIHIKI_FILE, 115
 .definelabel  G_OBJ_OSHIHIKI_VRAM, 0x80917290
 
+; ovl_En_Cow
+DefineDmaFile G_EN_COW_DMA, G_EN_COW_FILE, 227
+.definelabel  G_EN_COW_VRAM, 0x8099C290
+
 ; ovl_Obj_Pzlblock (Woodfall Temple pushblock, Sakon's Hideout pushblocks)
 DefineDmaFile G_OBJ_PZLBLOCK_DMA, G_OBJ_PZLBLOCK_FILE, 237
 .definelabel  G_OBJ_PZLBLOCK_VRAM, 0x809A33E0
