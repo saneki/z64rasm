@@ -384,6 +384,8 @@ typedef enum {
     Z2_ACTOR_EN_ELF = 0x10,
     // Gold skulltula token.
     Z2_ACTOR_EN_SI = 0xE3,
+    // Cow.
+    Z2_ACTOR_EN_COW = 0xF3,
     // Stray fairy.
     Z2_ACTOR_EN_ELFORG = 0x1B0,
     // Stray fairy in bubble.
@@ -938,6 +940,11 @@ typedef struct {
 /// =============================================================
 /// Actor Context
 /// =============================================================
+
+/**
+ * Number of array elements in actor_list field of z2_actor_ctxt_t.
+ **/
+#define Z2_ACTOR_LIST_ENTRIES 0x10
 
 /**
  * z2_actor_ctxt_t

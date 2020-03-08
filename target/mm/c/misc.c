@@ -4,11 +4,16 @@
 struct misc_config MISC_CONFIG = {
     .magic = MISC_CONFIG_MAGIC,
     .version = 0,
+
+    // Version 0 flags
     .crit_wiggle = CRIT_WIGGLE_DEFAULT,
     .draw_hash = 1,
     .fast_push = 1,
     .ocarina_underwater = 1,
     .quest_item_storage = 1,
+
+    // Version 1 flags
+    .close_cows = 1,
 };
 
 union faucet_speed {
