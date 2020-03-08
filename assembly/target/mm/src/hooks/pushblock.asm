@@ -231,3 +231,18 @@
     addiu   a1, r0, 0x0064
     lw      v1, 0x1CCC (t6)
 .endarea
+
+;==================================================================================================
+; In-Water Pushing Multiplier (Mikau Pushing)
+;==================================================================================================
+
+.headersize(G_PLAYER_ACTOR_VRAM - G_PLAYER_ACTOR_FILE)
+
+; Replaces:
+;   lwc1    f8, 0x0AD0 (s1)
+;   lui     at, 0x3F00
+;   mtc1    at, f16
+.org 0x80847FA8
+    jal     misc_get_in_water_push_speed_hook
+    or      a0, s1, r0
+    lwc1    f8, 0x0AD0 (S1)

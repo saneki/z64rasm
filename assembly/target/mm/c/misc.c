@@ -150,6 +150,17 @@ u32 misc_get_gravestone_speed(z2_actor_t *actor, z2_game_t *game) {
 }
 
 /**
+ * Hook function to get speed multiplier used for pushing an actor in water (pushing Mikau to shore).
+ **/
+f32 misc_get_in_water_push_speed(z2_link_t *link, z2_actor_t *actor) {
+    if (!MISC_CONFIG.fast_push) {
+        return 0.5;
+    } else {
+        return 1.5;
+    }
+}
+
+/**
  * Hook function to check whether or not to perform crit wiggle.
  **/
 bool misc_crit_wiggle_check(z2_camera_t *camera, s16 health) {

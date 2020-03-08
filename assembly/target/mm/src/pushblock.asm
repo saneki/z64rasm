@@ -141,3 +141,20 @@ misc_get_gravestone_speed_hook:
 
     jr      ra
     addiu   sp, sp, 0x18
+
+misc_get_in_water_push_speed_hook:
+    addiu   sp, sp, -0x18
+    sw      ra, 0x0014 (sp)
+    swc1    f0, 0x0010 (sp)
+
+    jal     misc_get_in_water_push_speed
+    or      a1, s0, r0
+
+    ; Place return value in F16
+    mfc1    at, f0
+    mtc1    at, f16
+
+    lwc1    f0, 0x0010 (sp)
+    lw      ra, 0x0014 (sp)
+    jr      ra
+    addiu   sp, sp, 0x18
