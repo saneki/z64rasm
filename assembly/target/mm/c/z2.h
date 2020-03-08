@@ -661,6 +661,20 @@ enum z2_button_text {
     Z2_BUTTON_TEXT_SHOOT = 0x29,
 };
 
+enum z2_seg {
+    Z2_SEG_DIRECT_REFERENCE,
+    Z2_SEG_NINTENDO_LOGO,
+    Z2_SEG_CURRENT_SCENE,
+    Z2_SEG_CURRENT_ROOM,
+    Z2_SEG_GAMEPLAY_KEEP,
+    Z2_SEG_GAMEPLAY_DUNGEON_FIELD_KEEP,
+    Z2_SEG_CURRENT_OBJECT,
+    Z2_SEG_LINK_ANIMATION, // Unsure if used.
+    Z2_SEG_CURRENT_MASK = 10,
+    Z2_SEG_Z_BUFFER = 14,
+    Z2_SEG_FRAME_BUFFER = 15,
+};
+
 /* Structure type aliases. */
 typedef struct z2_actor_s z2_actor_t;
 typedef struct z2_game_s  z2_game_t;
@@ -1439,7 +1453,9 @@ struct z2_game_s {
     z2_obj_ctxt_t    obj_ctxt;                       /* 0x17D88 */
     z2_room_ctxt_t   room_ctxt;                      /* 0x186E0 */
     u8               room_cnt;                       /* 0x18760 */
-    u8               unk_0x18761[0x114];             /* 0x18761 */
+    u8               unk_0x18761[0xDF];              /* 0x18761 */
+    u32              scene_frame_counter;            /* 0x18840 */
+    u8               unk_0x18844[0x31];              /* 0x18844 */
     u8               scene_load_flag;                /* 0x18875 */
     u8               unk_0x18876[0x04];              /* 0x18876 */
     u16              entrance_index;                 /* 0x1887A, double check this offset. */
