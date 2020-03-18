@@ -221,6 +221,36 @@
     ; Restore RA from previous stack value
     lw      ra, -0x0004 (sp)
 
+; Custom color for infinite magic (charging)
+; Replaces:
+;   lh      t7, 0x0272 (t1)
+;   andi    t8, t7, 0x00FF
+;   ori     t9, t8, 0xC800
+.org 0x80116D74
+    jal     get_magic_meter_charging_color_hook
+    ori     a0, r0, 1
+    lw      ra, -0x0004 (sp)
+
+; Custom color for normal magic (charging)
+; Replaces:
+;   lui     at, 0x00C8
+;   addiu   t6, v0, 0x0008
+;   sw      t6, 0x02A0 (v1)
+;   sw      t0, 0x0000 (v0)
+;   lh      t7, 0x0272 (t1)
+;   andi    t8, t7, 0x00FF
+;   or      t9, t8, at
+.org 0x80116D90
+.area 0x1C
+    addiu   t6, v0, 0x0008
+    sw      t6, 0x02A0 (v1)
+    sw      t0, 0x0000 (v0)
+    jal     get_magic_meter_charging_color_hook
+    ori     a0, r0, 0
+    lw      ra, -0x0004 (sp)
+    nop
+.endarea
+
 ;==================================================================================================
 ; Map color hooks
 ;==================================================================================================

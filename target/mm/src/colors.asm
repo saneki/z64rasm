@@ -30,6 +30,41 @@ get_magic_meter_color_hook:
     jr      ra
     nop
 
+get_magic_meter_charging_color_hook:
+    addiu   sp, sp, -0x38
+    sw      ra, 0x0030 (sp)
+    sw      a2, 0x0010 (sp)
+    sw      a3, 0x0014 (sp)
+    sw      v0, 0x0018 (sp)
+    sw      v1, 0x001C (sp)
+    sw      t1, 0x0020 (sp)
+    sw      t2, 0x0024 (sp)
+    sw      t3, 0x0028 (sp)
+
+    ; RA will be restored from stack after call
+    lui     ra, 0x0400
+    ori     ra, ra, 0x0400
+    sw      ra, 0x0034 (sp)
+
+    jal     get_magic_meter_color
+    sw      t5, 0x002C (sp)
+
+    ; Place return value in T9
+    or      t9, v0, r0
+
+    lw      a2, 0x0010 (sp)
+    lw      a3, 0x0014 (sp)
+    lw      v0, 0x0018 (sp)
+    lw      v1, 0x001C (sp)
+    lw      t1, 0x0020 (sp)
+    lw      t2, 0x0024 (sp)
+    lw      t3, 0x0028 (sp)
+    lw      t5, 0x002C (sp)
+
+    lw      ra, 0x0030 (sp)
+    jr      ra
+    addiu   sp, sp, 0x38
+
 get_map_color_hook:
     addiu   sp, sp, -0x20
     sw      ra, 0x0010 (sp)
